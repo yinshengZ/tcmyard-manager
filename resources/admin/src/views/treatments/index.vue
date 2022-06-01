@@ -1,0 +1,61 @@
+<template>
+    <div class="app-container"> 
+        <div class="button-group">
+            <el-button-group>
+                <el-button type="primary" icon="el-icon-plus" @click="load_add_herbs_form">Herbs</el-button> 
+            <el-button type="success" icon="el-icon-plus" >Services</el-button>
+            <el-button type="info" icon="el-icon-plus">Retails</el-button>
+            </el-button-group>
+            
+        </div>
+        <el-dialog
+        title="Add Herbal Packages"
+        :visible.sync="add_herbal_package_loaded"
+        :before-close="get_all_patient_treatments">
+                <add-herbs :patient_id="patient_id" :user_id="user_id" :key="key"></add-herbs>
+        </el-dialog>     
+        
+    </div>
+</template>
+
+<script>
+import AddHerbs from "./components/add-herbs"
+
+
+export default {
+    components:{AddHerbs},
+    props:['patient_id','user_id'],    
+    data(){
+        return{
+            add_herbal_package_loaded:false,
+            key:0
+            
+        }
+    },
+    created(){
+       this.test_props()
+    },
+    methods:{
+        load_add_herbs_form(){
+            this.add_herbal_package_loaded= true,
+            this.key+=1
+        },
+        get_all_patient_treatments(){
+            this.add_herbal_package_loaded = false
+        },
+        test_props(){
+            console.log(this.patient_id)
+            console.log(this.user_id)
+        }
+
+     
+    }
+}
+</script>
+
+<style scoped>
+.button-group{
+    float:right;
+    
+}
+</style>

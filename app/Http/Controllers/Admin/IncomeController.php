@@ -52,11 +52,21 @@ class IncomeController extends Controller
 
         $income->save();
 
-        return "Income Has Been Added!";
-        
+        return "Income Has Been Added!";        
        
     }
 
+    public function addIncomeByHerbs(Request $request){
+        return null;
+    }
+
+    public function addIncomeByRetail(Request $request){
+        return null;
+    }
+
+    public function addIncomeByOther(Request $request){
+        return null;
+    }
     /**
      * Display the specified resource.
      *

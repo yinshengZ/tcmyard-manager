@@ -110,14 +110,30 @@ class InventoryController extends Controller
         return $inventory;
     }
 
+    public function get_herbs(){
+        $herbs = Inventory::where('categories_id',1)->get();
+        return $herbs;
+    }
+
+    public function get_retails(){
+        $retails = Inventory::where('categories_id',2)->get();
+        return $retails;
+    }
+
+    public function get_others(){
+        $others = Inventory::where('categories_id', '>=','3')->get();
+        return $others;
+    }
+
     /**
      * Remove the specified resource from storage.
      *
      * @param  \App\Models\Inventory  $inventory
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Inventory $inventory)
+    public function destroy($id)
     {
-        //
+        $inventory = Inventory::where('id',$id)->delete();
+        
     }
 }

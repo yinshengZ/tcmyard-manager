@@ -31,7 +31,10 @@ Route::group([
     Route::post('patient/search',[PatientController::class,'search_patient'])->name('patient.search_patient');
     Route::get('record/search/{patient_id}',[RecordController::class,'patient_records'])->name('record.patient_records');
     Route::get('inventory/category/{category_id}',[InventoryController::class,'get_inventory_by_category']);
-    Route::get('inventory/retail',[InventoryController::class,'get_all_retail_products']);
+    Route::get('inventory/retail',[InventoryController::class,'get_retails']);
+    Route::get('inventory/herb',[InventoryController::class,'get_herbs']);
+    Route::get('inventory/other',[InventoryController::class,'get_others']);
+
     Route::post('treatment/herb',[TreatmentController::class,'addHerbalPackages']);
 
     Route::get('treatment/patient/{id}',[TreatmentController::class,'getPatientTreatments']);

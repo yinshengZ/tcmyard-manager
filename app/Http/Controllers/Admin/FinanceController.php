@@ -11,16 +11,16 @@ class FinanceController extends Controller
 
    }
 
-   public functon store(Request $request){
-
+   public function store(Request $request){
+      return null;
    }
 
    public function update(Request $request, $id){
-
+      return null;
    }
 
    public function destory($id){
-
+      return null;
    }
    
 }

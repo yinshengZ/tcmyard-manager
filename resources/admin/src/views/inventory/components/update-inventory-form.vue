@@ -48,8 +48,9 @@
                         type="date"
                          format="yyyy/MM/dd"
                          value-format="yyyy/MM/dd"
-                        :placeholder="inventory_details.expiry_date">
-                        </el-date-picker>
+                        :placeholder="inventory_details.expiry_date"
+                        >
+        </el-date-picker>
       </el-form-item>
 
       <el-form-item>
@@ -71,15 +72,25 @@ export default {
     return {
       inventory_details: [],
       categories_rtv:'',
-      updated_expiry_date:''
+      updated_expiry_date:'',
+      original_expiry_date:''
     };
   },
+
   mounted(){
       this.get_categories();
       this.get_inventory_details();
+      
+  },
+
+  updated(){
+    this.set_original_expiry_date();    
   },
 
   methods:{
+    set_original_expiry_date(){ // keep the original record of expiry_date incase no new date is provided!
+      this.original_expiry_date = this.inventory_details.expiry_date     
+    },
       get_inventory_details(){
           get_single(this.inventory_id).then((response)=>{
               console.log(this.inventory_id)
@@ -88,7 +99,11 @@ export default {
           })
       },
       update_inventory_details(){
-        this.inventory_details.expiry_date = this.updated_expiry_date
+        if(this.updated_expiry_date !=""){
+          this.inventory_details.expiry_date = this.updated_expiry_date          
+        }else{
+          this.inventory_details.expiry_date = this.original_expiry_date          
+        }// determine which date is going to be used!        
           update_inventory(this.inventory_details,this.inventory_id).then((response)=>{
               this.$notify({
                   title:'Notification',

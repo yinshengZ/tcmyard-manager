@@ -19,7 +19,7 @@ service.interceptors.request.use(
       // let each request carry token
       // ['X-Token'] is a custom headers key
       // please modify it according to the actual situation
-      config.headers['X-Token'] = getToken()
+      config.headers['XSRF-Token'] = getToken()
     }
     return config
   },
@@ -43,7 +43,7 @@ service.interceptors.response.use(
    * You can also judge the status by HTTP Status Code
    */
   response => {
-    console.log(response.data)
+    //console.log(response.data)
     return response.data
   },
   error => {

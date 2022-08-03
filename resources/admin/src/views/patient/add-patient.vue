@@ -178,6 +178,7 @@
 
       <el-dialog
         title="Add New Gender"
+        width ="30%"
         :visible.sync="add_genders_loaded"
         :before-close="get_genders"
       >

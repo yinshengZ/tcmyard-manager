@@ -1,0 +1,22 @@
+{
+    // settings.json
+
+// 1. enables vscode native bracket colorization
+ "editor.bracketPairColorization.enabled": true,
+
+ // 2. enables vscode pair guides
+"editor.guides.bracketPairs": true,
+
+// 3. highlight active tab
+"workbench.editor.highlightModifiedTabs": true,
+
+// use a font with font ligatures
+"editor.fontFamily": "Jetbrains Mono, Menlo, Monaco, 'Courier New', monospace",
+// 4. enable font ligature
+"editor.fontLigatures": true,
+
+// 5. enable parameter hints
+"typescript.inlayHints.parameterNames.enabled": "all",
+
+
+}

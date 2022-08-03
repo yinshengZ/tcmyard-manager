@@ -1,23 +1,14 @@
 <template>
   <div class="app-container">
+    <div class="search-box">
+      
+    </div>
     <el-card class="box-card search-box" :span="12" :offset="6" shadow="always">
       <div slot="header" class="clearfix">
         <span>Search Patient:</span>
-        <el-button
-        style="float:right"
-        type="primary"
-        icon="el-icon-plus"
-        @click="add_new_patient">
-        New
-        </el-button>
+        
       </div>
 
-      <!-- <el-row>
-         <el-form :model="form_data" :rules="validation" :ref="form_data" class="search_patient_form" label-position="top">
-           el
-        </el-form>
-       </el-row>
-    -->
 
       <el-row>
         <el-col :span="20" :offset="2">
@@ -71,6 +62,13 @@
                     @click="search_patient"
                   >Search</el-button>
                   <el-button type="info" @click="reset_form">Reset</el-button>
+                  <el-button
+        
+          type="primary"
+          icon="el-icon-plus"
+          @click="add_new_patient">
+        New
+        </el-button>
                 </el-col>
               </el-form-item>
             </el-row>
@@ -79,13 +77,12 @@
       </el-row>
     </el-card>
 
-    <el-row>
-      <el-col :span="20" :offset="2">
+    <div class="search-result">    
         <div v-if="searched" class="patient_table">
           <patient-table :key="key" :form_data="form_data" />
-        </div>
-      </el-col>
-    </el-row>
+        </div>    
+    </div>
+   
 
     <el-dialog
     title="Add New Patient:"

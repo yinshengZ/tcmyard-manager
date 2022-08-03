@@ -3,7 +3,7 @@
         
                 <inventory-list></inventory-list>   
             
-        
+       
     </div>
 </template>
 

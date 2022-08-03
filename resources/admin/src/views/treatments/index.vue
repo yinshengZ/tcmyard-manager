@@ -1,6 +1,7 @@
 <template>
     <div class="app-container"> 
-        <div class="button-group">
+        <el-card class="box-card">
+            <div class="button-group">
             <el-button-group>
                 <el-button type="primary" icon="el-icon-plus" @click="load_add_herbs_form">Herbs</el-button> 
             <el-button type="success" icon="el-icon-plus" >Services</el-button>
@@ -8,6 +9,12 @@
             </el-button-group>
             
         </div>
+        </el-card>
+
+        <el-card>
+            <treatments-table :patient_id="patient_id" :user_id="user_id" :key="key"></treatments-table>
+        </el-card>
+        
         <el-dialog
         title="Add Herbal Packages"
         :visible.sync="add_herbal_package_loaded"
@@ -20,10 +27,11 @@
 
 <script>
 import AddHerbs from "./components/add-herbs"
+import TreatmentsTable from "./components/TreatmentsTable.vue"
 
 
 export default {
-    components:{AddHerbs},
+    components:{AddHerbs, TreatmentsTable},
     props:['patient_id','user_id'],    
     data(){
         return{
@@ -54,8 +62,7 @@ export default {
 </script>
 
 <style scoped>
-.button-group{
-    float:right;
-    
+.box-card{
+    width:fit-content;
 }
 </style>

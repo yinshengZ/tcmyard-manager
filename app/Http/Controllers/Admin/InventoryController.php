@@ -125,6 +125,10 @@ class InventoryController extends Controller
         return $others;
     }
 
+    public function get_expirying(){
+        
+    }
+
     /**
      * Remove the specified resource from storage.
      *

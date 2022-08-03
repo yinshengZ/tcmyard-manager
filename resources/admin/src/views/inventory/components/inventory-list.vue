@@ -5,7 +5,7 @@
               <el-button 
               type="primary"
               @click="load_add_inventory_form">
-                New
+                New Item
               </el-button>
           </div>
       
@@ -92,7 +92,7 @@
         <template slot-scope="{row}">
           <el-button type="primary" @click="load_update_inventory_form(row.id)"> Update </el-button>
 
-          <el-button type="danger"> Delete </el-button>
+          <el-button type="danger" @click="delete_inventory(row.id)"> Delete </el-button>
         </template>
       </el-table-column>   
 
@@ -280,7 +280,7 @@
         <template slot-scope="{row}">
           <el-button type="primary" @click="load_update_inventory_form(row.id)"> Update </el-button>
 
-          <el-button type="danger"> Delete </el-button>
+          <el-button type="danger" @click="delete_inventory(row.id)"> Delete </el-button>
         </template>
       </el-table-column>   
 

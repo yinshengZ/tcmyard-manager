@@ -60,7 +60,7 @@
 </template>
 
 <script>
-import { getInventoryByCategory } from "@/api/inventory";
+import { get_herbs } from "@/api/inventory";
 import { addHerbalPackages } from "@/api/treatment"
 export default {
   props:['patient_id','user_id'],
@@ -95,8 +95,19 @@ export default {
       user_id:this.user_id, 
       discount:this.discount}
       addHerbalPackages(this.treatment_details).then((response)=>{
-        console.log(response)
+        this.$notify({
+          title:'Notification',
+          message:response.message,
+          type:'success'
+        })
+      }).catch(error=>{
+        this.$notify.error({
+          title:'Error',
+          message:error.response.data.message,
+
+        })
       })
+       
     },
 
     remove_herb_row(index) {
@@ -104,7 +115,7 @@ export default {
     },
 
     get_all_herbs() {
-      getInventoryByCategory("herb").then((response) => {
+      get_herbs().then((response) => {
         this.herb_rtv = response;
       });
     },
@@ -117,5 +128,6 @@ export default {
 <style lang="scss" scoped>
 .add_herbs_form{
     margin-top:10px;
+    width:fit-content;
 }
 </style>

@@ -104,63 +104,14 @@ class TreatmentController extends Controller
         $treatment->user_id = $user_id;
         $treatment->save();       
 
-       
+        $treatment_details = Treatment::select('id')->where('patient_id',$patient_id)->latest()->first();
+
+        return $treatment_details;
 
         return response()->json([
             'message'=>'Treatment Has been added successfully!'
-        ],200);
+        ],200); 
 
-     
-      /*  $herb_service = Category::where('categories','like','herb')->first();
-       $herb_package = Inventory::where('name','草药')->first();
-       $herb_package_price = $herb_package->unit_price;
-       //$herb_service_id = $herb_service->pluck('id')->toArray();
-       $quantity = $request->quantity;
-       $discount = 1-($request->discount / 100);
-       //$herb_details = json_encode($request->herb_details);
-
-       $treatment_details="";
-       foreach ($request->herb_details as $herb_detail){
-           $id= $herb_detail['id'];
-           $herb = Inventory::where('id',$id);
-           $chinese_name= $herb->value('name');
-           $english_name = $herb->value('eng_name');
-
-           $treatment_details .= $chinese_name ."-".$herb_detail['unit'].",";
-         }
-
-        //return $treatment_details;
-
-       
-       foreach ($request->herb_details as $herb_detail){
-
-           $id = $herb_detail['id'];
-           $units = $herb_detail['unit']*$quantity;   
-            $inventory = Inventory::find($id);
-            $stock = $inventory->stock;
-            if($stock-$units >= 0){
-                $inventory ->stock = $inventory->stock - $units;
-                $inventory->save();    
-            }else{
-                return "There are not enough stocks left for some items!";
-            }            
-                               
-       };
-       foreach($request as $treatments){
-        $treatment = new Treatment;
-        $treatment-> service_id = $herb_service->id;
-        $treatment->patient_id = $request->patient_id;
-        $treatment->quantity = $quantity;
-        $treatment->user_id = $request->user_id;
-        $treatment->treatment_details = $treatment_details;
-        $treatment->save();
-        return "Treatment Has Been Added!";
-       };
-
-
-       
-      
-       //return $herb_package_price; */
         
     }
 

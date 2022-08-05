@@ -14,4 +14,8 @@ class Treatment extends Model
     public function category(){
         return $this->belongsTo('App\Models\Category','service_id');
     }
+
+    public function treatment_details(){
+        return $this->hasMany('App\Models\TreatmentDetails','treatment_id');
+    }
 }

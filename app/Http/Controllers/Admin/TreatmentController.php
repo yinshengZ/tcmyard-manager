@@ -11,6 +11,9 @@ use App\Models\Treatment;
 use App\Models\Income;
 use App\Models\Finance;
 use App\Models\Service;
+use App\Models\TreatmentDetails;
+
+use App\Services\TreatmentService;
 
 class TreatmentController extends Controller
 {
@@ -28,6 +31,8 @@ class TreatmentController extends Controller
     public function getPatientTreatments($id){
         $treatments = Treatment::where('patient_id',$id)->get();
         //$treatment_details = $treatments->treatment_details;
+        $treatment_lists = TreatmentService::processTreatmentDetails($id);
+        
         $treatment_details = [];
         $inventory_details =array();
         $counter= 0;
@@ -49,7 +54,7 @@ class TreatmentController extends Controller
         foreach($treatment_details as $key=> $treatmen_detail){
 
         }
-        return $treatment_details[1];
+        return $treatment_lists;
        //return $treatments;
         
         //return $treatments->treatment_details;
@@ -87,6 +92,8 @@ class TreatmentController extends Controller
             array_push($herb_units,$herb_detail['unit']);  
              
         }
+
+        //get the type of treatment for herbs and its info
         $service_info = Service::select('id','unit_price')->where('service_title','LIKE','%'.'herb'.'%')->first();
         $package_price = $service_info['unit_price'];       
         
@@ -104,9 +111,23 @@ class TreatmentController extends Controller
         $treatment->user_id = $user_id;
         $treatment->save();       
 
-        $treatment_details = Treatment::select('id')->where('patient_id',$patient_id)->latest()->first();
+        $treatment_ids = Treatment::select('id')->where('patient_id',$patient_id)->latest()->first();
+        
+        $counter = 0;
+        foreach ($request->herb_details as $herb_detail){
+            $treatment_handler = new TreatmentDetails;
+            $treatment_handler->treatment_id = $treatment_ids['id'];
+            $treatment_handler->inventory_id =$herb_detail['id'];
+            $treatment_handler->units = $herb_detail['unit'];
+            $treatment_handler->patient_id = $patient_id;
+            $treatment_handler->user_id = $user_id;
+            $treatment_handler->quantity = $quantity;
+            $treatment_handler->save();
+            $counter++;
+            
+        }
 
-        return $treatment_details;
+        return $counter;
 
         return response()->json([
             'message'=>'Treatment Has been added successfully!'

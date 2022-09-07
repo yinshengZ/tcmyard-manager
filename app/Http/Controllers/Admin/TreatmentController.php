@@ -29,35 +29,10 @@ class TreatmentController extends Controller
     }
 
     public function getPatientTreatments($id){
-        $treatments = Treatment::where('patient_id',$id)->get();
-        //$treatment_details = $treatments->treatment_details;
-        $treatment_lists = TreatmentService::processTreatmentDetails($id);
         
-        $treatment_details = [];
-        $inventory_details =array();
-        $counter= 0;
-
-        /* foreach ($treatments as $key=>$treatment){
-            $treatment_details[]=json_decode($treatment->treatment_details,true);
-            $counter ++;
-        } */
-
-        
-        foreach($treatments as $key=>$treatment){
-            $treatment_details[] = json_decode($treatment->treatment_details,true);
-            //$inventory_details[] = Inventory::select('name')->where('id',$treatment_details[$key]['id']->first());
-            /* $inventory_details[] =['name'=>Inventory::select('name')->where('id',
-            $treatment_details[$key]['id'])->first(),
-        'unit'=>$treatment_details[0]['unit']]; */            
-        }
-
-        foreach($treatment_details as $key=> $treatmen_detail){
-
-        }
+        $treatment_lists = TreatmentService::processTreatmentDetails($id);     
         return $treatment_lists;
-       //return $treatments;
-        
-        //return $treatments->treatment_details;
+      
     }
 
     public function addHerbalPackages(Request $request){

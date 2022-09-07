@@ -20,7 +20,9 @@
         :visible.sync="add_herbal_package_loaded"
         :before-close="get_all_patient_treatments">
                 <add-herbs :patient_id="patient_id" :user_id="user_id" :key="key"></add-herbs>
-        </el-dialog>     
+        </el-dialog>
+        
+    
         
     </div>
 </template>

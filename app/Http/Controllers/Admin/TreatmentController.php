@@ -28,6 +28,11 @@ class TreatmentController extends Controller
        return $treatments;
     }
 
+    public function show($id){
+        $treatment_details = TreatmentService::processSingleTreatment($id);
+        return $treatment_details;   
+    }
+
     public function getPatientTreatments($id){
         
         $treatment_lists = TreatmentService::processTreatmentDetails($id);     

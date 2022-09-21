@@ -6,6 +6,7 @@ use DB;
 use App\Models\Treatment;
 use App\Models\Inventory;
 use App\Models\TreatmentDetails;
+use App\Models\Service;
 
 
 
@@ -23,6 +24,7 @@ class TreatmentService{
         ->groupBy('treatment_id')
         ->get()
         ;
+        //$services = Treatment::select('service_id')
         foreach($treatments as $index =>$treatment){           
             
             $inventory_id = $treatment->inventory_id;
@@ -40,6 +42,9 @@ class TreatmentService{
             foreach($treatment_details_id as $index=>$treatment_detail_id){
                 $treatment_details = TreatmentDetails::findOrFail($treatment_detail_id)->toArray();
                 $inventory_details = Inventory::findOrFail($treatment_details['inventory_id'])->toArray();
+
+                $treatment = Treatment::findOrFail($treatment_details['treatment_id'])->toArray();
+                $service_details = Service::findOrFail($treatment['service_id'])->toArray();
                 $inventory_details['units'] =$treatment_details['units'] ;
                 $inventory_details['treatment_id']=$treatment_details['treatment_id'];
                 $inventory_details['treatment_details_id']= $treatment_details['id'];
@@ -47,6 +52,8 @@ class TreatmentService{
                 $inventory_details['quantity']= $treatment_details['quantity'];
                 $inventory_details['patient_id']=$treatment_details['patient_id'];
                 $inventory_details['user_id']=$treatment_details['user_id'];
+                $inventory_details['categories_id']=$service_details['id'];
+                $inventory_details['categories_title']=$service_details['service_title'];
                 $inventory_details['treatment_created_at'] =$treatment_details['created_at'];
                 $inventory_details['treatment_updated_at']=$treatment_details['updated_at'];
 
@@ -69,5 +76,10 @@ class TreatmentService{
     }
     return $final_treatment_details;
        
+}
+
+public static function processSingleTreatment($id){
+    $treatment_details = Treatment::findOrFail($id)->toArray();
+    return $treatment_details;
 }
 }

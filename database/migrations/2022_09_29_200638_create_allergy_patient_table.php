@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddIncomeDescriptionToIncomesTable extends Migration
+class CreateAllergyPatientTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,11 @@ class AddIncomeDescriptionToIncomesTable extends Migration
      */
     public function up()
     {
-        Schema::table('incomes', function (Blueprint $table) {
-            $table->text('description')->nullable();
+        Schema::create('allergy_patient', function (Blueprint $table) {
+            $table->id();
+            $table->unsignedBigInteger('allergy_id');
+            $table->unsignedBigInteger('patient_id');
+            $table->timestamps();
         });
     }
 
@@ -25,8 +28,6 @@ class AddIncomeDescriptionToIncomesTable extends Migration
      */
     public function down()
     {
-        Schema::table('incomes', function (Blueprint $table) {
-            $table->dropColumn('description');
-        });
+        Schema::dropIfExists('allergy_patient');
     }
 }

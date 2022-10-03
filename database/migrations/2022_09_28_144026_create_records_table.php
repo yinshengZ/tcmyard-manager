@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddPatientIdToIncomesTable extends Migration
+class CreateRecordsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,13 @@ class AddPatientIdToIncomesTable extends Migration
      */
     public function up()
     {
-        Schema::table('incomes', function (Blueprint $table) {
+        Schema::create('records', function (Blueprint $table) {
+            $table->id();
+            $table->text('record_body');
             $table->unsignedBigInteger('patient_id');
+            $table->unsignedBigInteger('user_id');
+            $table->softDeletes($columns='deleted_at');
+            $table->timestamps();
         });
     }
 
@@ -25,8 +30,6 @@ class AddPatientIdToIncomesTable extends Migration
      */
     public function down()
     {
-        Schema::table('incomes', function (Blueprint $table) {
-            $table->dropColumn('patient_id');
-        });
+        Schema::dropIfExists('records');
     }
 }

@@ -19,7 +19,10 @@ class CreateInventoriesTable extends Migration
             $table->string('eng_name');
             $table->text('description');
             $table->double('stock',8,2);
-            $table->string('categories');
+            $table->unsignedBigInteger('categories_id');
+            $table->decimal('unit_price',$precision="9",$scale="2");
+            $table->date('expiry_date')->nullable();
+            $table->softDeletes('deleted_at');
             $table->timestamps();
         });
     }

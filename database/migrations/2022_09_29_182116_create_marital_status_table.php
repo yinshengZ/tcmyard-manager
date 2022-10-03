@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddSoftdeleteToPatientsTable extends Migration
+class CreateMaritalStatusTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,11 @@ class AddSoftdeleteToPatientsTable extends Migration
      */
     public function up()
     {
-        Schema::table('patients', function (Blueprint $table) {
-           
+        Schema::create('marital_status', function (Blueprint $table) {
+            $table->id();
+            $table->string('marital_status');
+            $table->softDeletes('deleted_at');
+            $table->timestamps();
         });
     }
 
@@ -25,8 +28,6 @@ class AddSoftdeleteToPatientsTable extends Migration
      */
     public function down()
     {
-        Schema::table('patients', function (Blueprint $table) {
-            //
-        });
+        Schema::dropIfExists('marital_status');
     }
 }

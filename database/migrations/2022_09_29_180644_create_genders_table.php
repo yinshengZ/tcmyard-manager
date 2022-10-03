@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class ChangeExpiryDateColumnOfInventoriesTableAgain extends Migration
+class CreateGendersTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,14 @@ class ChangeExpiryDateColumnOfInventoriesTableAgain extends Migration
      */
     public function up()
     {
-        Schema::table('inventories', function (Blueprint $table) {
-            $table->date('expiry_date')->change();
+        Schema::create('genders', function (Blueprint $table) {
+            $table->id();
+            $table->string('gender');
+            $table->softDeletes('deleted_at');
+            $table->timestamps();
         });
     }
+
     /**
      * Reverse the migrations.
      *
@@ -24,6 +28,6 @@ class ChangeExpiryDateColumnOfInventoriesTableAgain extends Migration
      */
     public function down()
     {
-        //
+        Schema::dropIfExists('genders');
     }
 }

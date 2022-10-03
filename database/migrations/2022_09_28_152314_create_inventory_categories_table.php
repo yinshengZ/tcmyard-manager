@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddUniqueToIncomeTypeColumnToIncomeTypeTable extends Migration
+class CreateInventoryCategoriesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,11 @@ class AddUniqueToIncomeTypeColumnToIncomeTypeTable extends Migration
      */
     public function up()
     {
-        Schema::table('income_type', function (Blueprint $table) {
-            $table->unique('income_type');
+        Schema::create('inventory_categories', function (Blueprint $table) {
+            $table->id();
+            $table->string('categories');
+            $table->softDeletes('deleted_at');
+            $table->timestamps();
         });
     }
 
@@ -25,8 +28,6 @@ class AddUniqueToIncomeTypeColumnToIncomeTypeTable extends Migration
      */
     public function down()
     {
-        Schema::table('income_type', function (Blueprint $table) {
-            $table->dropUnique('income_type');
-        });
+        Schema::dropIfExists('inventory_categories');
     }
 }

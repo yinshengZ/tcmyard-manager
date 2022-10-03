@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddSoftdeleteToGendersTable extends Migration
+class CreateSymptomsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,11 @@ class AddSoftdeleteToGendersTable extends Migration
      */
     public function up()
     {
-        Schema::table('genders', function (Blueprint $table) {
-            $table->softDeletes();
+        Schema::create('symptoms', function (Blueprint $table) {
+            $table->id();
+            $table->string('symptom');
+            $table->softDeletes('deleted_at');
+            $table->timestamps();
         });
     }
 
@@ -25,8 +28,6 @@ class AddSoftdeleteToGendersTable extends Migration
      */
     public function down()
     {
-        Schema::table('genders', function (Blueprint $table) {
-            //
-        });
+        Schema::dropIfExists('symptoms');
     }
 }

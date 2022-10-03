@@ -17,18 +17,18 @@ class CreatePatientsTable extends Migration
             $table->id();
             $table->string('first_name');
             $table->string('last_name');
-            $table->unsignedBigInteger('gender_id'); //gender table needs creating
-            $table->string('postcode');
-            $table->string('telephone');
-            $table->string('email');
-            $table->unsignedBigInteger('marital_status_id'); //marital_status table needs creating
+            $table->unsignedBigInteger('gender_id')->nullable(); //gender table needs creating
+            $table->string('postcode')->nullable();
+            $table->string('telephone')->nullable();
+            $table->string('email')->nullable();
+            $table->unsignedBigInteger('marital_status_id')->nullable(); //marital_status table needs creating
             $table->string('occupation')->nullable();
             $table->boolean('hiv_status')->default(0);
             $table->text('past_history')->nullable();
             $table->text('current_issue');
-            $table->unsignedBigInteger('allergies_id')->nullable(); //allergies needs creating
             $table->text('current_medication')->nullable();
-            $table->date('date_of_birth');
+            $table->date('date_of_birth')->nullable();
+            $table->softDeletes($columns='deleted_at');
             $table->timestamps();
         });
     }

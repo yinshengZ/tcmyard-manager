@@ -15,8 +15,16 @@ class CreateIncomesTable extends Migration
     {
         Schema::create('incomes', function (Blueprint $table) {
             $table->id();
-            $table->decimal('amount',8,2);
-            $table->unsignedBigInteger('income_type_id');            
+            $table->unsignedBigInteger('amount');
+            $table->unsignedBigInteger('income_type_id');
+            $table->unsignedBigInteger('patient_id')->nullable();
+            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('treatment_id');
+            $table->unsignedBigInteger('service_id');
+            $table->unsignedTinyInteger('discount');
+            $table->longtext('description');
+            $table->unsignedBigInteger('quantity');
+            $table->softDeletes('deleted_at');
             $table->timestamps();
         });
     }

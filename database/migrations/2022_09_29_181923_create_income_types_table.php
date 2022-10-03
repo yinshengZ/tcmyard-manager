@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddQuantityColumnToIncomesTable extends Migration
+class CreateIncomeTypesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,11 @@ class AddQuantityColumnToIncomesTable extends Migration
      */
     public function up()
     {
-        Schema::table('incomes', function (Blueprint $table) {
-            $table->unsignedBigInteger('quantity');
+        Schema::create('income_types', function (Blueprint $table) {
+            $table->id();
+            $table->string('income_type');
+            $table->softDeletes('deleted_at');
+            $table->timestamps();
         });
     }
 
@@ -25,8 +28,6 @@ class AddQuantityColumnToIncomesTable extends Migration
      */
     public function down()
     {
-        Schema::table('incomes', function (Blueprint $table) {
-            $table->dropColumn('quantity');
-        });
+        Schema::dropIfExists('income_types');
     }
 }

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateIncomeTypeTable extends Migration
+class CreatePatientSymptomTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,10 @@ class CreateIncomeTypeTable extends Migration
      */
     public function up()
     {
-        Schema::create('income_type', function (Blueprint $table) {
+        Schema::create('patient_symptom', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('patient_id');
+            $table->unsignedBigInteger('symptom_id');
             $table->timestamps();
         });
     }
@@ -26,6 +28,6 @@ class CreateIncomeTypeTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('income_type');
+        Schema::dropIfExists('patient_symptom');
     }
 }

@@ -18,10 +18,11 @@ class CreateUsersTable extends Migration
             $table->string('account')->unique();
             $table->string('password');
             $table->string('nickname', 32)->comment('昵称');
-            $table->unsignedTinyInteger('gender')->default(3)->comment('性别 1 男 2 女 3 未知');
+            $table->unsignedTinyInteger('gender')->default(3);
             $table->string('avatar', 128)->nullable();
             $table->string('email')->unique();
             $table->string('signature')->nullable();
+            $table->softDeletes('deleted_at');
             $table->rememberToken();
             $table->timestamp('email_verified_at')->nullable();
             $table->timestamps();

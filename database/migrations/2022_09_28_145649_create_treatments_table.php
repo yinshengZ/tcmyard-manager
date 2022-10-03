@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateRecordsTable extends Migration
+class CreateTreatmentsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,14 @@ class CreateRecordsTable extends Migration
      */
     public function up()
     {
-        Schema::create('records', function (Blueprint $table) {
+        Schema::create('treatments', function (Blueprint $table) {
             $table->id();
-            $table->text('record_body');
+            $table->unsignedBigInteger('service_id');
             $table->unsignedBigInteger('patient_id');
+            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('quantity');
+            $table->longtext('treatment_details');
+            $table->softDeletes('deleted_at');
             $table->timestamps();
         });
     }
@@ -28,6 +32,6 @@ class CreateRecordsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('records');
+        Schema::dropIfExists('treatments');
     }
 }

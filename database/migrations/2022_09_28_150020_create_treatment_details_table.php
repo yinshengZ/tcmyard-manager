@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreatePatientAllergyTable extends Migration
+class CreateTreatmentDetailsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,15 @@ class CreatePatientAllergyTable extends Migration
      */
     public function up()
     {
-        Schema::create('patient_allergy', function (Blueprint $table) {
+        Schema::create('treatment_details', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('treatment_id');
+            $table->unsignedBigInteger('inventory_id');
             $table->unsignedBigInteger('patient_id');
-            $table->unsignedBigInteger('allergy_id');
+            $table->unsignedBigInteger('user_id');
+            $table->double('units',8,2);
+            $table->unsignedBigInteger('quantity');
+            $table->softDeletes('deleted_at');
             $table->timestamps();
         });
     }
@@ -28,6 +33,6 @@ class CreatePatientAllergyTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('patient_allergy');
+        Schema::dropIfExists('treatment_details');
     }
 }

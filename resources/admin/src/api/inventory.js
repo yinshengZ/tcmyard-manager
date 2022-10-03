@@ -37,6 +37,13 @@ export function get_herbs(){
     })
 }
 
+export function get_services(){
+    return request({
+        url:'/inventory/service',
+        method:'get',
+    })
+}
+
 export function get_retails(){
     return request({
         url:'/inventory/retail',

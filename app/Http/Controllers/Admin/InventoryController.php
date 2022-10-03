@@ -115,13 +115,18 @@ class InventoryController extends Controller
         return $herbs;
     }
 
+    public function get_services(){
+        $services = Inventory::where('categories_id',2)->get();
+        return $services;
+    }
+
     public function get_retails(){
-        $retails = Inventory::where('categories_id',2)->get();
+        $retails = Inventory::where('categories_id',3)->get();
         return $retails;
     }
 
     public function get_others(){
-        $others = Inventory::where('categories_id', '>=','3')->get();
+        $others = Inventory::where('categories_id', '>=','4')->get();
         return $others;
     }
 

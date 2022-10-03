@@ -16,7 +16,7 @@
             :ref="form_data"
             :model="form_data"
             :inline="true"
-            :rules="validation1"
+            :rules="validation"
             class="search_patient_form"
             label-position="top"
           >
@@ -87,7 +87,7 @@
     <el-dialog
     title="Add New Patient:"
     :visible.sync="add_patient_form_visible"
-    :before-close="handle_close">
+    >
     <add-patient-form
     :key="key"></add-patient-form>
     </el-dialog>

@@ -144,7 +144,8 @@ export default {
 
 <style lang="scss" scoped>
 .new-record-button {
-  float: right;
+  margin:auto;
+  margin-bottom:20px;
 }
 .patient-record {
   .patient-block {

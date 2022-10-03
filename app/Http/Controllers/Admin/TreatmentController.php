@@ -74,7 +74,7 @@ class TreatmentController extends Controller
         }
 
         //get the type of treatment for herbs and its info
-        $service_info = Service::select('id','unit_price')->where('service_title','LIKE','%'.'herb'.'%')->first();
+        $service_info = Inventory::select('id','unit_price')->where('categories_id','=',1 )->first();
         $package_price = $service_info['unit_price'];       
         
         $service_id = $service_info['id'];

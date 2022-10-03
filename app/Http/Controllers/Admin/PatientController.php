@@ -148,17 +148,19 @@ class PatientController extends Controller
         $patients;
         $date;      
        if($option=="name"){
-        $id= Patient::where('first_name','LIKE',$input)->orWhere('last_name','Like',$input)->get()->pluck('id');
+        $id= Patient::where('first_name',"LIKE", "%{$input}%")
+        ->orWhere('last_name',"Like", "%{$input}%")
+        ->get()->pluck('id');
        }else if($option=="email"){
-           $id=Patient::where('email','LIKE',$input)->get()->pluck('id');
+           $id=Patient::where('email','LIKE',"%{$input}%")->get()->pluck('id');
        }else if($option=="gender"){
            $gender_id= Gender::select('id')->where('gender',$input)->value('id');
            $id= Patient::where('gender_id',$gender_id)->get()->pluck('id');
        }else if($option=="symptom"){
-           $data = Symptom::where('symptom','LIKE',$input)->with('patients')->get();
+           $data = Symptom::where('symptom','LIKE',"%{$input}%")->with('patients')->get();
            $id= $data->pluck('patients')->collapse()->pluck('id');
        }else if($option=="allergy"){
-           $data=Allergy::where('allergies','LIKE',$input)->with('patients')->get();
+           $data=Allergy::where('allergies','LIKE',"%{$input}%")->with('patients')->get();
            $id=$data->pluck('patients')->collapse()->pluck('id');
        }else if($option=="date"){             
            $date = Carbon::parse($input);

@@ -33,6 +33,7 @@ Route::group([
     Route::get('inventory/category/{category_id}',[InventoryController::class,'get_inventory_by_category']);
     Route::get('inventory/retail',[InventoryController::class,'get_retails']);
     Route::get('inventory/herb',[InventoryController::class,'get_herbs']);
+    Route::get('inventory/service',[InventoryController::class,'get_services']);
     Route::get('inventory/other',[InventoryController::class,'get_others']);
 
     Route::post('treatment/herb',[TreatmentController::class,'addHerbalPackages']);

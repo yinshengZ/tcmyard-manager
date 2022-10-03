@@ -124,6 +124,99 @@
     </el-pagination>
     </el-tab-pane>
 
+    <el-tab-pane>
+      <span slot="label"><svg-icon icon-class="service_2"></svg-icon>Service</span>
+      <el-table
+      :data="paged_services"
+      style="width:100%">
+
+      <el-table-column label="ID" width="50">
+        <template slot-scope="{row}">
+          <span>{{row.id}}</span>
+        </template>
+      </el-table-column>
+
+      <el-table-column label="Name" width="100">
+        <template slot-scope="{row}">           
+          <span>{{row.name}}</span>
+        </template>
+      </el-table-column>
+
+      <el-table-column label="English Name" width="130">
+        <template slot-scope="{row}">
+          <span>{{row.eng_name}}</span>
+        </template>
+      </el-table-column>
+
+      <el-table-column label="Stock" width="100">
+        <template slot-scope="{ row }">
+          <span>{{ row.stock }}</span>
+        </template>
+      </el-table-column>
+      
+      <el-table-column
+      label="Unit Price"
+      width="100"
+      align="center">
+        <template slot-scope="{row}">
+          <span>
+            {{row.unit_price}}
+          </span>         
+        </template>
+      </el-table-column>
+
+      <el-table-column label="Expiry Date" width="140">
+        <template slot-scope="{ row }">          
+          <span v-if="row.expiry_date==null">No Date Set</span>
+          <span v-else>{{convert_date(row.expiry_date)}}</span>
+        </template>
+      </el-table-column>
+
+      <el-table-column label="Last Updated" width="140">
+        <template slot-scope="{ row }">
+          <span>{{ convert_date(row.updated_at) }}</span>
+        </template>
+      </el-table-column>     
+
+      <el-table-column label="Operations" width="220">
+        <template slot-scope="{row}">
+          <el-button type="primary" @click="load_update_inventory_form(row.id)"> Update </el-button>
+
+          <el-button type="danger" @click="delete_inventory(row.id)"> Delete </el-button>
+        </template>
+      </el-table-column>   
+
+      <el-table-column type="expand" align="right" label="Description" width="180">
+          <template slot="header">
+            <el-input
+            v-model="search"
+            size="mini"
+            placeholder="Type to search..">
+            </el-input>            
+        </template>
+        <template slot-scope="{ row }">
+          <p><b>Description:</b></p>
+          <span>{{ row.description }}</span>
+        </template>
+      </el-table-column>
+
+        </el-table>
+
+        <el-pagination
+    background
+    layout="sizes,prev,pager,next"
+    @size-change="change_page_size"
+    @current-change="set_page"
+    :page-size="page_size"
+    :page-sizes = "page_sizes"
+    :total="services.length">
+
+    </el-pagination>
+
+      </el-table>
+
+    </el-tab-pane>
+
    
    <!--retail tab of inventory lists-->
   <el-tab-pane>
@@ -328,6 +421,7 @@
 import { get_herbs } from "@/api/inventory";
 import {get_retails} from "@/api/inventory";
 import {get_others } from "@/api/inventory";
+import {get_services} from "@/api/inventory";
 import {delete_item} from '@/api/inventory';
 
 import AddItem from './add-item';
@@ -345,6 +439,7 @@ components:{AddItem,UpdateInventory},
   data() {
     return {
       herbs:[],
+      services:[],
       retails:[],
       others:[],
       inventory_list: [],
@@ -363,6 +458,7 @@ components:{AddItem,UpdateInventory},
     this.get_herbs();
     this.get_retails();
     this.get_others();
+    this.get_services();
   },
 
   computed:{
@@ -372,6 +468,9 @@ components:{AddItem,UpdateInventory},
 
     paged_retails(){
        return this.retails.slice(this.page_size * this.page - this.page_size, this.page_size*this.page)
+    },
+    paged_services(){
+      return this.services.slice(this.page_size * this.page - this.page_size, this.page_size*this.page)
     },
 
     paged_others(){
@@ -385,6 +484,7 @@ components:{AddItem,UpdateInventory},
     get_inventories() {
      this.get_herbs();
      this.get_retails();
+     this.get_services();
      this.get_others();
      this.add_inventory_form_visible=false,
      this.update_inventory_form_visible=false
@@ -403,6 +503,12 @@ components:{AddItem,UpdateInventory},
       get_herbs().then((response)=>{
         this.herbs = response        
       })      
+    },
+
+    get_services(){
+      get_services().then((response)=>{
+        this.services = response
+      })
     },
 
 

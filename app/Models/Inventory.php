@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Inventory extends Model
 {
     use HasFactory;
-    use SoftDeletes;
+    //use SoftDeletes;
     public function category(){
         return $this->belongsTo('App\Models\Category','categories_id');
     }

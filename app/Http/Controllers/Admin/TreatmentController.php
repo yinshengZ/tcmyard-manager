@@ -116,6 +116,10 @@ class TreatmentController extends Controller
         
     }
 
+    public function addServices(Request $request){
+        return $request;
+    }
+
     /**
      * Store a newly created resource in storage.
      *

@@ -26,6 +26,7 @@
             Update
           </el-button>
 
+
           <el-button type="danger" @click="confirm_delete(row.id)">
             Delete
           </el-button>
@@ -120,4 +121,5 @@ export default {
 </script>
 
 <style scoped>
+
 </style>

@@ -61,7 +61,7 @@
         <template
         slot-scope="{row}">
                 
-             {{row[0].categories_title | uppercaseFirst}}
+             {{row[0].service_title}}
       
         </template>
 
@@ -104,7 +104,7 @@ import EditTreatmentTable from '@/views/treatments/components/edit-treatment-tab
 
 import { getPatientTreatments } from '@/api/treatment'
 
-import { uppercaseFirst } from '@/filters/index.js'
+
 import dayjs from 'dayjs'
 
 export default{
@@ -119,10 +119,6 @@ export default{
 
 
         }
-    },
-
-    filters:{
-        uppercaseFirst
     },
 
     created(){

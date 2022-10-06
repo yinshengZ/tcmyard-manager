@@ -1,7 +1,7 @@
 <template>
   <div class="body">
     <el-row>
-      <el-col :span="14" :offset="5">
+      <el-col :span="14" :offset="1">
         <div class="category">
           <el-card class="category_card">
             <div slot="header" class="clearfix">
@@ -29,7 +29,7 @@ export default {
 
 <style scoped>
 .category {
-  margin-top: 10%;
+  margin-top: 5%;
   width: 820px;
 }
 </style>

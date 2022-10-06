@@ -30,3 +30,11 @@ export function addHerbalPackages(data){
     })
 }
 
+export function addServices(data){
+    return request({
+        url:'/treatment/service',
+        method:'post',
+        data
+    })
+}
+

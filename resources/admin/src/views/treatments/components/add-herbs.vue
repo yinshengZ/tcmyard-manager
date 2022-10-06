@@ -3,7 +3,7 @@
     <el-card>
       <el-button @click="add_row" type="info" icon="el-icon-plus">Ingredient</el-button>
       <div class="add_herbs_form">
-          <el-form v-model="herb_details" label-width="80px" label-position="left">
+      <el-form v-model="herb_details" label-width="80px" label-position="left">
         <el-form-item
           v-for="(herb_detail, index) in herb_details"
           :label="'Herb ' + (index + 1)"
@@ -52,6 +52,8 @@
         </div>
       </el-form>
 
+      
+
       </div>
       
    
@@ -89,7 +91,9 @@ export default {
     },
     add_herbal_packages() {
     
-      this.treatment_details = {herb_details:this.herb_details, 
+      this.treatment_details = {
+      
+      herb_details:this.herb_details, 
       quantity:this.quantity,       
       patient_id:this.patient_id, 
       user_id:this.user_id, 

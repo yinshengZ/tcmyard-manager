@@ -117,7 +117,8 @@ class TreatmentController extends Controller
     }
 
     public function addServices(Request $request){
-        return $request;
+        $service = new Treatment;
+        $service->service_id = $request->service_id;
     }
 
     /**

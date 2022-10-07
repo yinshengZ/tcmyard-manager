@@ -200,9 +200,9 @@
         </template>
       </el-table-column>
 
-        </el-table>
+      </el-table>
 
-        <el-pagination
+    <el-pagination
     background
     layout="sizes,prev,pager,next"
     @size-change="change_page_size"
@@ -213,7 +213,7 @@
 
     </el-pagination>
 
-      </el-table>
+
 
     </el-tab-pane>
 
@@ -506,8 +506,10 @@ components:{AddItem,UpdateInventory},
     },
 
     get_services(){
+     
       get_services().then((response)=>{
         this.services = response
+       
       })
     },
 

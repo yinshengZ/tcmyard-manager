@@ -17,6 +17,7 @@ use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\TreatmentController;
 use App\Http\Controllers\Admin\StockController;
 use App\Http\Controllers\Admin\IncomeTypeController;
+use App\Http\Controllers\Admin\TodoController;
 
 Route::post('login', [UserController::class, 'login'])->name('admin.api.login');
 
@@ -57,5 +58,6 @@ Route::group([
     Route::apiResource('treatment',TreatmentController::class);
     Route::apiResource('stock',StockController::class);
     Route::apiResource('income_type',IncomeTypeController::class);
+    Route::apiResource('todo',TodoController::class);
 
 });

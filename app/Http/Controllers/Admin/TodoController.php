@@ -15,7 +15,12 @@ class TodoController extends Controller
      */
     public function index()
     {
-        //
+        
+    }
+
+    public function user_todo_list($user_id){
+        $user_todo = TODO::where('user_id',$user_id)->get();
+        return $user_todo;
     }
 
     /**

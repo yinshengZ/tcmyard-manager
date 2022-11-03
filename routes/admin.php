@@ -45,6 +45,7 @@ Route::group([
 
     Route::post('income/service',[IncomeController::class,'addIncomeByService']);
 
+    Route::get('todo/{user_id}',[TodoController::class,'user_todo_list']);
 
     Route::apiResource('gender',GenderController::class);
     Route::apiResource('marital',MaritalController::class);

@@ -30,6 +30,7 @@
                 icon="icon-size el-icon-check"
                 class="icon-size"
                 circle
+                @click="update_todo('completed',1)"
               ></el-button>
               <el-button type="warning" circle
                 ><svg-icon icon-class="pause" class="icon-size"></svg-icon
@@ -76,7 +77,8 @@
 
 <script>
 import {mapGetters} from "vuex"
-import {add_todo} from '@/api/todo'
+import {add_todo, get_todo} from '@/api/todo'
+
 export default {
   data() {
     return {
@@ -96,6 +98,7 @@ export default {
   },
   created(){
     this.get_user()
+    this.get_all_todo()
   },
   methods: {
     get_user(){
@@ -114,11 +117,16 @@ export default {
       
     },
     update_todo(status, id){
-
+      alert(status);
+      alert(id);
     },
 
     get_all_todo(){
+      get_todo(this.todo.user_id).then((response=>{
+        console.log(response)
+      }))
       this.todo_form_visibility=false
+
     }
   },
 };

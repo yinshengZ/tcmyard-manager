@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\TODO;
 
 class TodoController extends Controller
 {
@@ -35,7 +36,13 @@ class TodoController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $todo = new TODO;
+        $todo->content = $request->task;
+        $todo->finish_date=$request->deadline;
+        $todo->status = "unfinished";
+        $todo->user_id = $request->user_id;
+        $todo->save();
+        return $request;
     }
 
     /**

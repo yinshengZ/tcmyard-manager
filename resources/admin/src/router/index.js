@@ -80,7 +80,13 @@ export const constantRoutes = [
         component: () => import('@/views/dashboard/index'),
         name: 'Dashboard',
         meta: { title: 'Dashboard', icon: 'dashboard', affix: true }
-      }
+      },
+      {
+        path:'/todo',
+        component:()=>import('@/views/Todo/index'),
+        name:'ToDo',
+        meta:{title:'Todo list',icon:'char', affix:true}
+      },
     ]
   },
 

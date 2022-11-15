@@ -16,7 +16,7 @@ export function get_todo(user_id){
     })
 }
 
-export function update_todo(data){
+export function update_todo_list(data){
     return request({
         url:'/todo',
         method:'put',
@@ -24,10 +24,10 @@ export function update_todo(data){
     })
 }
 
-export function delete_todo(data){
+export function delete_todo_list(data){
     return request({
-        url:'/todo',
+        url:'/todo/'+data,
         method:'delete',
-        data
+        
     })
 }

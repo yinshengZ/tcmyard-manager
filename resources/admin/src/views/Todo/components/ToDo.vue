@@ -83,7 +83,7 @@
 
 <script>
 import {mapGetters} from "vuex"
-import {add_todo, get_todo, update_todo, delete_todo} from '@/api/todo'
+import {add_todo, get_todo, update_todo_list, delete_todo_list} from '@/api/todo'
 
 export default {
   data() {
@@ -121,8 +121,10 @@ export default {
       alert(status);
       alert(id);
     },
-    delete_todo(user_id){
-      console.log(user_id)
+    delete_todo(todo_id){
+      delete_todo_list(todo_id).then((response)=>{
+        this.get_all_todo()
+      })
     },
 
     get_all_todo(){

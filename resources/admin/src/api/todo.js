@@ -15,3 +15,19 @@ export function get_todo(user_id){
         method:'get',
     })
 }
+
+export function update_todo(data){
+    return request({
+        url:'/todo',
+        method:'put',
+        data
+    })
+}
+
+export function delete_todo(data){
+    return request({
+        url:'/todo',
+        method:'delete',
+        data
+    })
+}

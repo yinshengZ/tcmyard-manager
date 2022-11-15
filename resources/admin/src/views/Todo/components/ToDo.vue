@@ -5,34 +5,36 @@
       <div slot="header" class="clearfix">
         <span>To Do List</span>
         <div class="new-task-button">
-          <el-button icon="el-icon-plus" type="primary" v-on:click="add_todo_form"></el-button>
+          <el-button icon="el-icon-plus" type="primary" v-on:click="add_todo_form">
+          </el-button>
         </div>
       </div>
 
       
         <el-table :data="todo_list" style="width: 100%">
           <el-table-column
-            prop="deadline"
+            prop="finish_date"
             label="Deadline"
-            width="80%"
+            width="100"
             class="table-column"
           >
           </el-table-column>
           <el-table-column prop="status" label="Status" width="100">
           </el-table-column>
-          <el-table-column prop="task" label="Task" width="180">
+          <el-table-column prop="content" label="Task" width="180">
           </el-table-column>
 
-          <el-table-column label="Operations" width="180">
-            <div class="operation-buttons">
+          <el-table-column label="Operations" width="180" prop="id">
+            <template slot-scope="data">
+              <div class="operation-buttons">
               <el-button
                 type="success"
-                icon="icon-size el-icon-check"
-                class="icon-size"
+                icon="icon-size el-icon-check"              
                 circle
-                @click="update_todo('completed',1)"
+                @click="update_todo('completed',todo.user_id)"
               ></el-button>
               <el-button type="warning" circle
+              @click="update_todo('suspended',todo.user_id)"
                 ><svg-icon icon-class="pause" class="icon-size"></svg-icon
               ></el-button>
               <el-button
@@ -40,8 +42,12 @@
                 icon="el-icon-close"
                 class="icon-size"
                 circle
+                @click="delete_todo(data.row.id)"
               ></el-button>
+              <span></span>
             </div>
+            </template>
+            
           </el-table-column>
         </el-table>
       
@@ -77,17 +83,13 @@
 
 <script>
 import {mapGetters} from "vuex"
-import {add_todo, get_todo} from '@/api/todo'
+import {add_todo, get_todo, update_todo, delete_todo} from '@/api/todo'
 
 export default {
   data() {
     return {
       todo_list: [
-        {
-          task: "asdjlaksjfljaslkdfjlaksjdlknjasdnlkasnclknaxlkcnmlasjdflahksdflkhaslkdjklasjclknaslknflakshfklajsndlkhasdlfhalsjdlkadfhblkashdlkjasdkl",
-          deadline: "today",
-          status: "unfinished",
-        },
+      
       ],
       todo:{},
       todo_form_visibility:false,
@@ -103,13 +105,12 @@ export default {
   methods: {
     get_user(){
       this.todo.user_id = this.id;
-      alert(this.todo.user_id)
+      
     },
     add_todo_form(){
       this.todo_form_visibility=true
     },
-    add_new_todo(){
-      console.log(this.todo)
+    add_new_todo(){      
       add_todo(this.todo).then((response=>{
         console.log(response)
       }))
@@ -120,10 +121,14 @@ export default {
       alert(status);
       alert(id);
     },
+    delete_todo(user_id){
+      console.log(user_id)
+    },
 
     get_all_todo(){
       get_todo(this.todo.user_id).then((response=>{
-        console.log(response)
+        this.todo_list = response
+        console.log(this.todo_list)
       }))
       this.todo_form_visibility=false
 

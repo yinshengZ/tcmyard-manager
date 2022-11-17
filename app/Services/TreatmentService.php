@@ -35,10 +35,10 @@ class TreatmentService{
             
             $final_details=[];
 
-           // print_r($treatment);
+       
             
 
-            //TODO:treatment details constructed, but only with the last record. needs fixing
+          
             foreach($treatment_details_id as $index=>$treatment_detail_id){
                 $treatment_details = TreatmentDetails::findOrFail($treatment_detail_id)->toArray();
                 $inventory_details = Inventory::findOrFail($treatment_details['inventory_id'])->toArray();
@@ -81,7 +81,28 @@ class TreatmentService{
 }
 
 public static function processSingleTreatment($id){
-    $treatment_details = Treatment::findOrFail($id)->toArray();
-    return $treatment_details;
+    $treatment_details = Treatment::findOrFail($id)->get();
+    $treatments =[];
+    $units=[];
+    $final_detail=[];
+ 
+    // TODO: Fix needed. records retreived are wrong.
+    foreach($treatment_details as $treatment_detail){
+        $treatments = json_decode($treatment_detail['treatment_details'],true);
+        foreach($treatments as $treatment){
+            $inventory_detail = Inventory::findOrFail($treatment['id'])->get();
+            $inventory_name = $inventory_detail;
+            $units['unit']=$treatment['unit'];
+            $detail =[];
+            $detail['inventory_detail']=$inventory_name;            
+            $detail['unit']=$units['unit'];
+            array_push($final_detail, $detail);
+           
+        }
+
+        
+    }
+    
+    return $final_detail;
 }
 }

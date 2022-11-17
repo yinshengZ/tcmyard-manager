@@ -23,15 +23,6 @@ class TodoController extends Controller
         return $user_todo;
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
 
     /**
      * Store a newly created resource in storage.
@@ -44,7 +35,7 @@ class TodoController extends Controller
         $todo = new TODO;
         $todo->content = $request->task;
         $todo->finish_date=$request->deadline;
-        $todo->status = "unfinished";
+        $todo->status = 0;
         $todo->user_id = $request->user_id;
         $todo->save();
         return $request;
@@ -61,16 +52,7 @@ class TodoController extends Controller
         //
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
+
 
     /**
      * Update the specified resource in storage.
@@ -81,7 +63,10 @@ class TodoController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+      $todo = TODO::find($id);     
+      $todo->status = $request->todo_status;
+      $todo->save();
+      return 'updated!';
     }
 
     /**

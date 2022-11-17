@@ -18,8 +18,21 @@
             width="100"
             class="table-column"
           >
+          <template slot-scope="data">
+            <span>{{date_converter(data.row.finish_date)}}</span>
+
+          </template>
           </el-table-column>
-          <el-table-column prop="status" label="Status" width="100">
+          <el-table-column prop="status" label="Status" width="100"> 
+            <template slot-scope="data">
+              <div>
+                <span v-if="data.row.status ==1">Finished</span> 
+                <span v-else-if="data.row.status==2">Suspended</span>
+                <span v-else>Unfinished</span>
+
+              </div>
+            </template>   
+               
           </el-table-column>
           <el-table-column prop="content" label="Task" width="180">
           </el-table-column>
@@ -31,20 +44,27 @@
                 type="success"
                 icon="icon-size el-icon-check"              
                 circle
-                @click="update_todo('completed',todo.user_id)"
+                @click="update_todo(1,data.row.id)"
               ></el-button>
               <el-button type="warning" circle
-              @click="update_todo('suspended',todo.user_id)"
+              @click="update_todo(2,data.row.id)"
                 ><svg-icon icon-class="pause" class="icon-size"></svg-icon
               ></el-button>
-              <el-button
+
+             <el-popconfirm
+             title="Are you sure you want to delete this? "
+             @onConfirm="delete_todo(data.row.id)"
+             @onCancel="get_all_todo">
+             <el-button
+             slot="reference"
                 type="danger"
                 icon="el-icon-close"
                 class="icon-size"
-                circle
-                @click="delete_todo(data.row.id)"
+                circle              
               ></el-button>
-              <span></span>
+             </el-popconfirm> 
+              
+             
             </div>
             </template>
             
@@ -84,6 +104,7 @@
 <script>
 import {mapGetters} from "vuex"
 import {add_todo, get_todo, update_todo_list, delete_todo_list} from '@/api/todo'
+import {date_converter} from '@/utils/converters'
 
 export default {
   data() {
@@ -103,6 +124,7 @@ export default {
     this.get_all_todo()
   },
   methods: {
+    date_converter,
     get_user(){
       this.todo.user_id = this.id;
       
@@ -117,9 +139,17 @@ export default {
 
       
     },
-    update_todo(status, id){
-      alert(status);
-      alert(id);
+    update_todo(status, id){  
+      
+      this.data = {
+        todo_status: status
+      }
+      update_todo_list(this.data,id).then((response)=>{
+        this.get_all_todo()
+        
+      })
+      
+    
     },
     delete_todo(todo_id){
       delete_todo_list(todo_id).then((response)=>{

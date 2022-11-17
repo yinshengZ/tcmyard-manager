@@ -16,9 +16,9 @@ export function get_todo(user_id){
     })
 }
 
-export function update_todo_list(data){
+export function update_todo_list(data,id){
     return request({
-        url:'/todo',
+        url:'/todo/'+id,
         method:'put',
         data
     })

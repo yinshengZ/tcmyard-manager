@@ -28,7 +28,7 @@ class TreatmentController extends Controller
        return $treatments;
     }
 
-    //get single treatment data for updating
+    //get single treatment data for displaying or updating
     public function show($id){
         $treatment_details = TreatmentService::processSingleTreatment($id);
         return $treatment_details;   

@@ -86,12 +86,12 @@
 
         
         <el-dialog
-        title="Update Treatment"
+        
        :visible.sync="this.update_treatment_table_visible"
        :before-close="get_patient_treatments"
        >
-       <span>Treatment Deatils: </span>
-        <edit-treatment-table :treatment_id= "this.treatment_id"></edit-treatment-table>
+       
+        <edit-treatment-table :treatment_id= "this.treatment_id" :key="key"></edit-treatment-table>
         </el-dialog>
 
        
@@ -115,7 +115,7 @@ export default{
             treatments:[],
             update_treatment_table_visible:false,
             treatment_id:0,
-            
+            key:0
 
 
         }
@@ -140,6 +140,7 @@ export default{
         edit_treatment(id){
             this.update_treatment_table_visible = true;
             this.treatment_id = id
+            this.key +=1
            
         },
 

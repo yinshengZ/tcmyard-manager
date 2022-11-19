@@ -81,28 +81,16 @@ class TreatmentService{
 }
 
 public static function processSingleTreatment($id){
-    $treatment_details = Treatment::findOrFail($id)->get();
-    $treatments =[];
-    $units=[];
+    $treatment_details = TreatmentDetails::where('treatment_id',$id)->get();
+    $treatment =[]; 
     $final_detail=[];
- 
-    // TODO: Fix needed. records retreived are wrong.
-    foreach($treatment_details as $treatment_detail){
-        $treatments = json_decode($treatment_detail['treatment_details'],true);
-        foreach($treatments as $treatment){
-            $inventory_detail = Inventory::findOrFail($treatment['id'])->get();
-            $inventory_name = $inventory_detail;
-            $units['unit']=$treatment['unit'];
-            $detail =[];
-            $detail['inventory_detail']=$inventory_name;            
-            $detail['unit']=$units['unit'];
-            array_push($final_detail, $detail);
-           
-        }
 
-        
+    foreach($treatment_details as $treatment_detail){
+        $treatment['inventory'] = Inventory::where('id',$treatment_detail['inventory_id'])->get();
+        $treatment['quantity']=$treatment_detail['quantity'];
+        array_push($final_detail,$treatment);
     }
-    
+
     return $final_detail;
 }
 }

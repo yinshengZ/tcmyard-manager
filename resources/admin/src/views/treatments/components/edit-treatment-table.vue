@@ -1,6 +1,18 @@
 <template>
     <div>
-        <p>update treatment table here(under construction)</p>
+        <el-card shadow="always">
+            <div slot="header">
+                <span>Update Treatment</span>
+            </div>
+
+            <!--TODO: create update form here-->
+              
+            <el-form :model="updated_treatment_detail">
+               
+                
+            </el-form>
+
+        </el-card>
         
     </div>
 </template>
@@ -13,7 +25,10 @@
 
         data(){
             return{
-                id: this.treatment_id
+                id: this.treatment_id,
+                treatment_detail:[],
+                updated_treatment_detail:[],
+
             }
         },
 
@@ -23,8 +38,7 @@
         methods:{
             get_treatment_details(){
                 getSingleTreatment(this.id).then((response)=>{
-                    console.log(response)
-                    
+                    this.treatment_detail = response                    
                 })
 
                 

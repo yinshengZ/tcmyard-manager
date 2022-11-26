@@ -86,9 +86,10 @@ public static function processSingleTreatment($id){
     $final_detail=[];
 
     foreach($treatment_details as $treatment_detail){
-        $treatment['inventory'] = Inventory::where('id',$treatment_detail['inventory_id'])->get();
+        $treatment['inventory'] = Inventory::where('id',$treatment_detail['inventory_id'])->first();
         $treatment['units']= $treatment_detail['units'];
         $treatment['quantity']=$treatment_detail['quantity'];
+        $treatment['categories_id'] = Inventory::select('categories_id')->where('id',$treatment_detail['inventory_id'])->value('categories_id');
         array_push($final_detail,$treatment);
     }
 

@@ -1,52 +1,56 @@
 <template>
     <div>
         <el-card shadow="always">
-        <!--<p>{{this.treatment_detail}}</p>-->
-        <!-- <p v-for ="treatment in this.treatment_detail">
-            {{treatment.inventory[0].name}}
+        <p>{{this.treatment_detail}}</p>
+        <p v-for ="treatment in treatment_detail">
+            {{treatment.inventory.name}}
             {{treatment.quantity}}
             {{treatment.units}}
-        </p> -->
+        </p>
 
  <!--TODO:fix inventory not defined error-->
-        <div v-if="this.treatment_detail[0].inventory[0].categories_id == 1">
+        <div v-if="treatment_detail[0].categories_id == 1">
             <p>herbs update</p>
-            <p>{{this.inventory}}</p>
+            <p>categories_id is {{treatment_detail[0].categories_id}}</p>
+            <!-- <p>{{this.inventory}}</p> -->
             <el-form :model="updated_treatment_detail" label-width="120px">
-            <div v-for="treatment in this.treatment_detail">
+            <div v-for="(treatment,index) in treatment_detail" :key="treatment.id">
                 <el-form-item
             label="Name"
             >
 
+            <!--TODO:Fix v-model issue-->
             <el-select
-            v-model="updated_treatment_detail">
+            v-model="updated_treatment_detail[index]['name']">
                 <el-option
-                v-for="item in this.inventory"
+                v-for="item in inventory"
                 :key="item.id"
                 :label="item.name + ' / stock: '+ item.stock"
                 :value="item.id">
 
                 </el-option>
-        </el-select>
-
-
+            </el-select>
+            </el-form-item>
+            <el-form-item
+            label="Units">
+               <el-input v-model="updated_treatment_detail[index]"></el-input> 
             </el-form-item>
 
             </div>
            
         </el-form>
       </div>
-      <div v-else-if="this.treatment_detail[0].inventory[0].categories_id==2">
+      <div v-else-if="treatment_detail[0].categories_id==2">
         <p>service update</p>
       </div>
 
-      <div v-else-if="this.treatment_detail[0].inventory[0].categories_id==3">
+      <div v-else-if="treatment_detail[0].categories_id==3">
         <p>retail update</p>
     
     
     </div>
         
-        
+    <p>{{updated_treatment_detail}}</p>        
     </el-card>
         
     </div>
@@ -62,9 +66,13 @@
             return{
                 id: this.treatment_id,
                 treatment_detail:[],
-                updated_treatment_detail:[],
+                updated_treatment_detail:{
+                    name:'',
+                    units:'',
+                    quantity:''
+                },
                 inventory:[]
-
+                
             }
         },
 
@@ -77,7 +85,7 @@
                 getSingleTreatment(this.id).then((response)=>{
                     this.treatment_detail = response                 
                     
-                    this.get_categorized_inventories(this.treatment_detail[0].inventory[0].categories_id)
+                    this.get_categorized_inventories(this.treatment_detail[0].categories_id)
                    
                 })
 
@@ -88,11 +96,11 @@
                if(categories_id ==1){
                 this.get_all_herbs()
                }else if(categories_id==2){
-                 this.get_all_services
+                 this.get_all_services()
                }else if(categories_id==3){
-                this.get_all_retails
+                this.get_all_retails()
                }else if(categories_id==4){
-                this.get_all_others
+                this.get_all_others()
                }
             },
 

@@ -21,7 +21,7 @@
 
             <!--TODO:Fix v-model issue-->
             <el-select
-            v-model="updated_treatment_detail[index]['name']">
+            v-model="updated_treatment_detail[index]">
                 <el-option
                 v-for="item in inventory"
                 :key="item.id"
@@ -67,9 +67,7 @@
                 id: this.treatment_id,
                 treatment_detail:[],
                 updated_treatment_detail:{
-                    name:'',
-                    units:'',
-                    quantity:''
+                   
                 },
                 inventory:[]
                 

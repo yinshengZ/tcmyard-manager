@@ -26,9 +26,7 @@
         label="Details"
         align="center">
         <template slot-scope="{ row }">
-            <!--<span>{{date_convert(row.treatment_created_at)}}</span>-->
-<!--             <span>{{row[0].treatment_id}} : {{date_convert(row[0].treatment_created_at)}}</span>  
- -->            <span v-for="(detail, index) in row">
+          <span v-for="(detail, index) in row">
                 {{detail.name}}{{"("+detail.units+")"}}{{", "}}
             </span> 
         </template>
@@ -73,7 +71,7 @@
         <template
         slot-scope="{row}">
         <el-button
-        type="primary" @click="edit_treatment(row[0].treatment_id)">Edit</el-button>
+        type="primary" @click="edit_treatment(row[0].treatment_id, row[0].categories_id)">Edit</el-button>
         <el-button
         type="danger">Delete</el-button>
             
@@ -91,7 +89,7 @@
        :before-close="get_patient_treatments"
        >
        
-        <edit-treatment-table :treatment_id= "this.treatment_id" :key="key"></edit-treatment-table>
+        <edit-treatment-table :treatment_id= "this.treatment_id" :key="key" :treatment_category = "this.treatment_category"></edit-treatment-table>
         </el-dialog>
 
        
@@ -115,6 +113,7 @@ export default{
             treatments:[],
             update_treatment_table_visible:false,
             treatment_id:0,
+            treatment_category:0,
             key:0
 
 
@@ -137,10 +136,10 @@ export default{
             
         },
 
-        edit_treatment(id){
+        edit_treatment(id,categories_id){
             this.update_treatment_table_visible = true;
             this.treatment_id = id
-            this.key +=1
+            this.treatment_category = categories_id         
            
         },
 

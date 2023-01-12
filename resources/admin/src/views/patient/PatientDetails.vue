@@ -27,6 +27,10 @@
             <el-tab-pane label="Finance" name="finance">
               <finance-card></finance-card>
             </el-tab-pane>
+
+            <el-tab-pane label="Files" name="files">
+              
+            </el-tab-pane>
           </el-tabs>
         </el-card>
       </el-col>

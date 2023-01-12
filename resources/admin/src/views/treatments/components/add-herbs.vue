@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-card>
+
       <el-button @click="add_row" type="info" icon="el-icon-plus">Ingredient</el-button>
       <div class="add_herbs_form">
       <el-form v-model="herb_details" label-width="80px" label-position="left">
@@ -57,7 +57,7 @@
       </div>
       
    
-    </el-card>
+
   </div>
 </template>
 

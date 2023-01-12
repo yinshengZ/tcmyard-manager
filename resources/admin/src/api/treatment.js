@@ -38,3 +38,51 @@ export function addServices(data){
     })
 }
 
+export function addRetail(data){
+    return request({
+        url:'/treatment/retail',
+        method:'post',
+        data
+    })
+}
+
+export function addOther(data){
+    return request({
+        url:'/treatment/other',
+        method:'post',
+        data
+    })
+}
+
+export function update_service(data){
+    return request({
+        url:'/treatment/service',
+        method:'put',
+        data
+    })
+}
+
+export function updateHerbs(data){
+    return request({
+        url:'/treatment/herb',
+        method:'put',
+        data
+    })
+}
+
+export function updateRetails(data){
+    return request({
+        url:'/treatment/retail',
+        method:'put',
+        data
+    })
+}
+
+export function deleteTreatment(data){
+    return request({
+        url:'/treatment/'+data,
+        method:'delete',
+        
+    })
+}
+

@@ -9,7 +9,7 @@
      >
 
      <el-select
-     v-model="service_details.id"
+     v-model="treatment_details.id"
      placeholder="services...">
 
     <el-option
@@ -26,13 +26,23 @@
     <el-form-item
     label="Units: ">
     <el-input-number
-    v-model="service_details.unit"
+    v-model="treatment_details.unit"
     :min="1"
     :max="9999999"
     :step="1"
     placholder="units">
 
     </el-input-number>
+    </el-form-item>
+
+    <el-form-item
+    label="Quantity">
+    <el-input-number
+    v-model="treatment_details.quantity"
+    :min="1"
+    :max="9999999"
+    :step="1"
+    placeholder="quantity"></el-input-number>
     </el-form-item>
 
     <el-form-item
@@ -67,10 +77,11 @@ export default{
     props:['patient_id','user_id'],
     data(){
         return{
-            treatment_details:[],
-            service_details:[],
+            treatment_details:{},            
             services:[],
-            data:[]
+            p_id:this.patient_id,
+            u_id:this.user_id
+          
            
             
         }
@@ -83,23 +94,25 @@ export default{
         get_service_details(){
             get_services().then((response)=>{
                 this.services = response
-                console.log(this.services)
             })
         },
         add_service(){   
-            console.log('service detail: '+this.service_details)         
-            this.data = {
-                service_detail: this.service_details,
-                id:this.treatment_details.id,
-                discount:this.treatment_details.discount,
-                patient_id: this.$props.patient_id,
-                user_id: this.$props.user_id
-
-            }
-            console.log('data:'+this.data)
-            addServices(this.data).then((response)=>{
-                console.log(response)
+            this.treatment_details['patient_id']=this.p_id
+            this.treatment_details['user_id']=this.u_id
+            
+           addServices(this.treatment_details).then((response)=>{
+                this.$notify({
+                    title:'Notification',
+                    message:response.message,
+                    type:'success'
+                })
+           }).catch(error=>{
+            this.$notify.error({
+                title:'Error',
+                message:error.response.data.message,
             })
+           })
+            
         }
     }
 }

@@ -21,11 +21,11 @@ class InventoryController extends Controller
         return $inventory;
     }
 
-    public function get_all_retail_products(){
+ /*    public function get_all_retail_products(){
         $inventory = Inventory::where('categories_id','2')->with('category')->get();
         return $inventory;
     }
-
+ */
 
     /**
      * Store a newly created resource in storage.

@@ -37,9 +37,19 @@ Route::group([
     Route::get('inventory/herb',[InventoryController::class,'get_herbs']);
     Route::get('inventory/service',[InventoryController::class,'get_services']);
     Route::get('inventory/other',[InventoryController::class,'get_others']);
+    
 
     Route::post('treatment/herb',[TreatmentController::class,'addHerbalPackages']);
     Route::post('treatment/service',[TreatmentController::class,'addServices']);
+    Route::post('treatment/retail',[TreatmentController::class,'addRetail']);
+    Route::post('treatment/other',[TreatmentController::class,'addOther']);
+    Route::put('treatment/herb/',[TreatmentController::class,'updateHerb']);
+    Route::put('treatment/service',[TreatmentController::class,'updateService']);
+    Route::put('treatment/retail',[TreatmentController::class,'updateRetail']);
+    Route::put('treatment/other',[TreatmentController::class,'updateOther']);
+
+
+
 
     Route::get('treatment/patient/{id}',[TreatmentController::class,'getPatientTreatments']);
 

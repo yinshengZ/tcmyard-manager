@@ -152,6 +152,9 @@
     >
       <edit-other-table
         :treatment_id="this.treatment_id"
+        :patient_id="this.patient_id"
+        :user_id ="this.user_id"
+        :treatment_category="this.treatment_category"
         :key="key"
       ></edit-other-table>
     </el-dialog>

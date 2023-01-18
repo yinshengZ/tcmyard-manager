@@ -147,11 +147,9 @@ class TreatmentController extends Controller
     {
         $retail_ids = [];
         $retail_details = $request->retail_details;
-        $quantity = 0;
+        $quantity = 1;
         if (isset($request->quantity)) {
             $quantity = $request->quantity;
-        } else {
-            $quantity = 1;
         };
 
         foreach ($retail_details as $key => $retail_detail) {
@@ -199,24 +197,78 @@ class TreatmentController extends Controller
         //$treatment_handler->
     }
 
-    public function addOther(Request $request){
-        return $request;
+    public function addOther(Request $request)
+    {
+        $others_details = $request->others_details;
+        $quantity = 1;
+        if (isset($request->quantity)) {
+            $quantity = $request->quantity;
+        };
+
+        //check for remaining stocks and update accordingly
+        foreach ($others_details as $key => $others_detail) {
+            $inventory = Inventory::findOrFail($others_detail['id']);
+            $remaining_stock = $inventory->stock - ($others_detail['units'] * $quantity);
+            if ($remaining_stock >= 0) {
+                $inventory_id = $inventory['id'];
+                $updated_inventory = Inventory::find($inventory_id);
+                $updated_inventory->stock = $remaining_stock;
+                $updated_inventory->save();
+            } else {
+                return response()->json(
+                    [
+                        'message' => $inventory->name . ' does not have enough stocks left!'
+                    ],
+                    422
+                );
+            }
+         }
+
+         $others = new Treatment;
+         $others->service_id = 4;
+         $others->patient_id = $request->patient_id;
+         $others->user_id = $request->user_id;
+         $others->quantity = $quantity;
+         $others->discount = $request->discount;
+         $others->treatment_details = json_encode($request->others_details);
+         $others->save();
+
+         //grab the newly added treatment ID
+         $treatment_id = Treatment::select('id')->where('service_id',4)->latest()->first();
+
+         foreach($request->others_details as $others_detail){
+            $treatment_handler = new TreatmentDetails;
+            $treatment_handler->treatment_id = $treatment_id ->id;
+            $treatment_handler->inventory_id = $others_detail['id'];
+            $treatment_handler->patient_id = $request->patient_id;
+            $treatment_handler->user_id = $request->user_id;
+            $treatment_handler->units = $others_detail['units'];
+            $treatment_handler->quantity = $quantity;
+            $treatment_handler->save();
+         }
+
+         return response()->json([
+            'message'=>'Treatment Has Been Added Successfully!'
+         ],200);
+
+       
     }
 
-    public function updateHerb(Request $request){
-        $treatment_detail=[];    
+    public function updateHerb(Request $request)
+    {
+        $treatment_detail = [];
         $treatment_id = $request[0]['treatment_id'];
 
-        $prepare_update = TreatmentService::processUpdateTreatment($treatment_id);       
+        $prepare_update = TreatmentService::processUpdateTreatment($treatment_id);
 
-        
-        if($prepare_update>0){
 
-        
-            
+        if ($prepare_update > 0) {
+
+
+
             $treatment = Treatment::findOrFail($request[0]['treatment_id']);
 
-            foreach ($request->all() as $index=>$herb_detail){              
+            foreach ($request->all() as $index => $herb_detail) {
                 array_push($treatment_detail, $herb_detail['treatment_detail']);
                 $treatment_detail_handler = new TreatmentDetails;
                 $treatment_detail_handler->treatment_id = $herb_detail['treatment_id'];
@@ -226,40 +278,39 @@ class TreatmentController extends Controller
                 $treatment_detail_handler->units = $herb_detail['treatment_detail']['units'];
                 $treatment_detail_handler->quantity = $herb_detail['quantity'];
                 $treatment_detail_handler->save();
+            };
 
-                
-           };
+            $treatment->service_id = $request[0]['service_id'];
+            $treatment->patient_id = $request[0]['patient_id'];
+            $treatment->user_id = $request[0]['user_id'];
+            $treatment->quantity = $request[0]['quantity'];
+            $treatment->discount = $request[0]['discount'];
 
-        $treatment->service_id = $request[0]['service_id'];
-        $treatment->patient_id = $request[0]['patient_id'];
-        $treatment->user_id = $request[0]['user_id'];
-        $treatment->quantity = $request[0]['quantity'];
-        $treatment->discount = $request[0]['discount'];      
-        
-        
-        $treatment->treatment_details = json_encode($treatment_detail);
 
-        $treatment->save();
-        return response()->json([
-            'message'=>"Treatment has been updated!"
-        ],200);
-        }     
+            $treatment->treatment_details = json_encode($treatment_detail);
+
+            $treatment->save();
+            return response()->json([
+                'message' => "Treatment has been updated!"
+            ], 200);
+        }
     }
 
-    public function updateRetail(Request $request){
-        $treatment_detail=[];    
+    public function updateRetail(Request $request)
+    {
+        $treatment_detail = [];
         $treatment_id = $request[0]['treatment_id'];
 
-        $prepare_update = TreatmentService::processUpdateTreatment($treatment_id);       
+        $prepare_update = TreatmentService::processUpdateTreatment($treatment_id);
 
-        
-        if($prepare_update>0){
 
-        
-            
+        if ($prepare_update > 0) {
+
+
+
             $treatment = Treatment::findOrFail($request[0]['treatment_id']);
 
-            foreach ($request->all() as $index=>$retail_detail){              
+            foreach ($request->all() as $index => $retail_detail) {
                 array_push($treatment_detail, $retail_detail['treatment_detail']);
                 $treatment_detail_handler = new TreatmentDetails;
                 $treatment_detail_handler->treatment_id = $retail_detail['treatment_id'];
@@ -269,30 +320,29 @@ class TreatmentController extends Controller
                 $treatment_detail_handler->units = $retail_detail['treatment_detail']['units'];
                 $treatment_detail_handler->quantity = $retail_detail['quantity'];
                 $treatment_detail_handler->save();
+            };
 
-                
-           };
+            $treatment->service_id = $request[0]['service_id'];
+            $treatment->patient_id = $request[0]['patient_id'];
+            $treatment->user_id = $request[0]['user_id'];
+            $treatment->quantity = $request[0]['quantity'];
+            $treatment->discount = $request[0]['discount'];
 
-        $treatment->service_id = $request[0]['service_id'];
-        $treatment->patient_id = $request[0]['patient_id'];
-        $treatment->user_id = $request[0]['user_id'];
-        $treatment->quantity = $request[0]['quantity'];
-        $treatment->discount = $request[0]['discount'];      
-        
-        
-        $treatment->treatment_details = json_encode($treatment_detail);
 
-        $treatment->save();
-        return response()->json([
-            'message'=>"Treatment has been updated!"
-        ],200);
-        }    
+            $treatment->treatment_details = json_encode($treatment_detail);
+
+            $treatment->save();
+            return response()->json([
+                'message' => "Treatment has been updated!"
+            ], 200);
+        }
     }
 
-    public function updateService(Request $request){
+    public function updateService(Request $request)
+    {
         $treatment_detail = [
-            'id'=>$request->inventory_id,
-            'units'=>1
+            'id' => $request->inventory_id,
+            'units' => 1
         ];
         $treatment = Treatment::findOrFail($request->treatment_id);
         $treatment->service_id = $request->category_id;
@@ -303,7 +353,7 @@ class TreatmentController extends Controller
         $treatment->treatment_details = json_encode($treatment_detail);
         $treatment->save();
 
-        $treatment_details = TreatmentDetails::where('treatment_id',$request->treatment_id)->delete();
+        $treatment_details = TreatmentDetails::where('treatment_id', $request->treatment_id)->delete();
 
         $treatment_handler = new TreatmentDetails;
         $treatment_handler->treatment_id = $request->treatment_id;
@@ -315,15 +365,48 @@ class TreatmentController extends Controller
         $treatment_handler->save();
 
         return response()->json([
-            'message'=>'Treatment Has Been Updated Successfully!'
+            'message' => 'Treatment Has Been Updated Successfully!'
         ]);
-      
     }
 
- 
 
-    public function updateOther(Request $request){
-        return $request;
+
+    public function updateOther(Request $request)
+    {
+        $treatment_detail=[];
+        $treatment_id = $request[0]['treatment_id'];
+        $prepare_update = TreatmentService::processUpdateTreatment($treatment_id);
+
+        if($prepare_update>0){
+            $treatment = Treatment::findOrFail($treatment_id);
+            
+            foreach($request->all() as $index=>$other_detail){
+                array_push($treatment_detail, $other_detail['treatment_detail']);
+                $treatment_detail_handler = new TreatmentDetails;
+                $treatment_detail_handler->treatment_id = $other_detail['treatment_id'];
+                $treatment_detail_handler->inventory_id = $other_detail['treatment_detail']['id'];
+                $treatment_detail_handler->patient_id = $other_detail['patient_id'];
+                $treatment_detail_handler->user_id = $other_detail['user_id'];
+                $treatment_detail_handler->units = $other_detail['treatment_detail']['units'];
+                $treatment_detail_handler->quantity = $other_detail['quantity'];
+                $treatment_detail_handler->save();
+            }
+
+            $treatment->service_id = $request[0]['service_id'];
+            $treatment->patient_id = $request[0]['patient_id'];
+            $treatment->user_id = $request[0]['user_id'];
+            $treatment->quantity = $request[0]['quantity'];
+            $treatment->discount = $request[0]['discount'];
+
+            $treatment->treatment_details = json_encode($treatment_detail);
+
+            $treatment->save();
+
+            return response()->json([
+                'message'=>"Treatment has been updated!"
+            ],200);
+
+        }
     }
 
     /**
@@ -334,12 +417,10 @@ class TreatmentController extends Controller
      */
     public function destroy($id)
     {
-        $treatment = Treatment::where('id', $id)->delete(); 
+        $treatment = Treatment::where('id', $id)->delete();
         $treatment_details = TreatmentDetails::where('treatment_id', $id)->delete();
         return response()->json([
-            'message'=> 'Treatment Has Been Deleted Successfully!'
-        ],200);
-        
+            'message' => 'Treatment Has Been Deleted Successfully!'
+        ], 200);
     }
-
 }

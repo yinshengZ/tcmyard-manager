@@ -92,11 +92,7 @@ export default {
   },
   methods: {
     add_item_row() {
-      //fix add item to json object, push not supported for none array
-      /*  this.treatment_detail.push({
-        id:"",
-        units:""
-      }) */
+    
 
       this.treatment_detail.push({
         categories_id: "",

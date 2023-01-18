@@ -78,6 +78,14 @@ export function updateRetails(data){
     })
 }
 
+export function updateOthers(data){
+    return request({
+        url:'/treatment/other',
+        method:'put',
+        data
+    })
+}
+
 export function deleteTreatment(data){
     return request({
         url:'/treatment/'+data,

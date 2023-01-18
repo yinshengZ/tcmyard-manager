@@ -101,7 +101,17 @@ export default{
                 discount:this.discount
             }
             addOther(this.treatment_details).then((response)=>{
-                console.log(response)
+                this.$notify({
+                    title:"Notification",
+                    message:response.message,
+                    type:"success",
+                })
+            }).catch((error)=>{
+                this.$notify.error({
+                    title:"Error",
+                    message:error.response.data.message,
+                })
+                
             })
            
         },

@@ -2,7 +2,8 @@
     <div>
         <treatments  
         :patient_id="patient_id"
-        :user_id="user_id"></treatments>
+        :user_id="user_id"
+        ></treatments>
     </div>
 
 </template>
@@ -10,6 +11,7 @@
 <script>
 import Treatments from "@/views/treatments/index.vue"
 
+import {mapGetters} from "vuex";
 import { getPatientTreatments } from "@/api/treatment"
 export default {
     props:['patient_id','user_id','user_name'],
@@ -19,6 +21,7 @@ export default {
 
         }
     },
+
     mounted(){
        this.get_patient_treatments()
     },

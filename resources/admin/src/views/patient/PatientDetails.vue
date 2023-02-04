@@ -29,7 +29,7 @@
             </el-tab-pane>
 
             <el-tab-pane label="Files" name="files">
-              
+              <files-card :patient_id ="patient_id" :user_id = "user.id" :user_name="user.name" :token="user.token"></files-card>
             </el-tab-pane>
           </el-tabs>
         </el-card>
@@ -52,6 +52,7 @@ import ContactInfo from "./components/contact-info-card";
 import RecordsCard from "./components/records-card";
 import TreatmentsCard from "./components/treatments-card";
 import FinanceCard from "./components/finance-card";
+import FilesCard from "./components/files-card.vue";
 
 export default {
   components: {
@@ -61,6 +62,7 @@ export default {
     RecordsCard,
     TreatmentsCard,
     FinanceCard,
+    FilesCard
   },
   data() {
     return {

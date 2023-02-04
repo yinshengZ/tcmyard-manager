@@ -18,6 +18,7 @@ use App\Http\Controllers\Admin\TreatmentController;
 use App\Http\Controllers\Admin\StockController;
 use App\Http\Controllers\Admin\IncomeTypeController;
 use App\Http\Controllers\Admin\TodoController;
+use App\Http\Controllers\Admin\FileController;
 
 Route::post('login', [UserController::class, 'login'])->name('admin.api.login');
 
@@ -48,6 +49,8 @@ Route::group([
     Route::put('treatment/retail',[TreatmentController::class,'updateRetail']);
     Route::put('treatment/other',[TreatmentController::class,'updateOther']);
 
+    Route::get('file/{id}',[FileController::class,'get_patient_files']);
+    Route::post('/file',[FileController::class,'store']);
 
 
 

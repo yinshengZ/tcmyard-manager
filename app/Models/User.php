@@ -48,4 +48,8 @@ class User extends Authenticatable
     public function records(){
         return $this->hasMany('App\Models\Record','user_id');
     }
+
+    public function files(){
+        return $this->hasMany('App\Models\File','user_id');
+    }
 }

@@ -4,7 +4,8 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\File;
-use Illumiate\Support\Facades\Storage;
+use App\Services\FileService;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
 
 class FileController extends Controller
@@ -43,7 +44,8 @@ class FileController extends Controller
 
         $file = new File;
         if($request->file()){
-            $file_name = time().'_'.$request->file('file')->getClientOriginalName();
+            $original_name = str_replace(" ","_", $request->file('file')->getClientOriginalName());
+            $file_name = time().'_'.$original_name;
             $file_path = $request->file('file')->storeAs('patient_files/'.$request->patient_id,$file_name,'public');
             $file->file_name = $file_name;
             $file->file_path = '/storage/'.$file_path;
@@ -53,13 +55,18 @@ class FileController extends Controller
             $file->user_id = $request->user_id;
             $file->description = $request->description;
             $file->save();
+     
         };
 
-        $name = $request->file('file')->getClientOriginalName();
-        $file_type=$request->file('file')->getMimeType();
-        //return $request->file('file')->getClientOriginalExtension();
-        //return $request->description;
-        echo asset('storage/patient_files/1/1675272204_QQ图片20230110122711.jpg');
+    }
+
+    /**
+     * Update patient files
+     * @param Request $request
+     * @return json response of updating result
+     */
+    public function update_patient_file(Request $request){
+        return $request;
     }
 
 
@@ -69,54 +76,39 @@ class FileController extends Controller
      * @return json object of file info 
      */
     public function get_patient_files($id){
-        $files = File::where('patient_id',$id);
-        return $files;
+        $file_details=[];
+        $files = File::where('patient_id',$id)->with('user')->get();
+        foreach($files as $index=>$file){
+            $file_detail =[];
+            $file_detail['id']=$file->id;
+            $file_detail['file_name']=  $file->original_name;
+            $file_detail['url'] = url($file->file_path);
+            $file_detail['description'] = $file->description;
+            $file_detail['file_type']= $file->file_type;
+            $fie_detail['created_at'] = $file->created_at;
+            $file_detail['uploaded_by']=$file->user['nickname'];
+            array_push($file_details,$file_detail);
+        }
+        return $file_details;
     }
     
 
 
-    /**
-     * Display the patient's uploaded files
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        
-    }
+ 
+
+
+
 
     /**
-     * Show the form for editing the specified resource.
+     * Delete the file requested by user
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return json response of deletion result
      */
     public function destroy($id)
     {
-        //
+        $file = FileService::processFileList($id);
+
+        return $file;
     }
 }

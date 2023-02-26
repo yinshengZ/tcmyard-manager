@@ -12,7 +12,7 @@
       <el-col :span="18" :xs="24">
         <el-card>
           <el-tabs v-model="activeTab">
-            <el-tab-pane label="Records" name="records">
+            <el-tab-pane lazy label="Records" name="records">
               <records-card
                 :patient_id="patient_id"
                 :user_id="user.id"
@@ -20,15 +20,15 @@
               ></records-card>
             </el-tab-pane>
 
-            <el-tab-pane label="Treatments" name="treatments">
+            <el-tab-pane lazy label="Treatments" name="treatments">
               <treatments-card :patient_id="patient_id" :user_id="user.id" :user_name="user.name"></treatments-card>
             </el-tab-pane>
 
-            <el-tab-pane label="Finance" name="finance">
+            <el-tab-pane lazy label="Finance" name="finance">
               <finance-card></finance-card>
             </el-tab-pane>
 
-            <el-tab-pane label="Files" name="files">
+            <el-tab-pane lazy label="Files" name="files">
               <files-card :patient_id ="patient_id" :user_id = "user.id" :user_name="user.name" :token="user.token"></files-card>
             </el-tab-pane>
           </el-tabs>

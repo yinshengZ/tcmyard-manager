@@ -51,6 +51,8 @@ Route::group([
 
     Route::get('file/{id}',[FileController::class,'get_patient_files']);
     Route::post('/file',[FileController::class,'store']);
+    Route::delete('/file/{id}',[FileController::class,'destroy']);
+    ROute::put('/file',[FileController::class,'update_patient_file']);
 
 
 

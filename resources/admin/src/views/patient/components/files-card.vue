@@ -2,7 +2,7 @@
     <div>
 
         <files
-        :token = this.token
+        
         :patient_id = this.patient_id
         :user_id = this.user_id>
             

@@ -14,7 +14,8 @@ class FileService {
         DB::raw('group_concat(file_path) as file_path'),
         DB::raw('group_concat(original_name) as original_name'),'description','patient_id','user_id','created_at')
         ->where('patient_id',1)
-        ->groupBy('description')
+        ->groupBy('description')       
+        ->with('user')
         ->get();
 
         //TODO: Data retrived and needs to reconstruct return array

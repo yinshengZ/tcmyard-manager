@@ -90,6 +90,7 @@ class FileController extends Controller
             array_push($file_details,$file_detail);
         }
         return $file_details;
+
     }
     
 
@@ -107,8 +108,19 @@ class FileController extends Controller
      */
     public function destroy($id)
     {
-        $file = FileService::processFileList($id);
+        $file = File::findOrFail($id);
+        $file_path = '/patient_files'.'/'.$file->patient_id.'/'.$file->file_name;
+        if(Storage::disk('public')->exists($file_path)){
+            Storage::disk('public')->delete($file_path);
+        }else{
+           
+           
+            return "There's no such file on the system!";
+        }
+        $file->delete();
 
-        return $file;
+        return response()->json([
+            'message'=>'File Has Been Deleted Successfully!'
+        ],200);
     }
 }

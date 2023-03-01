@@ -72,23 +72,24 @@ class TreatmentService
             $treatment['quantity'] = $treatment_detail['quantity'];
             $treatment['discount'] = $treatment_detail['discount'];
             $treatment['categories_id'] = Inventory::select('categories_id')->where('id', $treatment_detail['inventory_id'])->value('categories_id');
-            $treatment['discount']=$discount->discount;
+            $treatment['discount'] = $discount->discount;
             array_push($final_detail, $treatment);
         }
 
         return $final_detail;
     }
 
-    public static function processUpdateTreatment($treatment_id){
+    public static function processUpdateTreatment($treatment_id)
+    {
         //TODO: Tighter database check might needed for more reliable update
 
         $original_treatment = Treatment::findOrFail($treatment_id);
-        $original_treatment_details = TreatmentDetails::where('treatment_id',$treatment_id)->get();
-        
-        foreach($original_treatment_details as $index=>$original_treatment_detail){
+        $original_treatment_details = TreatmentDetails::where('treatment_id', $treatment_id)->get();
+
+        foreach ($original_treatment_details as $index => $original_treatment_detail) {
 
             //add inventory stocks back to prepare for updating treatment
-            $treatment_units = $original_treatment_detail['units']*$original_treatment_detail['quantity'];
+            $treatment_units = $original_treatment_detail['units'] * $original_treatment_detail['quantity'];
             $inventory_stock = Inventory::findOrFail($original_treatment_detail['inventory_id']);
             $final_units = $inventory_stock->stock + $treatment_units;
             $inventory_stock->stock = $final_units;
@@ -99,14 +100,8 @@ class TreatmentService
             //Delete treatment details to prepare for update.            
         };
 
-        $treatment_delete = TreatmentDetails::where('treatment_id',$treatment_id)->delete();
+        $treatment_delete = TreatmentDetails::where('treatment_id', $treatment_id)->delete();
 
         return $treatment_delete;
-
-        
-        
-
-         
-       
-    }   
+    }
 }

@@ -17,6 +17,7 @@ class MaritalController extends Controller
     {
         $marital=Marital::all();
         return $marital;
+        
     }
 
     /**

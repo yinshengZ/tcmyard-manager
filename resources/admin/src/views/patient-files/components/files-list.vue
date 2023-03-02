@@ -43,13 +43,29 @@
                 icon="el-icon-edit"
                 circle
                 @click="updatePatientFile(file.id)"></el-button>
-                <el-button
+
+                  <el-popconfirm
+                  confirm-button-text="OK"
+                  cancel-button-text="Cancel"
+                  icon="el-icon-info"
+                  icon-color="red"
+                  title="Are you sure to delete this file?"
+                  @onConfirm="delete_patient_file(file.id)"
+                  @onCancel = get_patient_files()>
+
+                  <el-button
+                  slot="reference"
                      class="delete-button"
                       type="danger"
                       icon="el-icon-delete"
                       circle
-                      @click="deletePatientFile(file.id)"
+                
                     ></el-button>
+                  </el-popconfirm>
+
+ 
+        
+               
             </div>
 
             </div>
@@ -91,11 +107,31 @@ export default {
     get_patient_files() {
       getPatientFiles(this.patient_id).then((response) => {
         this.file_info = response;
-        console.log(response);
+        
       });
     },
+
+    delete_patient_file(id){
+      deletePatientFile(id).then((response)=>{
+        
+        this.$notify({
+          title:'Notification',
+          type:'success',
+          message:response.message,
+
+        })
+        this.get_patient_files()
+
+      }).catch(error=>{
+        this.$notify.error({
+          title:'Error',
+          message:error.response.data.message,
+
+        })
+      })
+    },
     date_converter,
-    deletePatientFile,
+
     updatePatientFile,
   },
 };

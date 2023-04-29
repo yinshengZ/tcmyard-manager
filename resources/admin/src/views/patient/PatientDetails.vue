@@ -11,25 +11,26 @@
 
       <el-col :span="18" :xs="24">
         <el-card>
-          <el-tabs v-model="activeTab">
+          <el-tabs v-model="activeTab"  @tab-click="handleClick">
             <el-tab-pane lazy label="Records" name="records">
               <records-card
                 :patient_id="patient_id"
                 :user_id="user.id"
                 :user_name="user.name"
+                :key = "key"
               ></records-card>
             </el-tab-pane>
 
             <el-tab-pane lazy label="Treatments" name="treatments">
-              <treatments-card :patient_id="patient_id" :user_id="user.id" :user_name="user.name"></treatments-card>
+              <treatments-card  :key="key" :patient_id="patient_id" :user_id="user.id" :user_name="user.name"></treatments-card>
             </el-tab-pane>
 
             <el-tab-pane lazy label="Finance" name="finance">
-              <finance-card></finance-card>
+              <finance-card :key="key" :patient_id="patient_id" :user_id="user.id"></finance-card>
             </el-tab-pane>
 
             <el-tab-pane lazy label="Files" name="files">
-              <files-card :patient_id ="patient_id" :user_id = "user.id" :user_name="user.name" :token="user.token"></files-card>
+              <files-card :key="key" :patient_id ="patient_id" :user_id = "user.id" :user_name="user.name" :token="user.token"></files-card>
             </el-tab-pane>
           </el-tabs>
         </el-card>
@@ -45,6 +46,8 @@ import moment from "moment";
 import { mapGetters } from "vuex";
 
 import { getSingle } from "@/api/patient";
+
+import { getPatientIncome } from "@/api/finance";
 
 import ConditionsCard from "./components/conditions-card.vue";
 import PatientCard from "./components/patient-card.vue";
@@ -66,6 +69,7 @@ export default {
   },
   data() {
     return {
+      key:0,
       patient_id: "",
       activeTab: "records",
       patient_details: [],
@@ -77,6 +81,7 @@ export default {
         age: "",
         marital_status: "",
         occupation: "",
+      
       },
 
       patient_conditions: {
@@ -109,6 +114,11 @@ export default {
   mounted() {},
 
   methods: {
+
+    handleClick(tab, event){
+      this.key+=1
+    },
+
     get_user() {
       this.user = {
         name: this.name,
@@ -120,6 +130,10 @@ export default {
       };
 
       console.log(this.user);
+    },
+
+    get_patient_incomes(){
+      this.key+1
     },
 
     get_patient_id() {

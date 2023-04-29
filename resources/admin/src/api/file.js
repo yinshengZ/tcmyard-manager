@@ -2,18 +2,28 @@ import request from "@/utils/request";
 
 export function getPatientFiles(id) {
   return request({
-    url: "/file/" + id,
+    url: "/file/patient/" + id,
     method: "get",
   });
 }
 
-export function updatePatientFile(data){
+export function getPatientFile(id){
   return request({
-    url:"/file",
-    method:"put",
-    data
+    url:'/file/'+id,
+    method:'get',
   })
 }
+
+
+
+export function updateFile(data){
+  return request({
+      url:'/file',
+      method:'patch',
+      data
+  })
+}
+
 
 export function deletePatientFile(id) {
   return request({

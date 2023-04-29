@@ -14,12 +14,17 @@
         :patient_id="this.patient_id"
         :user_id="this.user_id"
         :user_name="this.user_name"
+        :key="this.key"
       ></file-list>
 
-      <el-dialog :visible.sync="upload_file_form_visible">
+      <el-dialog :visible.sync="upload_file_form_visible"
+      :before-close="reload_files_list"
+      >
         <upload-file
           :patient_id="this.patient_id"
           :user_id="this.user_id"
+          :key= "this.key"
+          
         ></upload-file>
       </el-dialog>
     </el-card>
@@ -43,6 +48,7 @@ export default {
       token: "",
       description: "",
       upload_file_form_visible: false,
+      key:""
     };
   },
 
@@ -56,6 +62,12 @@ export default {
     },
     load_upload_files_form() {
       this.upload_file_form_visible = !this.upload_file_form_visible;
+      this.key+=1
+    },
+    reload_files_list(){
+      this.key+=1;
+      this.upload_file_form_visible = !this.upload_file_form_visible;
+
     },
 
     get_token() {

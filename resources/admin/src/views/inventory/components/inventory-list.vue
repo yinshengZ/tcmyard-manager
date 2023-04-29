@@ -418,11 +418,8 @@
 
 
 <script>
-import { get_herbs } from "@/api/inventory";
-import {get_retails} from "@/api/inventory";
-import {get_others } from "@/api/inventory";
-import {get_services} from "@/api/inventory";
-import {delete_item} from '@/api/inventory';
+import { get_herbs, get_retails, get_others, get_services,delete_item  } from "@/api/inventory";
+
 
 import AddItem from './add-item';
 import UpdateInventory from './update-inventory-form'

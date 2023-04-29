@@ -2,22 +2,21 @@ import request from '@/utils/request'
 
 export function getAllIncomes(){
     return request({
-        url:'/income',
+        url:'/finance/income',
         method:'get'
     })
 }
 
-export function addIncome(data){
+export function getPatientIncome(id){
     return request({
-        url:'/income',
-        method:'post',
-        data
+        url:'/finance/income/patient/'+id,
+        method:'get'
     })
 }
 
-export function addServiceIncome(data){
+export function addPatientIncome(data){
     return request({
-        url:'/income/service',
+        url:'/finance/income/patient',
         method:'post',
         data
     })
@@ -57,5 +56,15 @@ export function deleteIncomeType(id){
     return request({
         url:'/income_type/'+id,
         method:'delete'
+    })
+}
+
+
+//Payment methods down
+
+export function getPaymentMethods(){
+    return request({
+        url:'/payment_methods',
+        method:'get',
     })
 }

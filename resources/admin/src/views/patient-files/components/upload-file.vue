@@ -45,18 +45,26 @@
         <el-button type="primary" @click="upload">Upload</el-button>
       </el-form-item>
     </el-form>
+
+
+
   </div>
 </template> 
 
 <script>
 
 import { getToken } from "@/utils/auth";
+import VueUploadComponent from 'vue-upload-component'
 export default {
   props: ["patient_id", "user_id"],
+  components:{
+    FileUpload:VueUploadComponent,
+  },
   data() {
     return {
       file: [],
       fileList: [],
+      uploadUrl:"#",
       token: "",
       description: "",
     };
@@ -69,6 +77,7 @@ export default {
   methods: {
     upload() {
       this.$refs.file_upload.submit();
+      
     },
 
     get_token() {

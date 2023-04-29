@@ -81,6 +81,23 @@
           </template>
         </el-table-column>
 
+        <el-table-column
+        prop="date"
+        label="Date"
+        align="center"
+        :min-width="30">
+
+        <template slot-scope="{row}">
+          <div>
+            <span>
+              {{ date_converter(row[0].treatment_created_at) }}
+            </span>
+          </div>
+        </template>
+
+        </el-table-column>
+
+
         <el-table-column prop="operations" label="Operations">
           <template slot-scope="{ row }">
             <el-button
@@ -218,8 +235,9 @@ import EditRetailTable from "@/views/treatments/components/edit-retail-table.vue
 import EditOtherTable from "@/views/treatments/components/edit-other-table.vue";
 
 import { getPatientTreatments, deleteTreatment } from "@/api/treatment";
+import { date_converter } from "@/utils/converters";
 
-import dayjs from "dayjs";
+
 
 export default {
   props: ["patient_id", "user_id"],
@@ -335,9 +353,9 @@ export default {
        
     },
 
-    date_convert(date) {
-      return dayjs(date).format("dddd, MMMM D, YYYY h:mm A");
-    },
+    date_converter,
+
+
   },
 };
 </script>

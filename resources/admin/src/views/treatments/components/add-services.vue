@@ -57,6 +57,44 @@
 
     </el-input-number>
 
+    
+
+    </el-form-item>
+
+    <el-form-item
+    label="Price (£)">
+    <el-input-number
+    v-model="final_price"
+    :min="0"
+    :precision="2"
+    :step="1">
+    </el-input-number>
+
+    <el-button
+    type="primary"
+    @click="calculate_price()">Calculate</el-button>
+    </el-form-item>
+
+    <el-form-item
+    label="Payment Type">
+    <el-select
+    v-model="treatment_details.payment_type_id">
+        <el-option
+        v-for="payment_type in payment_types"
+        :key="payment_type.id"
+        :label="payment_type.payment_type"
+        :value="payment_type.id">
+
+        </el-option>
+    </el-select>
+    </el-form-item>
+
+    <el-form-item
+    label="Description">
+        <el-input
+        v-model="treatment_details.description">
+
+        </el-input>
     </el-form-item>
 
     <el-form-item>
@@ -72,16 +110,34 @@
 <script>
 import {get_services} from '@/api/inventory'
 import {addServices} from '@/api/treatment'
+import { getPaymentMethods } from '@/api/finance'
 
 export default{
     props:['patient_id','user_id'],
     data(){
         return{
-            treatment_details:{},            
+            treatment_details:{
+                id:'',
+                unit:0,
+                quantity:0,
+                discount:0,
+                final_price:0,
+                payment_type_id:'',
+                patient_id:'',
+                user_id:'',
+                original_price:'',
+                description:"",
+
+                
+
+            },            
             services:[],
+            payment_types:[],
             p_id:this.patient_id,
-            u_id:this.user_id
-          
+            u_id:this.user_id,
+            final_price:0,
+            original_price:0,
+            service_id:0,
            
             
         }
@@ -89,8 +145,39 @@ export default{
 
     created(){
         this.get_service_details()
+        this.get_all_payment_methods()
+        
     },
     methods:{
+        calculate_price(){
+     
+            if(this.treatment_details.id>0){
+                let service_id = this.treatment_details.id
+                let service = this.services.find(x=>x.id===service_id)
+
+                this.original_price = service.unit_price * this.treatment_details.unit*this.treatment_details.quantity
+
+                this.final_price = service.unit_price * this.treatment_details.unit*this.treatment_details.quantity*(1-this.treatment_details.discount/100)
+                this.service_id = service.categories_id
+
+
+            }else{
+                this.$message({
+                    message:'Please Select A Service First!',
+                    type:'error'
+                })
+            }
+
+           
+            
+        },
+
+        get_all_payment_methods(){
+        getPaymentMethods().then((response)=>{
+        this.payment_types = response
+        })
+        },
+
         get_service_details(){
             get_services().then((response)=>{
                 this.services = response
@@ -99,7 +186,10 @@ export default{
         add_service(){   
             this.treatment_details['patient_id']=this.p_id
             this.treatment_details['user_id']=this.u_id
-            
+            this.treatment_details['final_price']=this.final_price
+            this.treatment_details['original_price']=this.original_price
+            this.treatment_details['service_id']=this.service_id
+            console.log(this.treatment_details)
            addServices(this.treatment_details).then((response)=>{
                 this.$notify({
                     title:'Notification',

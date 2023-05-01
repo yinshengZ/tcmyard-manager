@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 
 use Illuminate\Http\Request;
 
+use Exception;
+
 use App\Models\Inventory;
 use App\Models\Treatment;
 use App\Models\Income;
@@ -79,7 +81,8 @@ class TreatmentController extends Controller
         $service_info = Inventory::select('id', 'unit_price')->where('categories_id', '=', 1)->first();
         $package_price = $service_info['unit_price'];
 
-        $service_id = $service_info['id'];
+        /* $service_id = $service_info['id']; */
+        $service_id = $request->service_id;
         $patient_id = $request->patient_id;
         $quantity = $request->quantity;
         $user_id = $request->user_id;
@@ -106,6 +109,21 @@ class TreatmentController extends Controller
             $treatment_handler->quantity = $quantity;
             $treatment_handler->save();
         }
+
+        $income = new Income;
+
+        $income->amount = $request->final_price;
+        $income->original_amount = $request->original_price;
+        $income->treatment_id = $treatment_ids['id'];
+        $income->patient_id = $request->patient_id;
+        $income->user_id = $request->user_id;
+        $income->discount = $request->discount;
+      
+        $income->service_id = $service_id;
+        $income->payment_type_id = $request->payment_type;
+        $income->description = $request->description;
+        $income->save();
+
 
 
 
@@ -137,6 +155,16 @@ class TreatmentController extends Controller
         $treatment_handler->units = $request->unit;
         $treatment_handler->quantity = $request->quantity;
         $treatment_handler->save();
+
+        $income = new Income;
+        $income->amount = $request->final_price;
+        $income->original_amount = $request->original_price;
+        $income->payment_type_id = $request->payment_type_id;
+        $income->patient_id = $request->patient_id;
+        $income->user_id = $request->user_id;
+        $income->treatment_id = $treatment_id->id;
+        $income->service_id = $request->service_id; 
+        $income->save();
 
         return response()->json([
             'message' => 'Service Has Been Added Successfully!'
@@ -189,6 +217,25 @@ class TreatmentController extends Controller
             $treatment_handler->quantity = $quantity;
             $treatment_handler->save();
         }
+
+        try{
+            if($request->with_finance){
+                $income = new Income;
+                $income->amount = $request->final_amount;
+                $income->original_amount = $request->original_amount;
+                $income->payment_type_id = $request->payment_type;
+                $income->patient_id = $request->patient_id;
+                $income->user_id = $request->user_id;
+                $income->discount = $request->discount;
+                $income->treatment_id = $treatment_id->id;
+                $income->service_id = $request->service_id;
+            }
+        }catch(Exception $err){
+
+        }
+
+        
+        
 
         return response()->json([
             'message' => 'Treatment Has Been Added Successfully!'
@@ -419,6 +466,7 @@ class TreatmentController extends Controller
     {
         $treatment = Treatment::where('id', $id)->delete();
         $treatment_details = TreatmentDetails::where('treatment_id', $id)->delete();
+        $income = Income::where('treatment_id',$id)->delete();
         return response()->json([
             'message' => 'Treatment Has Been Deleted Successfully!'
         ], 200);

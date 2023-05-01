@@ -16,15 +16,17 @@ class CreateIncomesTable extends Migration
         Schema::create('incomes', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('amount');
-            $table->unsignedBigInteger('income_type_id');
-            $table->unsignedBigInteger('patient_id')->nullable();
+            $table->unsignedBigInteger('original_amount');
+            $table->unsignedBigInteger('payment_type_id');
+            $table->unsignedBigInteger('patient_id');
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('treatment_id');
             $table->unsignedBigInteger('service_id');
             $table->unsignedTinyInteger('discount');
-            $table->longtext('description');
-            $table->unsignedBigInteger('quantity');
+            $table->date('date');
+            $table->longtext('description');            
             $table->softDeletes('deleted_at');
+      
             $table->timestamps();
         });
     }

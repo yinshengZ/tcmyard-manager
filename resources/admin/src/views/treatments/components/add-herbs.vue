@@ -47,8 +47,15 @@
             <el-input-number v-model="quantity" :min="1"></el-input-number>
           </el-form-item>
 
+          <el-form-item
+          label="Extra Options">
+              <el-checkbox v-model="with_finance">With Income</el-checkbox>
+              <el-checkbox v-model="with_date">With Date</el-checkbox>
+          </el-form-item>
+
 <!--TODO: Add conditions for finance and date-->
-          <el-form-item label="Discount">
+          <div class="finance" v-if="with_finance">
+            <el-form-item label="Discount">
               <el-input-number v-model="discount" :min="0" :max="100"></el-input-number>
           </el-form-item>          
 
@@ -82,6 +89,25 @@
             <el-input v-model="description"></el-input>
           </el-form-item>
 
+
+          </div>
+
+          <div class="date" v-if="with_date">
+            <el-form-item
+            label="Date">
+
+
+              <el-date-picker
+              v-model="date"
+              type="date"
+              aria-placeholder="pick a date..."
+              :picker-options="date_picker_options">
+
+              </el-date-picker>
+
+            </el-form-item>
+          </div>
+          
          
 
 
@@ -106,6 +132,11 @@ export default {
   props:['patient_id','user_id'],
   data() {
     return {
+      date_picker_options:{
+                disabledDate(time) {
+                return time.getTime() > Date.now();
+            }
+            },
       herb_details: [],
       herb_rtv: [],
       quantity: "",    
@@ -122,6 +153,7 @@ export default {
       service_id:'',
       with_finance:false,
       with_date:false,
+      date:''
       
 
     };

@@ -19,7 +19,8 @@ class FileService {
         DB::raw('group_concat(user_id) as user_id'),
          'created_at')
         ->where('patient_id',$patient_id)
-        ->groupBy('created_at')       
+        ->groupBy('created_at')
+        ->latest()     
         ->with('user')
         ->get();
 /* 

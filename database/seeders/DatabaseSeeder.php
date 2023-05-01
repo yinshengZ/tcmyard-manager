@@ -18,7 +18,9 @@ class DatabaseSeeder extends Seeder
             GenderSeeder::class,
             PatientSeeder::class,
             MaritalSeeder::class,
-            Inventory_Categories_Seeder::class
+            Inventory_Categories_Seeder::class,
+            PaymentTypeSeeder::class,
+
         ]);
     }
 }

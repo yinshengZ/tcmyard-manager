@@ -21,6 +21,7 @@ class TreatmentService
         $treatments = TreatmentDetails::select(DB::raw('group_concat(id) as t_id'), 'treatment_id', DB::raw('group_concat(inventory_id) as treatments'), DB::raw('group_concat(units) as amount'), 'units', 'quantity', 'patient_id', 'quantity', 'created_at', 'updated_at')
             ->where('patient_id', $patient_id)
             ->groupBy('treatment_id')
+            ->latest()
             ->get();
         foreach ($treatments as $index => $treatment) {
 

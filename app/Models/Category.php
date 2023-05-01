@@ -19,4 +19,11 @@ class Category extends Model
     public function treatments(){
         return $this->hasMany('App\Models\Treatment','service_id');
     }
+    
+   
+
+    public function incomes(){
+        return $this->hasMany('App\Models\Income','service_id');
+    }
+    
 }

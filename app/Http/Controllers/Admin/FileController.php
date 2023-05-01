@@ -8,27 +8,11 @@ use App\Services\FileService;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
 
+use Exception;
+
 class FileController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
-    }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
 
     /**
      * Store a newly created resource in storage.
@@ -42,11 +26,16 @@ class FileController extends Controller
             'file'=>'required'
         ]);
 
-        $file = new File;
-        if($request->file()){
+            $file = new File;
+       
             $original_name = str_replace(" ","_", $request->file('file')->getClientOriginalName());
             $file_name = time().'_'.$original_name;
-            $file_path = $request->file('file')->storeAs('patient_files/'.$request->patient_id,$file_name,'public');
+            try{
+                $file_path = $request->file('file')->storeAs('patient_files/'.$request->patient_id,$file_name,'public');
+            }catch(Exception $err){
+                return $err;
+            }
+           
             $file->file_name = $file_name;
             $file->file_path = '/storage/'.$file_path;
             $file->file_type= $request->file('file')->getMimeType();
@@ -55,8 +44,14 @@ class FileController extends Controller
             $file->user_id = $request->user_id;
             $file->description = $request->description;
             $file->save();
+
+            return $file;
      
-        };
+      
+
+
+
+        dd($request);
 
     }
 
@@ -66,7 +61,17 @@ class FileController extends Controller
      * @return json response of updating result
      */
     public function update_patient_file(Request $request){
-        return $request;
+        $file = File::findOrFail($request->id);
+        
+        if ($file){
+            $file->description = $request->description;
+            $file->save();
+
+            return response()->json([
+                'message'=>"File Has Been Updated!"
+            ],200);
+        };
+      
     }
 
 
@@ -77,7 +82,7 @@ class FileController extends Controller
      */
     public function get_patient_files($id){
         $file_details=[];
-        $files = File::where('patient_id',$id)->with('user')->get();
+        $files = File::where('patient_id',$id)->latest()->with('user')->get();
         foreach($files as $index=>$file){
             $file_detail =[];
             $file_detail['id']=$file->id;
@@ -85,12 +90,18 @@ class FileController extends Controller
             $file_detail['url'] = url($file->file_path);
             $file_detail['description'] = $file->description;
             $file_detail['file_type']= $file->file_type;
-            $fie_detail['created_at'] = $file->created_at;
+            $file_detail['created_at'] = $file->created_at;
             $file_detail['uploaded_by']=$file->user['nickname'];
             array_push($file_details,$file_detail);
         }
         return $file_details;
 
+    }
+
+    public function get_file($id){
+        $file_info = File::where('id',$id)->with('user')->get();
+
+        return $file_info;
     }
     
 

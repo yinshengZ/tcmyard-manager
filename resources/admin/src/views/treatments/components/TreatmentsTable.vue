@@ -90,7 +90,7 @@
         <template slot-scope="{row}">
           <div>
             <span>
-              {{ date_converter(row[0].treatment_created_at) }}
+              {{ date_converter(row[0].treatment_date) }}
             </span>
           </div>
         </template>

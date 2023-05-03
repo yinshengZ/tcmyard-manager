@@ -101,7 +101,8 @@
               v-model="date"
               type="date"
               aria-placeholder="pick a date..."
-              :picker-options="date_picker_options">
+              :picker-options="date_picker_options"
+              value-format="yyyy-MM-dd">
 
               </el-date-picker>
 
@@ -188,8 +189,53 @@ export default {
       });
     },
     add_herbal_packages() {
+
+      if(this.with_finance && !this.with_date){
+        this.treatment_details = {
+      
+        herb_details:this.herb_details, 
+      quantity:this.quantity,       
+      patient_id:this.patient_id, 
+      user_id:this.user_id, 
+      discount:this.discount,
+      description:this.description,
+      payment_type:this.payment_type,
+      original_price:this.original_price,
+      final_price:this.final_price,
+      service_id:this.service_id,
+      with_finance:this.with_finance,
+
+      }
+     }
+      else if(this.with_finance && this.with_date){
+        this.treatment_details = {
+      
+      herb_details:this.herb_details, 
+    quantity:this.quantity,       
+    patient_id:this.patient_id, 
+    user_id:this.user_id, 
+    discount:this.discount,
+    description:this.description,
+    payment_type:this.payment_type,
+    original_price:this.original_price,
+    final_price:this.final_price,
+    service_id:this.service_id,
+    with_finance:this.with_finance,
+    with_date:this.with_date,
+    date:this.date,
+      }
+    } else if (!this.with_finance && !this.with_date){
+        this.treatment_details = {
+      
+      herb_details:this.herb_details, 
+      quantity:this.quantity,       
+      patient_id:this.patient_id, 
+      user_id:this.user_id, 
+      service_id:this.service_id,
+      }
+    }
     
-      this.treatment_details = {
+      /* this.treatment_details = {
       
       herb_details:this.herb_details, 
       quantity:this.quantity,       
@@ -201,7 +247,7 @@ export default {
       original_price:this.original_price,
       final_price:this.final_price,
       service_id:this.service_id
-    }
+    } */
       addHerbalPackages(this.treatment_details).then((response)=>{
         this.$notify({
           title:'Notification',

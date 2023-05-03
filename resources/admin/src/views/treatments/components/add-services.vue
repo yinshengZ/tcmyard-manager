@@ -46,6 +46,15 @@
     </el-form-item>
 
     <el-form-item
+    label="Extra Options">
+        <el-checkbox v-model="with_finance">With Finance</el-checkbox>
+        <el-checkbox v-model="with_date">With Date</el-checkbox>
+    </el-form-item>
+
+
+
+    <div class="with-finance" v-if="with_finance">
+        <el-form-item
     label="Discount(%): ">
     <el-input-number
     v-model="treatment_details.discount"
@@ -82,7 +91,7 @@
         <el-option
         v-for="payment_type in payment_types"
         :key="payment_type.id"
-        :label="payment_type.payment_type"
+        :label=" uppercaseFirst(payment_type.payment_type) "
         :value="payment_type.id">
 
         </el-option>
@@ -96,6 +105,22 @@
 
         </el-input>
     </el-form-item>
+    </div>
+
+    <div class="with-date" v-if="with_date">
+        <el-form-item>
+            <el-date-picker
+            v-model="date"
+            type="date"
+            placeholder="pick a date..."
+            :picker-options="date_picker_options"
+            value-format="yyyy-MM-dd">
+
+            </el-date-picker>
+        </el-form-item>
+
+    </div>
+   
 
     <el-form-item>
         <el-button @click="add_service()">Submit</el-button>
@@ -111,11 +136,17 @@
 import {get_services} from '@/api/inventory'
 import {addServices} from '@/api/treatment'
 import { getPaymentMethods } from '@/api/finance'
+import { uppercaseFirst } from '@/filters'
 
 export default{
     props:['patient_id','user_id'],
     data(){
         return{
+            date_picker_options:{
+                disabledDate(time) {
+                return time.getTime() > Date.now();
+            }
+            },
             treatment_details:{
                 id:'',
                 unit:0,
@@ -127,9 +158,6 @@ export default{
                 user_id:'',
                 original_price:'',
                 description:"",
-
-                
-
             },            
             services:[],
             payment_types:[],
@@ -138,6 +166,9 @@ export default{
             final_price:0,
             original_price:0,
             service_id:0,
+            with_date:false,
+            with_finance:false,
+            date:''
            
             
         }
@@ -149,6 +180,7 @@ export default{
         
     },
     methods:{
+        uppercaseFirst,
         calculate_price(){
      
             if(this.treatment_details.id>0){
@@ -189,7 +221,10 @@ export default{
             this.treatment_details['final_price']=this.final_price
             this.treatment_details['original_price']=this.original_price
             this.treatment_details['service_id']=this.service_id
-            console.log(this.treatment_details)
+            this.treatment_details['with_finance']=this.with_finance
+            this.treatment_details['with_date']=this.with_date
+            this.treatment_details['date']=this.date
+           
            addServices(this.treatment_details).then((response)=>{
                 this.$notify({
                     title:'Notification',

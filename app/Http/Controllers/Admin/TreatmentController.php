@@ -1,17 +1,21 @@
 <?php
 
 namespace App\Http\Controllers\admin;
+;
 
 use App\Http\Controllers\Controller;
 
 use Illuminate\Http\Request;
 
 use Exception;
+use Carbon\Carbon;
 
 use App\Models\Inventory;
 use App\Models\Treatment;
 use App\Models\Income;
 use App\Models\TreatmentDetails;
+
+
 
 use App\Services\TreatmentService;
 
@@ -77,11 +81,7 @@ class TreatmentController extends Controller
             array_push($herb_units, $herb_detail['unit']);
         }
 
-        //get the type of treatment for herbs and its info
-        $service_info = Inventory::select('id', 'unit_price')->where('categories_id', '=', 1)->first();
-        $package_price = $service_info['unit_price'];
-
-        /* $service_id = $service_info['id']; */
+ 
         $service_id = $request->service_id;
         $patient_id = $request->patient_id;
         $quantity = $request->quantity;
@@ -94,6 +94,11 @@ class TreatmentController extends Controller
         $treatment->quantity = $quantity;
         $treatment->treatment_details = json_encode($treatment_details);
         $treatment->user_id = $user_id;
+        if($request->with_date){
+            $treatment->date = $request->date;
+        }else{
+            $treatment->date = Carbon::now();
+        }
         $treatment->save();
 
         $treatment_ids = Treatment::select('id')->where('patient_id', $patient_id)->latest()->first();
@@ -107,22 +112,37 @@ class TreatmentController extends Controller
             $treatment_handler->patient_id = $patient_id;
             $treatment_handler->user_id = $user_id;
             $treatment_handler->quantity = $quantity;
+            if($request->with_date){
+                $treatment_handler->date = $request->date;
+            }else{
+                $treatment_handler->date = Carbon::now();
+            }
             $treatment_handler->save();
         }
 
-        $income = new Income;
 
-        $income->amount = $request->final_price;
-        $income->original_amount = $request->original_price;
-        $income->treatment_id = $treatment_ids['id'];
-        $income->patient_id = $request->patient_id;
-        $income->user_id = $request->user_id;
-        $income->discount = $request->discount;
+
+        if($request->with_finance){
+     
+            $income = new Income;
+
+            $income->amount = $request->final_price;
+            $income->original_amount = $request->original_price;
+            $income->treatment_id = $treatment_ids['id'];
+            $income->patient_id = $request->patient_id;
+            $income->user_id = $request->user_id;
+            $income->discount = $request->discount;
+            if($request->with_date){
+                $income->date = $request->date;
+            }else{
+                $income->date = Carbon::now();
+            }
+            $income->service_id = $service_id;
+            $income->payment_type_id = $request->payment_type;
+            $income->description = $request->description;
+            $income->save();
+        }
       
-        $income->service_id = $service_id;
-        $income->payment_type_id = $request->payment_type;
-        $income->description = $request->description;
-        $income->save();
 
 
 
@@ -135,15 +155,20 @@ class TreatmentController extends Controller
     public function addServices(Request $request)
     {
         $service = new Treatment;
-        $service->service_id = $request->id;
+        $service->service_id = $request->service_id;
         $service->patient_id = $request->patient_id;
         $service->user_id = $request->user_id;
         $service->discount = $request->discount;
         //$service->unit = $request->unit;
         $service->quantity = $request->quantity;
+        if($request->with_date){
+            $service->date = $request->date;
+        }else{
+            $service->date = Carbon::now();
+        }
         $service->save();
 
-        $treatment_id = Treatment::select('id')->where('service_id', $request->id)->latest()->first();
+        $treatment_id = Treatment::select('id')->where('service_id', $request->service_id)->latest()->first();
 
 
 
@@ -154,9 +179,17 @@ class TreatmentController extends Controller
         $treatment_handler->user_id = $request->user_id;
         $treatment_handler->units = $request->unit;
         $treatment_handler->quantity = $request->quantity;
+        if($request->with_date){
+            $treatment_handler->date = $request->date;
+        }else{
+            $treatment_handler->date = Carbon::now();
+        }
+        
         $treatment_handler->save();
 
-        $income = new Income;
+ 
+        if($request->with_finance){
+            $income = new Income;
         $income->amount = $request->final_price;
         $income->original_amount = $request->original_price;
         $income->payment_type_id = $request->payment_type_id;
@@ -165,6 +198,8 @@ class TreatmentController extends Controller
         $income->treatment_id = $treatment_id->id;
         $income->service_id = $request->service_id; 
         $income->save();
+        }
+        
 
         return response()->json([
             'message' => 'Service Has Been Added Successfully!'

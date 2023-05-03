@@ -21,6 +21,7 @@ class CreateTreatmentDetailsTable extends Migration
             $table->unsignedBigInteger('user_id');
             $table->double('units',8,2);
             $table->unsignedBigInteger('quantity');
+            $table->date('date');
             $table->softDeletes('deleted_at');
             $table->timestamps();
         });

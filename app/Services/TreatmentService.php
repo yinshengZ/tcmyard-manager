@@ -51,6 +51,7 @@ class TreatmentService
                 $inventory_details['service_title'] = $inventory_category['categories'];
                 $inventory_details['treatment_created_at'] = $treatment_details['created_at'];
                 $inventory_details['treatment_updated_at'] = $treatment_details['updated_at'];
+                $inventory_details['treatment_date'] = $treatment_details['date'];
 
                 array_push($final_details, $inventory_details);
             }

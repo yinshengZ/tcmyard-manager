@@ -197,6 +197,7 @@ class TreatmentController extends Controller
         $income->user_id = $request->user_id;
         $income->treatment_id = $treatment_id->id;
         $income->service_id = $request->service_id; 
+        $income->description = $request->description;
         $income->save();
         }
         
@@ -205,6 +206,12 @@ class TreatmentController extends Controller
             'message' => 'Service Has Been Added Successfully!'
         ], 200);
     }
+
+    /**
+     * @param $request
+     * recives the retail treatment details from the front end and store them into the database.
+     * 
+     */
 
     public function addRetail(Request $request)
     {
@@ -238,6 +245,11 @@ class TreatmentController extends Controller
         $retail->quantity = $quantity;
         $retail->discount = $request->discount;
         $retail->treatment_details = json_encode($request->retail_details);
+        if($request->with_date){
+            $retail->date = $request->date;
+        }else{
+            $retail->date = Carbon::now();
+        }
         $retail->save();
 
         $treatment_id = Treatment::select('id')->where('service_id', 3)->latest()->first();
@@ -266,7 +278,7 @@ class TreatmentController extends Controller
                 $income->service_id = $request->service_id;
             }
         }catch(Exception $err){
-
+            return $err;
         }
 
         
@@ -278,6 +290,9 @@ class TreatmentController extends Controller
 
         //$treatment_handler->
     }
+
+
+    
 
     public function addOther(Request $request)
     {

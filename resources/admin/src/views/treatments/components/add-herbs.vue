@@ -19,7 +19,7 @@
             <el-option
               v-for="herb in herb_rtv"
               :key="herb.id"
-              :label="herb.name+' / stock: '+herb.stock"
+              :label="herb.name+' / stock: '+herb.stock+' / price: '+herb.unit_price"
               :value="herb.id"
             >
             </el-option>
@@ -53,7 +53,7 @@
               <el-checkbox v-model="with_date">With Date</el-checkbox>
           </el-form-item>
 
-<!--TODO: Add conditions for finance and date-->
+
           <div class="finance" v-if="with_finance">
             <el-form-item label="Discount">
               <el-input-number v-model="discount" :min="0" :max="100"></el-input-number>
@@ -77,7 +77,7 @@
               <el-option
               v-for="payment_method in payment_methods"
               :key="payment_method.id"
-              :label="payment_method.payment_type"
+              :label="uppercaseFirst(payment_method.payment_type) "
               :value="payment_method.id"
               >
 
@@ -129,6 +129,7 @@
 import { get_herbs } from "@/api/inventory";
 import { addHerbalPackages } from "@/api/treatment"
 import {getPaymentMethods} from "@/api/finance"
+import { uppercaseFirst } from "@/filters";
 export default {
   props:['patient_id','user_id'],
   data() {
@@ -166,6 +167,7 @@ export default {
 
 
   methods: {
+    uppercaseFirst,
     calculate_herb_price(){
       this.final_price= 0
       this.original_price = 0

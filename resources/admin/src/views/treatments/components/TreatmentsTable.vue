@@ -101,6 +101,7 @@
         <el-table-column prop="operations" label="Operations">
           <template slot-scope="{ row }">
             <el-button
+             
               type="primary"
               @click="edit_treatment(row[0].treatment_id, row[0].categories_id)"
               >Edit
@@ -111,7 +112,7 @@
             @onConfirm="delete_treatment(row[0].treatment_id)"
             @onCancel="get_patient_treatments()"
            >
-              <el-button  slot="reference" type="danger" >Delete</el-button>
+              <el-button  style="margin-left:5%" slot="reference" type="danger" >Delete</el-button>
             </el-popconfirm>
 
           </template>

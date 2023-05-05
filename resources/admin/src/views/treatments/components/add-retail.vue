@@ -201,8 +201,9 @@ export default{
             this.original_mount = 0
 
             if(this.retail_details.length>0){
+                let result
                 for(let i =0; i<this.retail_details.length; i++){
-                    let result = this.all_retails.find(item=>item.id ===this.retail_details[i].id)
+                     result = this.all_retails.find(item=>item.id ===this.retail_details[i].id)
                     console.log(result)
                     this.original_amount +=(Number(result.unit_price)*Number(this.retail_details[i].units))
                     this.final_amount +=(Number(result.unit_price)*Number(this.retail_details[i].units)) * (1-this.discount/100)
@@ -215,7 +216,7 @@ export default{
         },
         add_retail(){
 
-            if(this.with_finance){
+            if(this.with_finance&&!this.with_date){
                 this.treatment_details={
                     payment_type:this.payment_type,
                     original_price:this.original_price,
@@ -229,7 +230,23 @@ export default{
                     service_id: this.service_id
 
                 }
-            }else{
+            }else if(this.with_finance&&this.with_date){
+                this.treatment_details={
+                    payment_type:this.payment_type,
+                    original_price:this.original_price,
+                    final_price:this.final_price,
+                    description:this.description,
+                    discount:this.discount,
+                    retail_details:this.retail_details,
+                    patient_id : this.patient_id,
+                    user_id : this.user_id,
+                    with_finance:this.with_finance,
+                    service_id: this.service_id,
+                    date:this.date,
+
+                }
+            }          
+            else{
                 this.treatment_details={
                 retail_details:this.retail_details,
                 patient_id : this.patient_id,
@@ -240,7 +257,7 @@ export default{
 
             
             
-            /* addRetail(this.treatment_details).then((response)=>{
+            addRetail(this.treatment_details).then((response)=>{
                 this.$notify({
                     title:'Notification',
                     message:response.message,
@@ -251,7 +268,7 @@ export default{
                     title:'Error',
                     message:error.response.data.message
                 })
-            }) */
+            })
         },
 
     }

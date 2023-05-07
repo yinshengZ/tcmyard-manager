@@ -181,24 +181,24 @@ export default{
         calculate_price(){
             this.final_price=0
             this.original_price=0
-            alert('clicked!')
+      
 
-            let result
+            
 
             if(this.others_details.length>0){
-                //FIXME: 
-                console.log(`---------------others details`)
-                console.log(this.others_details)
-                console.log(`---------end---------`)
+                let result 
+
                 for(let i=0; i<this.others_details.length; i++){
-                     result = this.others_inventory.find(item=>item.id === this.others_details[i].id)
-                     console.log(result)
-                     this.final_price +=(Number(result.unit_price)*Number(this.other_details[i].units))*(1-this.discount)
-                     this.original_price +=(Number(result.unit_price)*Number(this.other_details[i].units))
+                    result = this.others_inventory.find(item=>item.id === this.others_details[i].id)
+                    this.original_price +=(Number(result.unit_price)*Number(this.others_details[i].units))
+                    this.final_price += (Number(result.unit_price)*Number(this.others_details[i].units))*(1-this.discount/100)
+                  
                 }
                 this.original_price = this.original_price.toFixed(2)
-                this.final_price=this.final_price.toFixed(2)
+                this.final_price = this.final_price.toFixed(2)
+
                 this.service_id = result.categories_id
+               
             }
         },
 
@@ -220,21 +220,41 @@ export default{
                     others_details:this.others_details,
                     patient_id:this.patient_id,
                     user_id:this.user_id,
-                    discount:this.discount
-                    
+                    discount:this.discount,
+                    with_finance: this.with_finance,
+                    with_date:this.with_date,
+                    payment_type:this.payment_type,
+                    original_price:this.original_price,
+                    final_price:this.final_price,
+                    description:this.description,
+                    service_id:this.service_id                    
                 }
             }else if(this.with_finance&&this.with_date){
                 this.treatment_details={
-
+                    others_details:this.others_details,
+                    patient_id:this.patient_id,
+                    user_id:this.user_id,
+                    discount:this.discount,
+                    with_finance: this.with_finance,
+                    with_date:this.with_date,
+                    payment_type:this.payment_type,
+                    original_price:this.original_price,
+                    final_price:this.final_price,
+                    description:this.description,
+                    service_id:this.service_id,
+                    date:this.date,
                 }
-            }
-
-            this.treatment_details={
+            }else{
+                this.treatment_details={
                 others_details:this.others_details,
                 patient_id:this.patient_id,
                 user_id:this.user_id,
-                discount:this.discount
+                discount:this.discount,
+                service_id:this.service_id
             }
+            }
+
+            
             addOther(this.treatment_details).then((response)=>{
                 this.$notify({
                     title:"Notification",

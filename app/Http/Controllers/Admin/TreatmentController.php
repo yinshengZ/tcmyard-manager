@@ -322,11 +322,17 @@ class TreatmentController extends Controller
          }
 
          $others = new Treatment;
-         $others->service_id = 4;
+         $others->service_id = $request->service_id;
          $others->patient_id = $request->patient_id;
          $others->user_id = $request->user_id;
          $others->quantity = $quantity;
          $others->discount = $request->discount;
+         if($request->with_date){
+            $others->date = $request->date;
+         }else{
+            $others->date = Carbon::now();
+         }
+       
          $others->treatment_details = json_encode($request->others_details);
          $others->save();
 
@@ -340,9 +346,39 @@ class TreatmentController extends Controller
             $treatment_handler->patient_id = $request->patient_id;
             $treatment_handler->user_id = $request->user_id;
             $treatment_handler->units = $others_detail['units'];
+            if($request->with_date){
+                $treatment_handler->date = $request->date;
+             }else{
+                $treatment_handler->date = Carbon::now();
+             }
             $treatment_handler->quantity = $quantity;
             $treatment_handler->save();
          }
+
+
+       
+         if($request->with_finance){
+            $finance = new Income;
+            $finance->amount = $request->final_price;
+            $finance->original_amount = $request->original_price;
+            $finance->payment_type_id = $request->payment_type;
+            $finance->patient_id = $request->patient_id;
+            $finance->user_id = $request->user_id;
+            $finance->treatment_id = $treatment_id->id;
+            $finance->service_id = $request->service_id;
+            $finance->discount = $request->discount;
+            if($request->with_date){
+                $finance->date=$request->date;
+            }else{
+                $finance->date=Carbon::now();
+            }
+
+            $finance->save();
+            
+
+         }
+         
+
 
          return response()->json([
             'message'=>'Treatment Has Been Added Successfully!'

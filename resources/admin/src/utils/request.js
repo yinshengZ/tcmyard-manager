@@ -47,9 +47,9 @@ service.interceptors.response.use(
     return response.data
   },
   error => {
-    console.log('err' + error) // for debug
+    /* console.log('err' + error) // for debug
     console.log(error.response.status)
-    console.log(error)
+    console.log(error) */
     if (error.response && error.response.status == 401) {
       store.dispatch('logout')
       Message({

@@ -67,6 +67,11 @@ Route::group([
     Route::put('finance/expense',[FinanceController::class,'update_expense']);
     Route::delete('finance/expense/{id}',[FinanceController::class,'delete_expense']);
 
+    Route::get('finance/income/year',[FinanceController::class,'get_curret_year_incomes']);
+    Route::get('finance/income/month',[FinanceController::class,'get_current_month_incomes']);
+    Route::get('finance/income/week',[FinanceController::class,'get_current_week_incomes']);
+    Route::get('finance/income/today',[FinanceController::class,'get_current_day_incomes']);
+
     Route::get('payment_methods',[PaymentMethodController::class,'index']);
 
     Route::get('treatment/patient/{id}',[TreatmentController::class,'getPatientTreatments']);

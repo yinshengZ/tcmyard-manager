@@ -9,6 +9,9 @@ use App\Models\Income;
 use App\Services\FinanceService;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
+
+
 
 class FinanceController extends Controller
 {
@@ -18,8 +21,28 @@ class FinanceController extends Controller
       return $request;
    }
 
+   public function get_curret_year_incomes(){
+      $incomes = Income::select('amount')->whereYear('date',date('Y'))->sum('amount');
+      return $incomes;
+   }
+
+   public function get_current_month_incomes(){
+      $incomes = Income::select('amount')->whereYear('date',Carbon::now()->year)->whereMonth('date',Carbon::now()->month)->sum('amount');
+      return $incomes;
+   }
+
+   public function get_current_week_incomes(){
+      $incomes = Income::select('amount')->whereBetween('date',[Carbon::now()->startOfWeek(),Carbon::now()->endOfWeek()])->sum('amount');
+      return $incomes;
+   }
+
+   public function get_current_day_incomes(){
+      $incomes = Income::select('amount')->whereDate('date',Carbon::today())->sum('amount');
+      return $incomes;
+   }
+
    public function get_all_incomes(){
-      return null;
+      
    }
 
    public function get_patient_incomes($id){

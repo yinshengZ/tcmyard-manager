@@ -161,9 +161,17 @@ export const constantRoutes = [
     name: 'Finance',
     meta: {
       title: 'Finance',
-      icon: 'gbp'
+      icon: 'finance'
     },
     children: [
+      {
+        path:'dashboard',
+        name:'FinanceDashBoard',
+        component: () =>import('@/views/finance/dashboard.vue'),
+        meta:{title:'Dashboard',icon:'dashboard',affix:true}
+      },
+
+
       {
         path: 'overview',
         name: 'FianceOverview',

@@ -97,7 +97,8 @@ class TreatmentController extends Controller
         if($request->with_date){
             $treatment->date = $request->date;
         }else{
-            $treatment->date = Carbon::now();
+            $treatment->date = Carbon::today();
+            
         }
         $treatment->save();
 
@@ -115,7 +116,7 @@ class TreatmentController extends Controller
             if($request->with_date){
                 $treatment_handler->date = $request->date;
             }else{
-                $treatment_handler->date = Carbon::now();
+                $treatment_handler->date = Carbon::today();
             }
             $treatment_handler->save();
         }
@@ -135,7 +136,7 @@ class TreatmentController extends Controller
             if($request->with_date){
                 $income->date = $request->date;
             }else{
-                $income->date = Carbon::now();
+                $income->date = Carbon::today();
             }
             $income->service_id = $service_id;
             $income->payment_type_id = $request->payment_type;
@@ -164,7 +165,8 @@ class TreatmentController extends Controller
         if($request->with_date){
             $service->date = $request->date;
         }else{
-            $service->date = Carbon::now();
+            $service->date = Carbon::today();
+           
         }
         $service->save();
 
@@ -182,7 +184,7 @@ class TreatmentController extends Controller
         if($request->with_date){
             $treatment_handler->date = $request->date;
         }else{
-            $treatment_handler->date = Carbon::now();
+            $treatment_handler->date = Carbon::today();
         }
         
         $treatment_handler->save();
@@ -198,6 +200,13 @@ class TreatmentController extends Controller
         $income->treatment_id = $treatment_id->id;
         $income->service_id = $request->service_id; 
         $income->description = $request->description;
+
+        if($request->with_date){
+            $income->date = $request->date;
+        }else{
+            $income->date = Carbon::today();
+        }
+
         $income->save();
         }
         
@@ -248,7 +257,7 @@ class TreatmentController extends Controller
         if($request->with_date){
             $retail->date = $request->date;
         }else{
-            $retail->date = Carbon::now();
+            $retail->date = Carbon::today();
         }
         $retail->save();
 
@@ -330,7 +339,7 @@ class TreatmentController extends Controller
          if($request->with_date){
             $others->date = $request->date;
          }else{
-            $others->date = Carbon::now();
+            $others->date = Carbon::today();
          }
        
          $others->treatment_details = json_encode($request->others_details);
@@ -349,7 +358,7 @@ class TreatmentController extends Controller
             if($request->with_date){
                 $treatment_handler->date = $request->date;
              }else{
-                $treatment_handler->date = Carbon::now();
+                $treatment_handler->date = Carbon::today();
              }
             $treatment_handler->quantity = $quantity;
             $treatment_handler->save();
@@ -370,7 +379,7 @@ class TreatmentController extends Controller
             if($request->with_date){
                 $finance->date=$request->date;
             }else{
-                $finance->date=Carbon::now();
+                $finance->date=Carbon::today();
             }
 
             $finance->save();

@@ -1,5 +1,35 @@
 import request from '@/utils/request'
 
+
+export function getCurrentYearIncomes(){
+    return request({
+        url:'/finance/income/year',
+        method:'get'
+    })
+}
+
+export function getCurrentMonthIncomes(){
+    return request({
+        url:'/finance/income/month',
+        method:'get'
+    })
+}
+
+export function getCurrentWeekIncomes(){
+    return request({
+        url:'/finance/income/week',
+        method:'get'
+    })
+}
+
+export function getCurrentDayIncomes(){
+    return request({
+        url:'/finance/income/today',
+        method:'get'
+    })
+}
+
+
 export function getAllIncomes(){
     return request({
         url:'/finance/income',

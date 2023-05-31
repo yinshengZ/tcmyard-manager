@@ -37,6 +37,29 @@ export function getAllIncomes(){
     })
 }
 
+export function getWeeklyIncomes(){
+    return request({
+        url:'/finance/income/weekly',
+        method:'get'
+    })
+}
+
+export function getMonthlyIncomes(){
+    return request({
+        url:'/finance/income/monthly',
+        method:'get'
+    })
+}
+
+export function getYearlyIncomes(){
+    return request({
+        url:'/finance/income/yearly',
+        method:'get'
+    })
+}
+
+
+
 export function getPatientIncome(id){
     return request({
         url:'/finance/income/patient/'+id,

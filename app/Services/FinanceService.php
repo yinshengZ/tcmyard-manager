@@ -39,6 +39,25 @@ use App\Models\Income;
 
         }
 
+        /**
+         * @param $data must be a collection of 2 collumns only consisting keys of 
+         * date, amount
+         */
+        public static function financeDataReconstruct($data){
+            $amount = [];
+            $date = [];
+            foreach($data as $index=>$chart_data){
+                array_push($date,$chart_data->date);
+                array_push($amount,$chart_data->amount);
+            }
+            $final_data =array(
+                array('amount',$amount),
+                array('date',$date)
+            );
+
+            return $final_data;
+        }
+
 
 
     }

@@ -11,6 +11,8 @@ use App\Services\FinanceService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 
+use DB;
+
 
 
 class FinanceController extends Controller
@@ -39,6 +41,19 @@ class FinanceController extends Controller
    public function get_current_day_incomes(){
       $incomes = Income::select('amount')->whereDate('date',Carbon::today())->sum('amount');
       return $incomes;
+   }
+
+   public function get_yearly_incomes(){
+      $incomes = Income::select(DB::raw("(sum(amount)) as amount"),DB::raw("(DATE_FORMAT(date,'%Y')) as date"))
+      ->orderBy('date','DESC')
+      ->groupBy(DB::raw("DATE_FORMAT(date,'%Y')"))
+      ->get();
+
+      $data = FinanceService::financeDataReconstruct($incomes);
+
+
+
+      return $data;
    }
 
    public function get_all_incomes(){

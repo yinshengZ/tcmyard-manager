@@ -72,6 +72,8 @@ Route::group([
     Route::get('finance/income/week',[FinanceController::class,'get_current_week_incomes']);
     Route::get('finance/income/today',[FinanceController::class,'get_current_day_incomes']);
 
+    Route::get('finance/income/yearly',[FinanceController::class,'get_yearly_incomes']);
+
     Route::get('payment_methods',[PaymentMethodController::class,'index']);
 
     Route::get('treatment/patient/{id}',[TreatmentController::class,'getPatientTreatments']);

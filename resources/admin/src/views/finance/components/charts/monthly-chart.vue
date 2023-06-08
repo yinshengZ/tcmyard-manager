@@ -1,11 +1,23 @@
 <template>
     <div>
+        <div class="button-group">
+            <el-button-group>
+            <el-button @click = "get_current_week_daily_incomes">Week</el-button>
+            <el-button @click="get_monthly_incomes">Month</el-button>
+            <el-button @click="get_yearly_incomes">Year</el-button>
+            <el-button @click="get_current_year_income_distribution">Yearly Distribution</el-button>
+            <el-button @click="get_current_week_income_distribution">Weekly Distribution</el-button>
+        </el-button-group>
+
+        </div>
+        
+      
         
 
         <div id="monthly-chart"></div>
 
-        <div id="yearly-chart"></div>
-        {{ data }}
+        <div id="pie-chart"></div>
+
     </div>
    
 </template>
@@ -15,30 +27,79 @@
 
 import echarts from 'echarts'
 
+import { getCurrentMonthDailyIncomes,
+     getCurrentWeekDailyIncomes,
+      getYearlyIncomes, 
+      getCurrentYearIncomeDistribution,
+      getCurrentWeekIncomeDistribution} from '@/api/finance'
 
 export default{
     props:['data'],
     data(){
         return{
-            chart:null,
+            chart_data:[],
         }
     },
     mounted(){
-        this.initChart()
+        //this.get_yearly_incomes()
+
+        this.initPieChart()
+        
+        
     },
 
     
     methods:{
-    initChart(){
+        get_yearly_incomes(){
+        getYearlyIncomes().then((response)=>{
+            this.chart_data = response[0]
+
+            console.log(this.yearly_incomes)
+
+            this.initChart(this.chart_data.date, this.chart_data.amount)
+        })
+     
+    },
+
+    get_monthly_incomes(){
+        getCurrentMonthDailyIncomes().then((response)=>{
+            this.chart_data = response[0]
+            this.initChart(this.chart_data.date, this.chart_data.amount)
+        })
+    },
+
+    get_current_week_daily_incomes(){
+        getCurrentWeekDailyIncomes().then((response)=>{
+            this.chart_data=response[0]
+            this.initChart(this.chart_data.date, this.chart_data.amount)
+        })
+    },
+
+    get_current_year_income_distribution(){
+        getCurrentYearIncomeDistribution().then((response)=>{
+            console.log(response)
+        })
+    },
+
+    get_current_week_income_distribution(){
+        getCurrentWeekIncomeDistribution().then((response)=>{
+            console.log(response)
+        })
+    },
+
+    initChart(date, amount){
         this.chart=echarts.init(document.getElementById('monthly-chart'))
 
         this.chart.setOption({
+           
             title:{
-                text:'Echarts test!'
+                text:'Income Distributions'
             },
 /*             backgroundColor:'#394056',
  */            xAxis:{
-                data:['Jan','Feb','Mar','APR','May','June','July','Aug','Sep','Oct','Nov','Dec'],
+                name:'Date',
+                data:date,
+                
                 /* axisLabel:{
                     formatter:function(d){
                         return d.label;
@@ -53,45 +114,97 @@ export default{
                 ] */
             },
 
-            yAxis:{},
+            yAxis:{
+                name:'Incomes(£)'
+            },
+
+            tooltip:{
+                show:true
+            },
+
             series:[
                 
-                   
-             
-                
-
-                {
+            {
                     name:'Months',
                     label:{
                        emphasis:{
-                        show:true,
-                        textStyle:{
+                        show:false,
+                        /* textStyle:{
+                            color:'white',
                             fontSize:'30',
                             fontweight:'bold'
-                        }
+                        } */
                        }
                     },
 
                     type:'bar',
-                    //data:[20,20,30,40,50,60,70,80,90,100,110,120]
-                    data:[{value:10,name:'January'},
-                        {value:20,name:'Feburary'},
-                    {value:30,name:'March'},
-                {value:40,name:'April'},
-            {value:50,name:'May'},
-        {value:60,name:'June'},
-    {value:70,name:'July'},
-{value:80,name:'August'},
-{value:90,name:'Sepetember'},
-{value:100,name:'October'},
-{value:110,name:'Novemeber'},
-{value:120,name:'Decenmber'}]
+                    itemStyle:{
+                    color:'#374c80',
+                    borderType:'dashed',
+                    opacity:0.8
+                   /*  [
+                    '#003f5c',
+                    '#374c80',
+                    '#7a5195',
+                    '#bc5090',
+                    '#ef5675',
+                    '#ff764a',
+                    '#ffa600'
+                    ] */
+                    },
+                 
+                    data:amount
+                }
+
+
+                
+
+
+
+            ]
+        })
+    },
+
+    initPieChart(){
+        this.chart=echarts.init(document.getElementById('pie-chart'))
+
+        this.chart.setOption({
+            title:{
+                text:'Pie Chart'
+            },
+
+
+
+
+            series:[
+                {
+                    type:'pie',
+                    data:[
+                        {
+                            value:335,
+                            name:'Herbs'
+                        },
+                        {
+                            value:830,
+                            name:'Service'
+                        },
+                        {
+                            vlaue:115,
+                            name:'Retail'
+                        },
+                        {
+                            value:553,
+                            name:'Other'
+                        }
+                    ]
+
                 }
             ]
         })
-    }
+    },
 }
 }
+
 
 
 
@@ -100,8 +213,13 @@ export default{
 
 <style  scoped>
     #monthly-chart{
-        border-style: solid;
+        
         height:500px;
-        width:100%;
+        width:50%;
+    }
+
+    .button-group{
+        width:50%;
+        margin:auto;
     }
 </style>

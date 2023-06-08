@@ -4,9 +4,15 @@
             <finance-overview></finance-overview>
         </div>
         
-        <monthly-chart :data = yearly_incomes ></monthly-chart>
+        <div class="charts">
+            <el-card>
+            <monthly-chart :data = yearly_incomes></monthly-chart>
+        </el-card>
+        </div>
+        
+        
         <finance-chart></finance-chart>
-        <p>{{ yearly_incomes }}</p>
+     
     </div>
 </template>
 
@@ -17,7 +23,7 @@ import FinanceOverview from '@/views/finance/components/finance-overview.vue'
 import MonthlyChart from './components/charts/monthly-chart.vue';
 import FinanceChart from './components/charts/finance-chart.vue';
 
-import { getWeeklyIncomes,getMonthlyIncomes, getYearlyIncomes } from '@/api/finance';
+
 
 
 export default{
@@ -30,15 +36,11 @@ export default{
         }
     },
     created(){
-        this.get_yearly_incomes()
+       
     },
 
     methods:{
-     get_yearly_incomes(){
-        getYearlyIncomes().then((response)=>{
-            this.yearly_incomes = response
-        })
-     }
+     
     },
 
 }
@@ -50,6 +52,11 @@ export default{
 <style scoped>
 .finance-panel{
     margin:30px;
+}
+
+.charts{
+    width:95%;
+    margin:auto;
 }
 
 </style>

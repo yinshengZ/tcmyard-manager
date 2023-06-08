@@ -29,6 +29,34 @@ export function getCurrentDayIncomes(){
     })
 }
 
+export function getCurrentMonthDailyIncomes(){
+    return request({
+        url:'/finance/income/month/daily',
+        method:'get'
+    })
+}
+
+export function getCurrentWeekDailyIncomes(){
+    return request({
+        url:'/finance/income/week/daily',
+        method:'get'
+    })
+}
+
+export function getCurrentYearIncomeDistribution(){
+    return request({
+        url:'/finance/income/year/distribution',
+        method:'get'
+    })
+}
+
+export function getCurrentWeekIncomeDistribution(){
+    return request({
+        url:'/finance/income/week/distribution',
+        method:'get'
+    })
+}
+
 
 export function getAllIncomes(){
     return request({

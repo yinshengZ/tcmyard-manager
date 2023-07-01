@@ -198,19 +198,25 @@ export default{
         calculate_price(){
            
             this.final_amount = 0
-            this.original_mount = 0
+            this.original_amount = 0
+            let result 
 
             if(this.retail_details.length>0){
-                let result
-                for(let i =0; i<this.retail_details.length; i++){
-                     result = this.all_retails.find(item=>item.id ===this.retail_details[i].id)
-                    console.log(result)
-                    this.original_amount +=(Number(result.unit_price)*Number(this.retail_details[i].units))
-                    this.final_amount +=(Number(result.unit_price)*Number(this.retail_details[i].units)) * (1-this.discount/100)
-                } 
-                this.original_amount = this.original_amount.toFixed(2)
-                this.final_amount = this.final_amount.toFixed(2)
                 
+                for(let i =0; i<this.retail_details.length; i++){
+                   result = this.all_retails.find(item=>item.id ===this.retail_details[i].id)
+                    
+                    this.original_amount +=(Number(result.unit_price)
+                                    *Number(this.retail_details[i].units))
+
+
+                    this.final_amount +=(Number(result.unit_price)
+                                    *Number(this.retail_details[i].units)) * (1-this.discount/100)
+                } 
+                
+
+                this.original_amount = Number(this.original_amount).toFixed(2)
+                this.final_amount = Number(this.final_amount).toFixed(2)    
                 this.service_id = result.categories_id
             }
         },
@@ -219,8 +225,8 @@ export default{
             if(this.with_finance&&!this.with_date){
                 this.treatment_details={
                     payment_type:this.payment_type,
-                    original_price:this.original_price,
-                    final_price:this.final_price,
+                    original_price:this.original_amount,
+                    final_price:this.final_amount,
                     description:this.description,
                     discount:this.discount,
                     retail_details:this.retail_details,
@@ -233,14 +239,15 @@ export default{
             }else if(this.with_finance&&this.with_date){
                 this.treatment_details={
                     payment_type:this.payment_type,
-                    original_price:this.original_price,
-                    final_price:this.final_price,
+                    original_price:this.original_amount,
+                    final_price:this.final_amount,
                     description:this.description,
                     discount:this.discount,
                     retail_details:this.retail_details,
                     patient_id : this.patient_id,
                     user_id : this.user_id,
                     with_finance:this.with_finance,
+                    with_date:this.with_date,
                     service_id: this.service_id,
                     date:this.date,
 
@@ -249,6 +256,7 @@ export default{
             else{
                 this.treatment_details={
                 retail_details:this.retail_details,
+                
                 patient_id : this.patient_id,
                 user_id : this.user_id,                         
             }

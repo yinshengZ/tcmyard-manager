@@ -43,6 +43,23 @@ class FinanceController extends Controller
       return $incomes;
    }
 
+   public function get_current_day_daily_incomes(){
+      $incomes = Income::select('amount')
+      ->whereDate('date',Carbon::today())
+      ->get();
+      return $incomes;
+   }
+
+   public function get_current_day_daily_income_distribution(){
+      $incomes = Income::select([DB::raw("SUM(amount) as amount"),DB::raw("service_id as service_id"), DB::raw('date as date')])
+      ->whereDate('date',Carbon::today())
+      ->groupBy('service_id')
+      ->orderBy('amount','DESC')
+      ->with('service')
+      ->get();
+      return $incomes;
+   }
+
    public function get_yearly_incomes(){
       $incomes = Income::select(DB::raw("(sum(amount)) as amount"),DB::raw("(DATE_FORMAT(date,'%Y')) as date"))
       ->orderBy('date','DESC')
@@ -55,6 +72,149 @@ class FinanceController extends Controller
 
       return $data;
    }
+
+   public function get_current_month_daily_incomes(){
+      /* $incomes = Income::select(DB::raw("(sum(amount)) as amount"),DB::raw("date"))->where('date',Carbon::now()->month)->get();
+      return $incomes; */
+
+
+      /* $incomes = Income::select(DB::raw("(sum(amount) as amount", DB::raw("(Date_FORMAT(date,'%d')) as date")))
+      ->orderBy('date','ASC')
+      ->groupBy(DB::raw("DATE_FORMAT(date,'%d)"))
+      ->get();
+
+      return $incomes; */
+      /* $incomes = Income::select(DB::raw('SUM(amount) as sum'),'date')->where('date','>=',Carbon::now()->subMonth())->groupBy(DB::raw('Date(date)'))->orderBy('date','DESC');
+      return $incomes; */
+      $incomes = Income::select([DB::raw("SUM(amount) as amount"),DB::raw('date as date')])
+      ->whereBetween('date',[Carbon::now()->startOfMonth(), Carbon::now()])
+      ->groupBy('date')
+      ->orderBy('date','ASC')->get();
+      //$data = FinanceService::financeDataReconstruct($incomes);
+      return $incomes;
+   }
+
+   public function get_current_week_daily_incomes(){
+      $incomes = Income::select([DB::raw("SUM(amount) as amount"),DB::raw('date as date')])
+      ->whereBetween('date',[Carbon::now()->startOfWeek(), Carbon::now()])
+      ->groupBy('date')
+      ->orderBy('date','ASC')->get();
+      //$data = FinanceService::financeDataReconstruct($incomes);
+      return $incomes;
+   }
+
+
+   public function get_current_year_monthly_incomes(){
+      $incomes = Income::select([DB::raw("SUM(amount) as amount"), DB::raw(" date as date ")])
+      ->whereBetween('date',[Carbon::now()->startOfYear(),Carbon::now()])
+      ->groupBy( DB::raw('MONTH(date)'))
+      ->orderBy('date','ASC')->get();
+      return $incomes;
+   }
+
+
+   public function get_current_year_income_distribution(){
+
+    
+      $incomes = Income::select([DB::raw("SUM(amount) as amount"),DB::raw("service_id as service_id"),DB::raw("date as date")])
+      ->whereBetween('date',[Carbon::now()->startOfYear(),Carbon::now()])
+      ->groupBy('service_id')
+      ->orderBy('amount','DESC')
+      ->with('service')
+      ->get();
+
+      return $incomes;
+   }
+
+   public function get_current_month_income_distribution(){
+      $incomes = Income::select([DB::raw("SUM(amount) as amount"),DB::raw("service_id as service_id"), DB::raw('date as date')])
+      ->whereBetween('date',[Carbon::now()->startOfMonth(),Carbon::now()])
+      ->groupBy('service_id')
+      ->orderBy('amount','DESC')
+      ->with('service')
+      ->get();
+
+      return $incomes;
+   }
+
+   public function get_current_week_income_distribution(){
+      $incomes= Income::select([DB::raw("SUM(amount) as amount"),DB::raw("service_id as service_id"),DB::raw("date as date")])
+      ->whereBetween('date',[Carbon::now()->startOfWeek(),Carbon::now()])
+      ->groupBy('service_id')
+      ->orderBy('amount','DESC')
+      ->with('service')
+      ->get();
+      return $incomes;
+   }
+
+
+   public function get_weekly_comp_incomes(){
+      $incomes = Income::select([DB::raw("SUM(amount) as amount"),DB::raw("YEAR(date) as year, MONTH(date) as month, WEEK(date) as week")])
+      ->groupBy('year','month','week')
+      ->orderBy('date','ASC')
+      ->whereYear('date','=',Carbon::now()->year)
+      ->get();
+
+      return $incomes;
+   }
+
+
+   public function get_monthly_comp_incomes(){
+      $incomes = Income::select([DB::raw("SUM(amount) as amount"),DB::raw("YEAR(date) as year, MONTH(date) as month"),
+      DB::raw("date as date")])
+      ->groupBy('year','month')
+      ->orderBy('date','DESC')
+      ->whereMonth('date','=',Carbon::now()->month)
+      ->get();
+
+      return $incomes;
+   }
+
+
+   public function get_yearly_comp_incomes(){
+      $incomes = Income::select([DB::raw("SUM(amount) as amount"), DB::raw("YEAR(date) as year"), DB::raw("date as date")])
+      ->groupBy('year')
+      ->orderBy('date','DESC')
+      ->get();
+
+      return $incomes;
+   }
+
+   public function get_highest_daily_income(){
+      $income = Income::select([DB::raw("SUM(amount) as amount"),DB::raw("COUNT(amount) as transactions"),DB::raw("DAY(date) as day, YEAR(date) as year, MONTH(date) as month"),DB::raw("date as date")])
+      ->groupBy('year','month','day')
+      ->orderBy('amount','DESC')
+      ->first();
+
+      return $income;
+   }
+
+   public function get_highest_weekly_income(){
+      $income = Income::select([DB::raw("SUM(amount) as amount"),DB::raw("COUNT(amount) as transactions"),DB::raw("WEEK(date) as week, YEAR(date) as year, MONTH(date) as month")])
+      ->groupby('year','month','week')
+      ->orderBy('amount','DESC')
+      ->first();
+      return $income;
+   }
+
+   public function get_highest_monthly_income(){
+      $income = Income::select([DB::raw("SUM(amount) as amount"),DB::raw("COUNT(amount) as transactions"),DB::raw("date as date"), DB::raw("MONTH(date) as month, YEAR(date) as year")])
+      ->groupBy('year','month')
+      ->orderBy('amount','DESC')
+      ->first();
+
+      return $income;
+   }
+
+   public function get_highest_yearly_income(){
+      $income = Income::select([DB::raw("SUM(amount) as amount"),DB::raw("COUNT(amount) as transactions"),DB::raw("date as date"),DB::raw("YEAR(date) as year")])
+      ->groupBy('year')
+      ->orderBy('amount','DESC')
+      ->first();
+      return $income;
+   }
+
+
 
    public function get_all_incomes(){
       

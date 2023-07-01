@@ -50,14 +50,17 @@ use App\Models\Income;
                 array_push($date,$chart_data->date);
                 array_push($amount,$chart_data->amount);
             }
-            $final_data =array(
-                array('amount',$amount),
-                array('date',$date)
-            );
+            $final_data =[
+                [
+                    'date'=>$date,
+                    'amount'=>$amount
+                ],
+            ];
 
             return $final_data;
         }
 
+     
 
 
     }

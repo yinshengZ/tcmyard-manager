@@ -268,27 +268,37 @@ class TreatmentController extends Controller
             $treatment_handler->treatment_id = $treatment_id->id;
             $treatment_handler->inventory_id = $retail_detail['id'];
             $treatment_handler->patient_id = $request->patient_id;
-            $treatment_handler->user_id = $request->user_id;
+            $treatment_handler->user_id = $request->user_id;#
+            if($request->with_date){
+                $treatment_handler->date = $request->date;
+            }else{
+                $treatment_handler->date = Carbon::today();
+            }
+           
             $treatment_handler->units = $retail_detail['units'];
             $treatment_handler->quantity = $quantity;
             $treatment_handler->save();
         }
 
-        try{
+    
             if($request->with_finance){
                 $income = new Income;
-                $income->amount = $request->final_amount;
-                $income->original_amount = $request->original_amount;
+                $income->amount = $request->final_price;
+                $income->original_amount = $request->original_price;
                 $income->payment_type_id = $request->payment_type;
                 $income->patient_id = $request->patient_id;
                 $income->user_id = $request->user_id;
                 $income->discount = $request->discount;
                 $income->treatment_id = $treatment_id->id;
                 $income->service_id = $request->service_id;
+                if($request->with_date){
+                    $income->date = $request->date;
+                }else{
+                    $income->date = Carbon::today();
+                }
+                $income->save();
             }
-        }catch(Exception $err){
-            return $err;
-        }
+     
 
         
         
@@ -296,6 +306,8 @@ class TreatmentController extends Controller
         return response()->json([
             'message' => 'Treatment Has Been Added Successfully!'
         ], 200);
+
+        
 
         //$treatment_handler->
     }

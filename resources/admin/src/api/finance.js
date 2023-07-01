@@ -1,6 +1,9 @@
 import request from '@/utils/request'
 
 
+
+
+
 export function getCurrentYearIncomes(){
     return request({
         url:'/finance/income/year',
@@ -29,6 +32,24 @@ export function getCurrentDayIncomes(){
     })
 }
 
+
+export function getCurrentDailyIncomes(){
+    return request({
+        url:'/finance/income/today/daily',
+        method:'get'
+    })
+}
+
+export function getCurrentDayDailyIncomeDistribution(){
+    return request({
+        url:'/finance/income/today/distribution',
+        method:'get'
+    })
+}
+
+
+
+
 export function getCurrentMonthDailyIncomes(){
     return request({
         url:'/finance/income/month/daily',
@@ -43,9 +64,24 @@ export function getCurrentWeekDailyIncomes(){
     })
 }
 
+
+export function getCurrentYearMonthlyIncomes(){
+    return request({
+        url:'/finance/income/year/monthly',
+        method:'get'
+    })
+}
+
 export function getCurrentYearIncomeDistribution(){
     return request({
         url:'/finance/income/year/distribution',
+        method:'get'
+    })
+}
+
+export function getCurrentMonthIncomeDistribution(){
+    return request({
+        url:'/finance/income/month/distribution',
         method:'get'
     })
 }
@@ -56,6 +92,61 @@ export function getCurrentWeekIncomeDistribution(){
         method:'get'
     })
 }
+
+
+export function getWeeklyComparisonIncomes(){
+    return request({
+        url:'/finance/income/comp/week',
+        method:'get'
+    })
+}
+
+export function getMonthlyComparisonIncomes(){
+    return request({
+        url:'/finance/income/comp/month',
+        method:'get'
+    })
+}
+
+export function getYearlyComparisonIncomes(){
+    return request({
+        url:'/finance/income/comp/year',
+        method:'get'
+    })
+}
+
+
+// income records
+export function getHighestDailyIncome(){
+    return request({
+        url:'/finance/income/record/day',
+        method:'get'
+    })
+}
+
+export function getHighestWeeklyIncome(){
+    return request({
+        url:'/finance/income/record/week',
+        method:'get'
+    })
+}
+
+
+export function getHighestMonthlyIncome(){
+    return request({
+        url:'/finance/income/record/month',
+        method:'get'
+    })
+}
+
+export function getHighestYearlyIncome(){
+    return request({
+        url:'/finance/income/record/year',
+        method:'get'
+    })
+}
+
+
 
 
 export function getAllIncomes(){

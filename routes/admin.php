@@ -74,6 +74,25 @@ Route::group([
 
     Route::get('finance/income/yearly',[FinanceController::class,'get_yearly_incomes']);
 
+    Route::get('finance/income/today/daily',[FinanceController::class,'get_current_day_daily_incomes']);
+    Route::get("finance/income/month/daily",[FinanceController::class,'get_current_month_daily_incomes']);
+    Route::get("finance/income/week/daily",[FinanceController::class,'get_current_week_daily_incomes']);
+    Route::get('finance/income/year/monthly',[FinanceController::class,'get_current_year_monthly_incomes']);
+
+    Route::get('finance/income/today/distribution',[FinanceController::class,'get_current_day_daily_income_distribution']);
+    Route::get("finance/income/year/distribution",[FinanceController::class,'get_current_year_income_distribution']);
+    Route::get('finance/income/month/distribution',[FinanceController::class,'get_current_month_income_distribution']);
+    Route::get('finance/income/week/distribution',[FinanceController::class,'get_current_week_income_distribution']);
+
+    Route::get('finance/income/comp/week',[FinanceController::class,'get_weekly_comp_incomes']);
+    Route::get('finance/income/comp/month',[FinanceController::class,'get_monthly_comp_incomes']);
+    ROute::get('finance/income/comp/year',[FinanceController::class,'get_yearly_comp_incomes']);
+
+    Route::get('finance/income/record/day',[FinanceController::class,'get_highest_daily_income']);
+    Route::get('finance/income/record/week',[FinanceController::class,'get_highest_weekly_income']);
+    Route::get('finance/income/record/month',[FinanceController::class,'get_highest_monthly_income']);
+    Route::get('finance/income/record/year',[FinanceController::class,'get_highest_yearly_income']);
+
     Route::get('payment_methods',[PaymentMethodController::class,'index']);
 
     Route::get('treatment/patient/{id}',[TreatmentController::class,'getPatientTreatments']);

@@ -22,6 +22,6 @@ class Income extends Model
     }
 
     public function service(){
-        return $this->belongsTo('App\Models\Category','id');
+        return $this->belongsTo('App\Models\Category','service_id');
     }
 }

@@ -20,7 +20,7 @@
             <el-option
             v-for="others_list in others_inventory"
             :key="others_list.id"
-            :label="others_list.name + '/ stock( ' + others_list.stock+ ' )'"
+            :label="others_list.name + '/ Stock( ' + others_list.stock+ ' )'+' / Price( £'+others_list.unit_price+' )'"
             :value="others_list.id">
             </el-option>
         </el-select>

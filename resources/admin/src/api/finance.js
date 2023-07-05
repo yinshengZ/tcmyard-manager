@@ -115,6 +115,16 @@ export function getYearlyComparisonIncomes(){
     })
 }
 
+//get income distributions between services of all time 
+export function getAllTimePercentages(){
+    return request({
+        url:'/finance/income/comp/all_time',
+        method:'get'
+    })
+}
+
+
+
 
 // income records
 export function getHighestDailyIncome(){
@@ -142,6 +152,13 @@ export function getHighestMonthlyIncome(){
 export function getHighestYearlyIncome(){
     return request({
         url:'/finance/income/record/year',
+        method:'get'
+    })
+}
+
+export function getHighestSpender(){
+    return request({
+        url:'/finance/income/record/spender',
         method:'get'
     })
 }

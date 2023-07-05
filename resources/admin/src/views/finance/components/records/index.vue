@@ -126,6 +126,9 @@
             
         </div>
 
+        <div>
+            <el-button @click="get_highest_spender">Click Me!</el-button>
+        </div>
         
     </div>
 </template>
@@ -134,7 +137,8 @@
 
 <script>
 import CountTo from "vue-count-to";
-import { getHighestDailyIncome , getHighestWeeklyIncome ,getHighestMonthlyIncome, getHighestYearlyIncome} from '@/api/finance';
+import { getHighestDailyIncome , getHighestWeeklyIncome ,getHighestMonthlyIncome, getHighestYearlyIncome
+,getHighestSpender} from '@/api/finance';
 export default{
     components:{
         CountTo,
@@ -177,6 +181,12 @@ export default{
         get_highest_yearly_income(){
             getHighestYearlyIncome().then((response)=>{
                 this.highest_yearly = response
+            })
+        },
+
+        get_highest_spender(){
+            getHighestSpender().then((response)=>{
+                console.log(response)
             })
         }
         

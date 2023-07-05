@@ -86,12 +86,14 @@ Route::group([
 
     Route::get('finance/income/comp/week',[FinanceController::class,'get_weekly_comp_incomes']);
     Route::get('finance/income/comp/month',[FinanceController::class,'get_monthly_comp_incomes']);
-    ROute::get('finance/income/comp/year',[FinanceController::class,'get_yearly_comp_incomes']);
+    Route::get('finance/income/comp/year',[FinanceController::class,'get_yearly_comp_incomes']);
+    Route::get('finance/income/comp/all_time',[FinanceController::class,'get_all_time_comp_percentages']);
 
     Route::get('finance/income/record/day',[FinanceController::class,'get_highest_daily_income']);
     Route::get('finance/income/record/week',[FinanceController::class,'get_highest_weekly_income']);
     Route::get('finance/income/record/month',[FinanceController::class,'get_highest_monthly_income']);
     Route::get('finance/income/record/year',[FinanceController::class,'get_highest_yearly_income']);
+    Route::get('finance/income/record/spender',[FinanceController::class,'get_highest_spender']);
 
     Route::get('payment_methods',[PaymentMethodController::class,'index']);
 

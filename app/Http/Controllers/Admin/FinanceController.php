@@ -61,7 +61,7 @@ class FinanceController extends Controller
    }
 
    public function get_yearly_incomes(){
-      $incomes = Income::select(DB::raw("(sum(amount)) as amount"),DB::raw("(DATE_FORMAT(date,'%Y')) as date"))
+     /*  $incomes = Income::select(DB::raw("(sum(amount)) as amount"),DB::raw("(DATE_FORMAT(date,'%Y')) as date"))
       ->orderBy('date','DESC')
       ->groupBy(DB::raw("DATE_FORMAT(date,'%Y')"))
       ->get();
@@ -70,27 +70,17 @@ class FinanceController extends Controller
 
 
 
-      return $data;
+      return $data; */
+      
+      //currently not used
    }
 
    public function get_current_month_daily_incomes(){
-      /* $incomes = Income::select(DB::raw("(sum(amount)) as amount"),DB::raw("date"))->where('date',Carbon::now()->month)->get();
-      return $incomes; */
-
-
-      /* $incomes = Income::select(DB::raw("(sum(amount) as amount", DB::raw("(Date_FORMAT(date,'%d')) as date")))
-      ->orderBy('date','ASC')
-      ->groupBy(DB::raw("DATE_FORMAT(date,'%d)"))
-      ->get();
-
-      return $incomes; */
-      /* $incomes = Income::select(DB::raw('SUM(amount) as sum'),'date')->where('date','>=',Carbon::now()->subMonth())->groupBy(DB::raw('Date(date)'))->orderBy('date','DESC');
-      return $incomes; */
+   
       $incomes = Income::select([DB::raw("SUM(amount) as amount"),DB::raw('date as date')])
       ->whereBetween('date',[Carbon::now()->startOfMonth(), Carbon::now()])
       ->groupBy('date')
       ->orderBy('date','ASC')->get();
-      //$data = FinanceService::financeDataReconstruct($incomes);
       return $incomes;
    }
 
@@ -99,7 +89,6 @@ class FinanceController extends Controller
       ->whereBetween('date',[Carbon::now()->startOfWeek(), Carbon::now()])
       ->groupBy('date')
       ->orderBy('date','ASC')->get();
-      //$data = FinanceService::financeDataReconstruct($incomes);
       return $incomes;
    }
 
@@ -180,6 +169,14 @@ class FinanceController extends Controller
       return $incomes;
    }
 
+   public function get_all_time_comp_percentages(){
+      $incomes = Income::select([DB::raw("SUM(amount) as amount"),'service_id'])
+      ->groupBy('service_id')
+      ->with('service')
+      ->get();
+      return $incomes;
+   }
+
    public function get_highest_daily_income(){
       $income = Income::select([DB::raw("SUM(amount) as amount"),DB::raw("COUNT(amount) as transactions"),DB::raw("DAY(date) as day, YEAR(date) as year, MONTH(date) as month"),DB::raw("date as date")])
       ->groupBy('year','month','day')
@@ -213,6 +210,18 @@ class FinanceController extends Controller
       ->first();
       return $income;
    }
+
+   public function get_highest_spender(){
+      $income = Income::select([DB::raw("SUM(amount) as amount"),
+      DB::raw("patient_id as patient_id"),DB::raw("COUNT(amount) as transactions")])
+      ->groupBy('patient_id')
+      ->orderBy('amount','DESC')
+      ->with('patient')
+      ->first();
+      return $income;
+   }
+
+
 
 
 

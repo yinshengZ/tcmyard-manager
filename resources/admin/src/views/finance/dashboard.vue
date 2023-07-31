@@ -1,8 +1,8 @@
 <template>
   <div>
     <div class="container">
-      <el-tabs type="border-card">
-        <el-tab-pane label="Incomes">
+      <el-tabs type="border-card" >
+        <el-tab-pane lazy label="Incomes">
           <div class="charts">
             <!-- <current-year-income-chart></current-year-income-chart> -->
             <income-charts></income-charts>
@@ -12,7 +12,7 @@
          
         </el-tab-pane>
 
-        <el-tab-pane label="Records">
+        <el-tab-pane lazy label="Records">
           <income-records></income-records>
         </el-tab-pane>
       </el-tabs>

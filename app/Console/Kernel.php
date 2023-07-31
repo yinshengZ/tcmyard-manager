@@ -5,6 +5,8 @@ namespace App\Console;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
+use App\Http\Controllers\admin\FinanceController;
+
 class Kernel extends ConsoleKernel
 {
     /**
@@ -13,7 +15,7 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        //
+        
     ];
 
     /**
@@ -24,7 +26,9 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        // $schedule->command('inspire')->hourly();
+            $schedule->command('inspire')->everyMinute();
+        //$schedule->call('FinanceController@report_nill')->everyMinute();
+
     }
 
     /**

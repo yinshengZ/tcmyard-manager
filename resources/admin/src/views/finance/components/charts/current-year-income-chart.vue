@@ -170,18 +170,21 @@ export default {
 
     get_current_day_daily_income_distribution() {
       getCurrentDayDailyIncomeDistribution().then((response) => {
-        console.log(response);
 
         let final_data = [];
 
-        for (let i = 0; i < response.length; i++) {
+        if(response.length>0){
+          for (let i = 0; i < response.length; i++) {
           let data = {};
           data.value = response[i].amount;
           data.name = uppercaseFirst(response[i].service["categories"]);
           final_data.push(data);
-        }
+          }
+          this.initPieChart(final_data, "Current Day Income Distribution");
 
-        this.initPieChart(final_data, "Current Day Income Distribution");
+        }
+        
+
       });
     },
 

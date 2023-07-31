@@ -20,7 +20,7 @@
                     <div>
                         <span>
                             Income: £
-                            <count-to :start-val="0" :end-val="highest_daily.amount" :duration="2600"></count-to>
+                            <count-to :start-val=0 :end-val=Number(highest_daily.amount) :duration="2600"></count-to>
                         </span>
                        
                     </div>
@@ -51,7 +51,7 @@
                     <div>
                         <span>
                             Income: £
-                            <count-to :start-val="0" :end-val="highest_weekly.amount" :duration="2600"></count-to>
+                            <count-to :start-val=0 :end-val=Number(highest_weekly.amount) :duration="2600"></count-to>
                         </span>
                        
                     </div>
@@ -80,7 +80,7 @@
                     <div>
                         <span>
                             Income: £
-                            <count-to :start-val="0" :end-val="highest_monthly.amount" :duration="2600"></count-to>
+                            <count-to :start-val=0 :end-val=Number(highest_monthly.amount) :duration="2600"></count-to>
                         </span>
                        
                     </div>
@@ -109,7 +109,7 @@
                     <div>
                         <span>
                             Income: £
-                            <count-to :start-val="0" :end-val="highest_yearly.amount" :duration="2600"></count-to>
+                            <count-to :start-val=0 :end-val=Number(highest_yearly.amount) :duration="2600"></count-to>
                         </span>
                        
                     </div>
@@ -216,6 +216,7 @@ export default{
     display:grid;
     grid-template-columns: 1fr;
     height:300px;
+    border: solid 2px;
 }
 
 

@@ -115,6 +115,21 @@ export function getYearlyComparisonIncomes(){
     })
 }
 
+export function getYearDistributions(data){
+    return request({
+        url:'/finance/income/distribution/year/'+data,
+        method:'get'
+    })
+}
+
+export function getWeekDistributions(data){
+    return request({
+        url:'/finance/income/distribution/week/'+data,
+        method:'get'
+    })
+}
+
+
 //get income distributions between services of all time 
 export function getAllTimePercentages(){
     return request({

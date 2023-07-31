@@ -87,6 +87,12 @@ Route::group([
     Route::get('finance/income/comp/week',[FinanceController::class,'get_weekly_comp_incomes']);
     Route::get('finance/income/comp/month',[FinanceController::class,'get_monthly_comp_incomes']);
     Route::get('finance/income/comp/year',[FinanceController::class,'get_yearly_comp_incomes']);
+    
+
+
+    Route::get('finance/income/distribution/year/{data}',[FinanceController::class,'get_year_income_distributions']);
+    Route::get('finance/income/distribution/week/{data}',[FinanceController::class,'get_week_income_distributions']);
+
     Route::get('finance/income/comp/all_time',[FinanceController::class,'get_all_time_comp_percentages']);
 
     Route::get('finance/income/record/day',[FinanceController::class,'get_highest_daily_income']);
@@ -116,3 +122,5 @@ Route::group([
     Route::apiResource('todo',TodoController::class);
 
 });
+
+

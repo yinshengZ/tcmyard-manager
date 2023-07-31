@@ -4,7 +4,7 @@ namespace App\Services;
 use App\Models\Category;
 
 use App\Models\Inventory;
-
+use Illuminate\Support\Carbon;
 use DB;
 
 use App\Models\Income;
@@ -39,6 +39,33 @@ use App\Models\Income;
 
         }
 
+        public function reportNill(){
+            $income = Income::where('date','=',Carbon::today())->get();
+            
+            if($income->count()>0){
+               return 'there were incomes today!';
+            }else{
+               $nill_income = new Income;
+               $nill_income->amount = 0;
+               $nill_income->original_amount= 0;
+               $nill_income->payment_type_id= 1;
+               $nill_income->patient_id = 0;
+               $nill_income->user_id = 0;
+               $nill_income->treatment_id = 0;
+               $nill_income->service_id = 0;
+               $nill_income->discount = 0;
+               $nill_income->date= Carbon::today();
+               $nill_income->description = "There are no incomes for this day";
+      
+               $nill_income->save();
+      
+               return "Nill income has been added!";
+      
+      
+            }
+      
+          
+         }
 
      
 

@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\admin\FinanceController;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,3 +21,5 @@ Route::get('/', function () {
 Route::get('/php',function(){
     return phpinfo();
 });
+
+Route::get('income/nill',[FinanceController::class,'report_nill']);

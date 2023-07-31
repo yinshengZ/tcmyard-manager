@@ -7,6 +7,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Income;
 
 use App\Services\FinanceService;
+use App\Services\Ultilities;
+
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
@@ -73,6 +75,8 @@ class FinanceController extends Controller
       return $data; */
       
       //currently not used
+
+     
    }
 
    public function get_current_month_daily_incomes(){
@@ -169,6 +173,47 @@ class FinanceController extends Controller
       return $incomes;
    }
 
+   //income distributions data
+   public function get_year_income_distributions($data){
+      $incomes = Income::select([DB::raw("SUM(amount) as amount"),DB::raw("COUNT(amount) as transactions"),
+      'service_id','date'])
+      ->groupBy('service_id')
+      ->with('service')
+      ->whereYear('date','=',$data)
+      ->get();
+      return $incomes;
+   }
+
+   public function get_week_income_distributions($data){
+
+      $year = strval(Carbon::now()->year);
+      $date = Carbon::now();
+      $date->setISODate($year,$data);
+   
+      $from = $date->copy()->startOfWeek();
+      $to = $date->copy()->endOfWeek();
+
+      $income = Income::select([DB::raw("SUM(amount) as amount"),DB::raw("COUNT(amount) as transactions"),
+      DB::raw("service_id as service_id"),DB::raw("date as date")])
+      ->groupBy('service_id')
+      ->with('service')
+      ->whereBetween('date',[$from, $to])
+      ->get();
+
+
+      return $income;
+      
+ 
+      
+   /*    return gettype($year);
+      
+     $date->getDateFromWeek($year, $data); */
+  
+     
+   }
+
+
+
    public function get_all_time_comp_percentages(){
       $incomes = Income::select([DB::raw("SUM(amount) as amount"),'service_id'])
       ->groupBy('service_id')
@@ -221,6 +266,8 @@ class FinanceController extends Controller
       return $income;
    }
 
+
+   
 
 
 

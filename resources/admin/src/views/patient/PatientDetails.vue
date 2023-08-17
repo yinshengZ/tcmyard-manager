@@ -6,6 +6,7 @@
           :personal_info="personal_info"
           :contact_info="contact_info"
           :patient_conditions="patient_conditions"
+          :patient_id="patient_id"
         ></patient-card>
       </el-col>
 
@@ -19,6 +20,10 @@
                 :user_name="user.name"
                 :key = "key"
               ></records-card>
+            </el-tab-pane>
+
+            <el-tab-pane lazy label="Timeline" name="timelines">
+              <p>hello timeline</p>
             </el-tab-pane>
 
             <el-tab-pane lazy label="Treatments" name="treatments">

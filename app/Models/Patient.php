@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+use App\Models\Disease;
+
 class Patient extends Model
 {
     use HasFactory;
@@ -19,12 +21,20 @@ class Patient extends Model
         return $this->belongsTo('App\Models\Marital','marital_status_id');
     }
 
-    public function allergy(){
+    public function allergies(){
         return $this->belongsToMany('App\Models\Allergy')->withTimestamps();
+    }
+
+    public function medications(){
+        return $this->belongsToMany('App\Models\Medication')->withTimestamps();
     }
 
     public function symptoms(){
         return $this->belongsToMany('App\Models\Symptom')->withTimestamps();
+    }
+
+    public function diseases(){
+        return $this->belongsToMany(Disease::class,'disease_patient')->withTimestamps();
     }
 
     public function records(){

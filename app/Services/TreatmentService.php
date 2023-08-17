@@ -18,11 +18,12 @@ class TreatmentService
         $final_treatment_details = [];
 
         //group_concat() to concatenate and group by of treatments
-        $treatments = TreatmentDetails::select(DB::raw('group_concat(id) as t_id'), 'treatment_id', DB::raw('group_concat(inventory_id) as treatments'), DB::raw('group_concat(units) as amount'), 'units', 'quantity', 'patient_id', 'quantity', 'created_at', 'updated_at')
+        $treatments = TreatmentDetails::select(DB::raw('group_concat(id) as t_id'), 'treatment_id', DB::raw('group_concat(inventory_id) as treatments'), DB::raw('group_concat(units) as amount'), 'units', 'quantity', 'patient_id', 'created_at', 'updated_at')
             ->where('patient_id', $patient_id)
             ->groupBy('treatment_id')
             ->latest()
-            ->get();
+
+            ->paginate(10)->toJson();
         foreach ($treatments as $index => $treatment) {
 
             $treatment_details_id = explode(',', $treatment->t_id);
@@ -32,7 +33,7 @@ class TreatmentService
 
 
 
-
+            //FIXME: string given weird error?
 
             foreach ($treatment_details_id as $index => $treatment_detail_id) {
                 $treatment_details = TreatmentDetails::findOrFail($treatment_detail_id)->toArray();

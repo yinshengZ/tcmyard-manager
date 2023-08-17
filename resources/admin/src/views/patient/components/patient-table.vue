@@ -58,17 +58,34 @@
       </el-table-column>
 
       <el-table-column label="Operations" min-width="200" align="center">
-        <template slot-scope="{ row }">   
-          <el-button type="success"
+        <template slot-scope="{ row }">  
+          <div class="buttons">
+            <el-button type="success"
           @click="patient_details(row.id)"
           >
           Details
           </el-button>
+        </div>
+
+          <div class="buttons">
+            <el-popconfirm
+          title="Are you sure to delete this patient?"
+          confirm-button-text="Yes"
+          cancel-button-text="Cancel"
+          icon="el-icon-info"
+          icon-color="red"
+          @onConfirm="delete_patient(row.id)">
           <el-button
           type="danger"
-          @click="delete_patient(row.id)">
+          slot="reference">
           Delete
           </el-button>
+          </el-popconfirm>
+          </div>
+          
+ 
+         
+         
 
         </template>
       </el-table-column>
@@ -79,7 +96,7 @@
 </template>
 
 <script>
-import { searchPatient } from '@/api/patient'
+import { searchPatient, deletePatient } from '@/api/patient'
 
 export default {
   filters: {
@@ -109,12 +126,22 @@ export default {
       searchPatient(this.search_query).then(
         (response) => {
           this.table_data = response
-          console.log(this.table_data)         
+              
         }
       )
     },
     patient_details(id){
       this.$router.push({path:'/patient/details/'+id})
+    },
+
+    delete_patient(id){
+      deletePatient(id).then((response)=>{
+        this.$notify({
+          title:'Notification',
+          type:'success',
+          message:response.data
+        })
+      })
     },
 
     convert_date(value) {
@@ -124,3 +151,15 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.operation-buttons{
+  /* display: grid;
+  grid-template-columns: 1fr 1fr; */
+
+}
+.buttons{
+  display:inline;
+  margin-left: 1em;
+}
+</style>

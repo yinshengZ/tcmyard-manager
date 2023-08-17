@@ -28,7 +28,6 @@ class PatientSeeder extends Seeder
         'hiv_status'=>0,
         'past_history'=>'askjdhkashdjkhasdkhjaskd',
         'current_issue'=>'aksjdhkjashdhaskjdhjahsd',
-        'current_medication'=>'none',
         'date_of_birth'=>'20/04/1991'
        ];
        Patient::create($data);

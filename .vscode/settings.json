@@ -17,6 +17,7 @@
 
 // 5. enable parameter hints
 "typescript.inlayHints.parameterNames.enabled": "all",
+"editor.formatOnSave": true,
 
 
 }

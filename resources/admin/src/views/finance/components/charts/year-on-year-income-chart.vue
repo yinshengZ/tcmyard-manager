@@ -194,7 +194,6 @@ export default {
             }
           })
           console.log(this.pie_data)
-          //FIXME:pie chart not called here
           this.initPieChart(this.pie_data,"Weekly Distributions")
         } 
 
@@ -280,7 +279,7 @@ export default {
 }
 
 .YOY-PieChart{
-  width:100%;
+
   height:500px;
 }
 </style>

@@ -17,6 +17,11 @@ class CreateAllergyPatientTable extends Migration
             $table->id();
             $table->unsignedBigInteger('allergy_id');
             $table->unsignedBigInteger('patient_id');
+
+            $table->foreign('allergy_id')->references('id')->on('allergies')->onDelete('cascade');
+
+            $table->foreign('patient_id')->references('id')->on('patients')->onDelete('cascade');
+
             $table->timestamps();
         });
     }

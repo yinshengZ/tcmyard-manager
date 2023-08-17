@@ -28,7 +28,7 @@ class TreatmentController extends Controller
      */
     public function index()
     {
-        $treatments = Treatment::all()->with('category');
+        $treatments = Treatment::all()->with('category')->paginate(10);
         return $treatments;
     }
 

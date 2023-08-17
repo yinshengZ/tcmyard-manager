@@ -32,9 +32,8 @@ class PatientFactory extends Factory
             'hiv_status'=>$this->faker->numberBetween(0,1),
             'past_history'=>$this->faker->text($maxNbChars=200),
             'current_issue'=>$this->faker->text($maxNbChars=200),
-            'current_medication'=>$this->faker->words($nb=3, $asText=true),
             'date_of_birth'=>$this->faker->dateTimeThisCentury($max='now',$timezone=null)
-
+            
         ];
     }
 }

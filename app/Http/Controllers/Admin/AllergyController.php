@@ -15,7 +15,8 @@ class AllergyController extends Controller
      */
     public function index()
     {
-        return Allergy::all();
+        $allergies = Allergy::get();
+        return $allergies;
     }
 
    

@@ -8,23 +8,33 @@
         label-width="140px"
         label-position="left"
       >
-        <el-form-item label="First Name" prop="first_name">
+      <el-row :gutter="20">
+        <el-col :span="11">
+          <el-form-item label="First Name" prop="first_name">
           <el-input
             v-model="patient_info.first_name"
             prefix-icon="el-icon-user-solid"
           />
         </el-form-item>
+        </el-col>
 
-        <el-form-item label="Last Name" prop="last_name">
+        <el-col :span="11">
+          <el-form-item label="Last Name" prop="last_name">
           <el-input
             v-model="patient_info.last_name"
             prefix-icon="el-icon-user-solid"
           />
         </el-form-item>
+        </el-col>
+      </el-row>
+        
 
-        <el-row>
-          <el-col :span="12">
+      
+
+        
             <el-form-item label="Gender" prop="gender_id">
+              <el-row :gutter="1">
+          <el-col :span="7">
               <el-select v-model="patient_info.gender_id">
                 <el-option
                   v-for="genders in gender_rtv"
@@ -33,14 +43,18 @@
                   :value="genders.id"
                 />
               </el-select>
-            </el-form-item>
+            
           </el-col>
-          <el-col :span="5">
-            <el-button type="primary" @click="load_gender" icon="el-icon-plus">
-              Add
+          <el-col :span="1">
+            <el-tooltip content="Add New Genders" placement="top">
+              <el-button @click="load_gender" >
+                <svg-icon icon-class="add"></svg-icon>
             </el-button>
+            </el-tooltip>
+           
           </el-col>
         </el-row>
+      </el-form-item>
 
         <el-form-item label="Date of Birth" prop="date_of_birth">
           <el-date-picker
@@ -63,9 +77,10 @@
           <el-input v-model="patient_info.email" />
         </el-form-item>
 
-        <el-row>
-          <el-col :span="12">
+        
             <el-form-item label="Marital Status" prop="marital_status_id">
+              <el-row :gutter="1">
+          <el-col :span="7">
               <el-select v-model="patient_info.marital_status_id">
                 <el-option
                   v-for="marital in marital_rtv"
@@ -74,14 +89,18 @@
                   :value="marital.id"
                 />
               </el-select>
-            </el-form-item>
+            
           </el-col>
-          <el-col :span="5">
-            <el-button type="primary" @click="load_marital" icon="el-icon-plus">
-              Add
+          <el-col :span="1">
+            <el-tooltip content="Add New Marital Status" placement="top">
+              <el-button  @click="load_marital" >
+             <svg-icon icon-class="add"></svg-icon>
             </el-button>
+            </el-tooltip>
+            
           </el-col>
         </el-row>
+      </el-form-item>
 
         <el-form-item label="Occupation" prop="occupation">
           <el-input v-model="patient_info.occupation" />
@@ -107,10 +126,12 @@
           />
         </el-form-item>
 
-        <el-row>
-          <el-col :span="12">
+        
+         
             <el-form-item label="Allergies" prop="allergies">
-              <el-select v-model="patient_info.allergies" multiple>
+              <el-row :gutter="1">
+                <el-col :span="7">
+              <el-select v-model="patient_info.allergies" multiple filterable>
                 <el-option
                   v-for="allergy in allergies_rtv"
                   :key="allergy.id"
@@ -118,20 +139,26 @@
                   :value="allergy.id"
                 />
               </el-select>
-            </el-form-item>
+            
           </el-col>
 
-          <el-col :span="5">
-            <el-button type="primary" @click="load_allergy" icon="el-icon-plus">
-              Add
+          <el-col :span="1">
+            <el-tooltip content="Add New Allergies" placement="top">
+              <el-button @click="load_allergy">
+              <svg-icon icon-class="add"></svg-icon>
             </el-button>
+            </el-tooltip>
+            
           </el-col>
+        
         </el-row>
+      </el-form-item>
 
-        <el-row>
-          <el-col :span="12">
+        
             <el-form-item label="Symptoms" prop="symptoms">
-              <el-select v-model="patient_info.symptoms" multiple>
+              <el-row :gutter="1">
+          <el-col :span="7">
+              <el-select v-model="patient_info.symptoms" multiple filterable>
                 <el-option
                   v-for="symptom in symptoms_rtv"
                   :key="symptom.id"
@@ -139,23 +166,75 @@
                   :value="symptom.id"
                 />
               </el-select>
-            </el-form-item>
+           
           </el-col>
 
-          <el-col :span="5">
-            <el-button type="primary" @click="load_symptom" icon="el-icon-plus">
-              Add
+          <el-col :span="1">
+            <el-tooltip content="Add New Symptoms" placement="top">
+              <el-button @click="load_symptom">
+              <svg-icon icon-class="add"></svg-icon>
             </el-button>
+            </el-tooltip>
+           
           </el-col>
         </el-row>
+      </el-form-item>
 
-        <el-form-item label="Current Medication" prop="current_medication">
-          <el-input
-            v-model="patient_info.current_medication"
-            type="textarea"
-            :rows="3"
-          />
+        <el-row :gutter="1">
+          <el-form-item label="Medications" prop="current_medication">
+            <el-col :span="7">
+              <el-select v-model="patient_info.current_medication"
+          multiple filterable>
+            <el-option
+            v-for="medication in medications"
+            :key="medication.id"
+            :label="medication.medication"
+            :value="medication.id">
+
+            </el-option>
+          </el-select>
+            </el-col>
+          
+
+            <el-col :span="1">
+            <el-tooltip content="Add New Medications" placement="top">
+              <el-button @click="load_medication"><svg-icon icon-class="add"></svg-icon></el-button>
+
+            </el-tooltip>  
+          
+            </el-col>
+          
         </el-form-item>
+
+
+        <el-form-item label="Diseases">
+          <el-row :gutter="1">
+            <el-col :span="7">
+              <el-select v-model="patient_info.diseases" multiple filterable>
+            <el-option
+            v-for="disease in diseases"
+            :key="disease.id"
+            :label="disease.disease"
+            :value="disease.id">
+
+            </el-option>
+          </el-select>
+            </el-col>
+
+            <el-col :span="1">
+              <el-tooltip
+              content="Add New Diseases"
+              placement="top">
+                <el-button @click="load_disease"><svg-icon icon-class="add"></svg-icon></el-button>
+              </el-tooltip>
+            </el-col>
+
+          </el-row>
+          
+
+        </el-form-item>
+        </el-row>
+       
 
         <el-row>
           <el-col>
@@ -173,7 +252,7 @@
         :visible.sync="add_allergy_loaded"
         :before-close="get_allergies"
       >
-        <add-allergy />
+        <add-allergy :key="key" />
       </el-dialog>
 
       <el-dialog
@@ -182,7 +261,7 @@
         :visible.sync="add_genders_loaded"
         :before-close="get_genders"
       >
-        <add-gender />
+        <add-gender :key="key" />
       </el-dialog>
 
       <el-dialog
@@ -190,7 +269,7 @@
         :visible.sync="add_marital_loaded"
         :before-close="get_maritals"
       >
-        <add-marital />
+        <add-marital :key="key" />
       </el-dialog>
 
       <el-dialog
@@ -198,8 +277,25 @@
         :visible.sync="add_symptom_loaded"
         :before-close="get_symptoms"
       >
-        <add-symptom />
+        <add-symptom  :key="key" />
       </el-dialog>
+
+      <el-dialog
+      title="Add New Medications"
+      :visible.sync="add_medications_loaded"
+      :before-close="get_medications">
+
+      <add-medication :key="key"></add-medication>
+
+      </el-dialog>
+
+      <el-dialog
+      title="Add New Diseases"
+      :visible.sync="add_diseases_loaded"
+      :before-close="get_diseases">
+        <add-diseases :key="key"></add-diseases>
+      </el-dialog>
+
     </el-card>
   </div>
 </template>
@@ -210,11 +306,15 @@ import { getGenders } from "@/api/patient";
 import { getMarital } from "@/api/patient";
 import { getAllergies } from "@/api/patient";
 import { getSymptoms } from "@/api/patient";
+import { getMedications } from "@/api/medication";
+import { getDiseases } from "@/api/disease";
 
 import AddGender from "./add-gender.vue";
 import AddMarital from "./add-marital.vue";
 import AddAllergy from "./add-allergy.vue";
 import AddSymptom from "./add-symptom.vue";
+import AddMedication from "@/views/medication/components/add-medication.vue"
+import AddDiseases from "@/views/disease/components/add-disease.vue"
 
 export default {
   components: {
@@ -222,6 +322,8 @@ export default {
     AddMarital,
     AddAllergy,
     AddSymptom,
+    AddMedication,
+    AddDiseases
   },
   data() {
     return {
@@ -238,10 +340,15 @@ export default {
         hiv: "false",
         past_history: "",
         current_issue: "",
-        current_medication: "",
+        current_medication: [],
         allergies: [],
         symptoms: [],
+        diseases:[]
       },
+        allergies: [],
+        symptoms: [],
+        medications:[],
+        diseases:[],
       gender_rtv: null,
       marital_rtv: null,
       allergies_rtv: null,
@@ -250,21 +357,39 @@ export default {
       add_genders_loaded: false,
       add_marital_loaded: false,
       add_symptom_loaded: false,
+      add_medications_loaded:false,
+      add_diseases_loaded:false,
+
+      key:0,
     };
   },
-  created() {},
-  mounted() {
+  created() {
+
     this.get_genders();
     this.get_maritals();
     this.get_allergies();
     this.get_symptoms();
+    this.get_medications();
+    this.get_diseases();
+  },
+  mounted() {
+    
   },
   methods: {
     add_patient(data) {
       this.data = this.patient_info;
       AddPatient(this.data).then((response) => {
         console.log(response);
-        this.$message("Patient has been added successfully!");
+        this.$notify({
+          title:'Notification',
+          type:'success',
+          message:response.data
+        }).catch((error)=>{
+          this.$notify.error({
+            title:'Error',
+            message:error.message
+          })
+        })
         this.$refs["patient-info"].resetFields();
       });
     },
@@ -301,18 +426,39 @@ export default {
       });
       this.add_symptom_loaded = false;
     },
+    get_medications(){
+      getMedications().then((response)=>{
+        this.medications =response
+      });
+      this.add_medications_loaded=false;
+    },
+    
+    get_diseases(){
+      getDiseases().then((response)=>{
+        this.diseases=response
+      });
+      this.add_diseases_loaded=false;
+    },
     load_gender: function () {
-      this.add_genders_loaded = !this.add_genders_loaded;
+      this.add_genders_loaded = true
     },
     load_marital: function () {
-      this.add_marital_loaded = !this.add_marital_loaded;
+      this.add_marital_loaded = true
     },
     load_allergy: function () {
-      this.add_allergy_loaded = !this.add_allergy_loaded;
+      this.add_allergy_loaded = true
     },
     load_symptom: function () {
-      this.add_symptom_loaded = !this.add_symptom_loaded;
+      this.add_symptom_loaded = true
     },
+    load_medication:function(){
+      this.add_medications_loaded=true;
+      this.key++
+    },
+    load_disease:function(){
+      this.add_diseases_loaded=true;
+      this.key++
+    }
   },
 };
 </script>
@@ -325,6 +471,9 @@ export default {
 }
 #add_patient {
   padding-top: 2%;
+}
+.add-buttons{
+  margin-left:1%;
 }
 </style>
 

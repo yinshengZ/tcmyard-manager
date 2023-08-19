@@ -21,20 +21,15 @@ class TreatmentService
         $treatments = TreatmentDetails::select(DB::raw('group_concat(id) as t_id'), 'treatment_id', DB::raw('group_concat(inventory_id) as treatments'), DB::raw('group_concat(units) as amount'), 'units', 'quantity', 'patient_id', 'created_at', 'updated_at')
             ->where('patient_id', $patient_id)
             ->groupBy('treatment_id')
-            ->latest()
+            ->latest();
 
-            ->paginate(10)->toJson();
+
         foreach ($treatments as $index => $treatment) {
 
             $treatment_details_id = explode(',', $treatment->t_id);
 
 
             $final_details = [];
-
-
-
-            //FIXME: string given weird error?
-
             foreach ($treatment_details_id as $index => $treatment_detail_id) {
                 $treatment_details = TreatmentDetails::findOrFail($treatment_detail_id)->toArray();
                 $inventory_details = Inventory::findOrFail($treatment_details['inventory_id'])->toArray();

@@ -9,7 +9,17 @@ class TreatmentDetails extends Model
 {
     use HasFactory;
 
-    public function treatment(){
-        return $this->belongsTo('App\Models\Treatment','treatment_id');
+    public function treatment()
+    {
+        return $this->belongsTo('App\Models\Treatment', 'treatment_id', 'id');
+    }
+
+ /*    public function inventory_details()
+    {
+        return $this->hasMany('App\Models\Inventory', 'id', 'inventory_id');
+    } */
+
+    public function inventory(){
+        return $this->belongsToMany('App\Models\Inventory',)
     }
 }

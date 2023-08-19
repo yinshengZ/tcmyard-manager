@@ -1,59 +1,29 @@
 <template>
   <div>
     <el-card shadow="always">
-      <el-button @click="add_item_row" type="info" icon="el-icon-plus"
-        >Herb</el-button
-      >
+      <el-button @click="add_item_row" type="info" icon="el-icon-plus">Herb</el-button>
       <el-form v-model="treatment_detail" label-width="120px">
         <div v-for="(treatment, index) in treatment_detail" :key="treatment.id">
           <el-form-item :label="'Item ' + (index + 1)">
-            <el-select
-              v-model="treatment.inventory.id"
-              filterable
-              style="width: 200px"
-            >
-              <el-option
-                v-for="item in inventory"
-                :key="item.id"
-                :label="item.name + ' / stock: ' + item.stock"
-                :value="item.id"
-              >
+            <el-select v-model="treatment.inventory.id" filterable style="width: 200px">
+              <el-option v-for="item in inventory" :key="item.id" :label="item.name + ' / stock: ' + item.stock"
+                :value="item.id">
               </el-option>
             </el-select>
 
-            <el-input-number
-              v-model="treatment.units"
-              style="width: 120px"
-              :min="1"
-              :max="9999999"
-              :step="1"
-            ></el-input-number>
+            <el-input-number v-model="treatment.units" style="width: 120px" :min="1" :max="9999999"
+              :step="1"></el-input-number>
 
-            <el-button
-              style="padding: 10px; margin-left: 10px"
-              @click.prevent="remove_item_row(index)"
-              >Delete</el-button
-            >
+            <el-button style="padding: 10px; margin-left: 10px" @click.prevent="remove_item_row(index)">Delete</el-button>
           </el-form-item>
         </div>
 
         <el-form-item label="Quantity">
-          <el-input-number
-            v-model="quantity"
-            :min="1"
-            :max="9999999"
-            :step="1"
-          ></el-input-number>
+          <el-input-number v-model="quantity" :min="1" :max="9999999" :step="1"></el-input-number>
         </el-form-item>
 
         <el-form-item label="Discount">
-          <el-input-number
-            v-model="discount"
-            :min="0"
-            :max="100"
-            :precision="2"
-            :step="1"
-          >
+          <el-input-number v-model="discount" :min="0" :max="100" :precision="2" :step="1">
           </el-input-number>
         </el-form-item>
 
@@ -92,7 +62,7 @@ export default {
   },
   methods: {
     add_item_row() {
-    
+
 
       this.treatment_detail.push({
         categories_id: "",
@@ -155,8 +125,10 @@ export default {
     get_treatment_details() {
       getSingleTreatment(this.id).then((response) => {
         this.treatment_detail = response;
-        this.quantity = response[0].quantity;
-        this.discount = response[0].discount;
+        /* this.quantity = response[0].quantity;
+        this.discount = response[0].discount; */
+
+        console.log(this.treatment_detail);
 
         this.get_all_herbs();
         //this.get_categorized_inventories(this.category_id);

@@ -3,223 +3,121 @@
     <el-card shadow="hover">
       <div class="button-group">
         <el-button-group>
-          <el-button
-            type="success"
-            icon="el-icon-plus"
-            @click="load_add_herbs_form"
-            >Herbs</el-button
-          >
-          <el-button
-            type="primary"
-            icon="el-icon-plus"
-            @click="load_add_services_form"
-            >Services</el-button
-          >
-          <el-button
-            type="warning"
-            icon="el-icon-plus"
-            @click="load_add_retails_form"
-            >Retails</el-button
-          >
-          <el-button
-            type="info"
-            icon="el-icon-plus"
-            @click="load_add_others_form"
-            >Others</el-button
-          >
+          <el-button type="success" icon="el-icon-plus" @click="load_add_herbs_form">Herbs</el-button>
+          <el-button type="primary" icon="el-icon-plus" @click="load_add_services_form">Services</el-button>
+          <el-button type="warning" icon="el-icon-plus" @click="load_add_retails_form">Retails</el-button>
+          <el-button type="info" icon="el-icon-plus" @click="load_add_others_form">Others</el-button>
         </el-button-group>
       </div>
     </el-card>
 
+
+
     <el-card shadow="hover">
       <el-table :data="treatments" border style="width: 100%" fit>
-        <el-table-column
-          prop="id"
-          label="ID"
-          :min-width="30"
-          align="center"
-          fit
-        >
+        <el-table-column prop="id" label="ID" :min-width="30" align="center" fit>
           <template slot-scope="{ row }">
-            {{ row[0].treatment_id }}
+            {{ row.id }}
           </template>
         </el-table-column>
 
         <el-table-column prop="details" label="Details" align="center">
-          <template slot-scope="{ row }">
-            <span v-for="(detail, index) in row">
-              {{ detail.name }}{{ "(" + detail.units + ")" }}{{ ", " }}
-            </span>
+          <template slot-scope="{row}">
+            <div>
+              <!-- {{ row.treatment_details }} -->
+              <span v-for="(details, index) in row.treatment_details">
+
+                {{ details.inventory_details[0].name }} ({{ details.units }}) /
+              </span>
+              <!--               {{ row.treatment_details[0].inventory_details }}
+ -->
+            </div>
           </template>
         </el-table-column>
 
-        <el-table-column
-          prop="amount"
-          label="Quantity"
-          :min-width="25"
-          align="center"
-        >
+
+        <el-table-column prop="amount" label="Quantity" :min-width="25" align="center">
           <template slot-scope="{ row }">
             <div>
               <span>
-                {{ row[0].quantity }}
+                {{ row.quantity }}
               </span>
             </div>
           </template>
         </el-table-column>
 
-        <el-table-column
-          prop="category"
-          label="Category"
-          align="center"
-          :min-width="28"
-          
-        >
+        <el-table-column prop="category" label="Category" align="center" :min-width="28">
           <template slot-scope="{ row }">
 
-            <span class="capitalized_texts">{{ row[0].service_title }}</span>
+            <span class="capitalized_texts">{{ row.category.categories }}</span>
           </template>
         </el-table-column>
 
-        <el-table-column
-        prop="date"
-        label="Date"
-        align="center"
-        :min-width="30">
 
-        <template slot-scope="{row}">
-          <div>
-            <span>
-              {{ date_converter(row[0].treatment_date) }}
-            </span>
-          </div>
-        </template>
+
+        <el-table-column prop="date" label="Date" align="center" :min-width="30">
+
+          <template slot-scope="{row}">
+            <div>
+              <span>
+                {{ date_converter(row.date) }}
+              </span>
+            </div>
+          </template>
 
         </el-table-column>
 
 
         <el-table-column prop="operations" label="Operations">
           <template slot-scope="{ row }">
-            <el-button
-             
-              type="primary"
-              @click="edit_treatment(row[0].treatment_id, row[0].categories_id)"
-              >Edit
-              </el-button>
+            <el-button type="primary" @click="edit_treatment(row.id, row.category.id)">Edit
+            </el-button>
 
-            <el-popconfirm
-            title="Are you sure to delete this treatment?"
-            @onConfirm="delete_treatment(row[0].treatment_id)"
-            @onCancel="get_patient_treatments()"
-           >
-              <el-button  style="margin-left:5%" slot="reference" type="danger" >Delete</el-button>
+            <el-popconfirm title="Are you sure to delete this treatment?" @onConfirm="delete_treatment(row.id)"
+              @onCancel="get_patient_treatments()">
+              <el-button style="margin-left:5%" slot="reference" type="danger">Delete</el-button>
             </el-popconfirm>
 
           </template>
-        </el-table-column>
+        </el-table-column> -->
       </el-table>
     </el-card>
 
-    <el-dialog
-      title="Update Herbs"
-      :visible.sync="update_herbs_table_visible"
-      :before-close="get_patient_treatments"
-    >
-      <edit-herbs-table
-        :treatment_id="this.treatment_id"
-        :key="key"
-        :patient_id = "this.patient_id"
-        :user_id = "this.user_id"
-        :treatment_category="this.treatment_category"
-      ></edit-herbs-table>
+    <el-dialog title="Update Herbs" :visible.sync="update_herbs_table_visible" :before-close="get_patient_treatments">
+      <edit-herbs-table :treatment_id="this.treatment_id" :key="key" :patient_id="this.patient_id" :user_id="this.user_id"
+        :treatment_category="this.treatment_category"></edit-herbs-table>
     </el-dialog>
 
-    <el-dialog
-    title="Update Service"
-      :visible.sync="update_service_table_visible"
-      :before-close="get_patient_treatments"
-    >
-      <edit-service-table
-      
-        :treatment_id="this.treatment_id"
-        :patient_id="this.patient_id"
-        :user_id="this.user_id"
-        :key="key"
-      ></edit-service-table>
+    <el-dialog title="Update Service" :visible.sync="update_service_table_visible" :before-close="get_patient_treatments">
+      <edit-service-table :treatment_id="this.treatment_id" :patient_id="this.patient_id" :user_id="this.user_id"
+        :key="key"></edit-service-table>
     </el-dialog>
 
-    <el-dialog
-      title="Update Retail"
-      :visible.sync="update_retail_table_visible"
-      :before-close="get_patient_treatments"
-    >
-      <edit-retail-table
-        :treatment_id="this.treatment_id"
-        :patient_id="this.patient_id"
-        :user_id="this.user_id"
-        :treatment_category = "this.treatment_category"
-        :key="key"
-        
-      ></edit-retail-table>
+    <el-dialog title="Update Retail" :visible.sync="update_retail_table_visible" :before-close="get_patient_treatments">
+      <edit-retail-table :treatment_id="this.treatment_id" :patient_id="this.patient_id" :user_id="this.user_id"
+        :treatment_category="this.treatment_category" :key="key"></edit-retail-table>
     </el-dialog>
 
-    <el-dialog
-    title="Update Other"
-      :visible.sync="update_other_table_visible"
-      :before-close="get_patient_treatments"
-    >
-      <edit-other-table
-        :treatment_id="this.treatment_id"
-        :patient_id="this.patient_id"
-        :user_id ="this.user_id"
-        :treatment_category="this.treatment_category"
-        :key="key"
-      ></edit-other-table>
+    <el-dialog title="Update Other" :visible.sync="update_other_table_visible" :before-close="get_patient_treatments">
+      <edit-other-table :treatment_id="this.treatment_id" :patient_id="this.patient_id" :user_id="this.user_id"
+        :treatment_category="this.treatment_category" :key="key"></edit-other-table>
     </el-dialog>
 
-    <el-dialog
-      title="Add Herbs"
-      :visible.sync="add_herbs_visible"
-      :before-close="get_patient_treatments"
-    >
-      <add-herbs
-        :patient_id="patient_id"
-        :user_id="user_id"
-        :key="key"
-      ></add-herbs>
+    <el-dialog title="Add Herbs" :visible.sync="add_herbs_visible" :before-close="get_patient_treatments">
+      <add-herbs :patient_id="patient_id" :user_id="user_id" :key="key"></add-herbs>
     </el-dialog>
 
-    <el-dialog
-      title="Add Services"
-      :visible.sync="add_services_visible"
-      :before-close="get_patient_treatments"
-    >
-      <add-services
-        :patient_id="patient_id"
-        :user_id="user_id"
-        :key="key"
-      ></add-services>
+    <el-dialog title="Add Services" :visible.sync="add_services_visible" :before-close="get_patient_treatments">
+      <add-services :patient_id="patient_id" :user_id="user_id" :key="key"></add-services>
     </el-dialog>
 
-    <el-dialog
-      title="Add Retail"
-      :visible.sync="add_retails_visible"
-      :before-close="get_patient_treatments"
-    >
+    <el-dialog title="Add Retail" :visible.sync="add_retails_visible" :before-close="get_patient_treatments">
       <add-retail :patient_id="patient_id" :user_id="user_id" :key="key">
       </add-retail>
     </el-dialog>
 
-    <el-dialog
-      title="Add Other"
-      :visible.sync="add_others_visible"
-      :before-close="get_patient_treatments"
-    >
-      <add-other
-        :patient_id="patient_id"
-        :user_id="user_id"
-        :key="key"
-      ></add-other>
+    <el-dialog title="Add Other" :visible.sync="add_others_visible" :before-close="get_patient_treatments">
+      <add-other :patient_id="patient_id" :user_id="user_id" :key="key"></add-other>
     </el-dialog>
   </div>
 </template>
@@ -336,22 +234,22 @@ export default {
       this.treatment_category = categories_id;
     },
 
-    delete_treatment(treatment_id){
-        deleteTreatment(treatment_id).then((response)=>{
-            this.$notify({
-              title:'Notification',
-              message:response.message,
-              type:'success'
-            })
-            this.get_patient_treatments()
-        }).catch(error=>{
-          this.$notify.error({
-            title:'Error',
-            message:error.response.data.message,
-          })
+    delete_treatment(treatment_id) {
+      deleteTreatment(treatment_id).then((response) => {
+        this.$notify({
+          title: 'Notification',
+          message: response.message,
+          type: 'success'
         })
+        this.get_patient_treatments()
+      }).catch(error => {
+        this.$notify.error({
+          title: 'Error',
+          message: error.response.data.message,
+        })
+      })
 
-       
+
     },
 
     date_converter,
@@ -367,7 +265,7 @@ export default {
   margin: auto auto;
 }
 
-.capitalized_texts{
-  text-transform:capitalize ;
+.capitalized_texts {
+  text-transform: capitalize;
 }
 </style>

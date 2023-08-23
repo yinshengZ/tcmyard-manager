@@ -14,12 +14,13 @@ class TreatmentDetails extends Model
         return $this->belongsTo('App\Models\Treatment', 'treatment_id', 'id');
     }
 
- /*    public function inventory_details()
+    /*    public function inventory_details()
     {
         return $this->hasMany('App\Models\Inventory', 'id', 'inventory_id');
     } */
 
-    public function inventory(){
-        return $this->belongsToMany('App\Models\Inventory',)
+    public function inventory()
+    {
+        return $this->belongsToMany('App\Models\Inventory')->withTimestamps();
     }
 }

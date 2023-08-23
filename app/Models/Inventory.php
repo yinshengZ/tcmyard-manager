@@ -15,8 +15,15 @@ class Inventory extends Model
         return $this->belongsTo('App\Models\Category', 'categories_id');
     }
 
+    public function treatments()
+    {
+        return $this->belongsToMany('App\Models\Treatment')->withPivot('units')->withTimestamps();
+    }
+
+
+
     public function treatment_details()
     {
-        return $this->belongsTo('App\Models\TreatmentDetails', 'inventory_id', 'id');
+        return $this->BelongsToMany('App\models\TreatmentDetails')->withTimestamps();
     }
 }

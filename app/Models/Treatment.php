@@ -15,6 +15,16 @@ class Treatment extends Model
         return $this->belongsTo('App\Models\Category', 'service_id');
     }
 
+    public function inventories()
+    {
+        return $this->belongsToMany('App\Models\Inventory')->withPivot('units')->withTimestamps();
+    }
+
+    public function incomes()
+    {
+        return $this->hasMany('App\Models\Income', 'treatment_id');
+    }
+
     public function treatment_details()
     {
         return $this->hasMany('App\Models\TreatmentDetails', 'id');

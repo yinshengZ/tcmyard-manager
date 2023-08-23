@@ -15,11 +15,13 @@ class CreateInventoryTreatmentTable extends Migration
     {
         Schema::create('inventory_treatment', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('treatment_id');
             $table->foreignId('inventory_id');
+            $table->foreignId('treatment_id');
+            $table->unsignedBigInteger('units');
 
-            $table->foreign('treatment_id')->references('id')->on('treatment_details')->onDelete('cascade');
+
             $table->foreign('inventory_id')->references('id')->on('inventories')->onDelete('cascade');
+            $table->foreign('treatment_id')->references('id')->on('treatments')->onDelete('cascade');
 
             $table->timestamps();
         });

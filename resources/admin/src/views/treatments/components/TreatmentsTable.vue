@@ -25,9 +25,9 @@
           <template slot-scope="{row}">
             <div>
               <!-- {{ row.treatment_details }} -->
-              <span v-for="(details, index) in row.treatment_details">
+              <span v-for="(details, index) in row.inventories">
 
-                {{ details.inventory_details[0].name }} ({{ details.units }}) /
+                {{ details.name }} ({{ details.pivot.units }}) /
               </span>
               <!--               {{ row.treatment_details[0].inventory_details }}
  -->

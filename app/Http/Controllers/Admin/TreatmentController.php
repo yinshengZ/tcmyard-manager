@@ -44,83 +44,34 @@ class TreatmentController extends Controller
 
     public function getPatientTreatments($id)
     {
-        $treatments = Treatment::where('patient_id', $id)->with('treatment_details.inventory_details')->with('category')->orderBy('date', 'DESC')->get();
+        $treatments = Treatment::where('patient_id', $id)->with('category')->with('inventories')->with('incomes')->orderBy('date', 'DESC')->get();
         return $treatments;
     }
 
     public function addHerbalPackages(Request $request)
     {
+        //TODO: add stocks checking
         $herb_ids = [];
         $herb_units = [];
-        $quantity = $request->quantity;
 
-        //$herb_details = $request->herb_details;
-        $treatment_details = $request->herb_details;
-
-        //extracting herb ids and amounts
         foreach ($request->herb_details as $key => $herb_detail) {
-            $inventory = Inventory::where('id', $herb_detail['id'])->first();
-            $stock = $inventory->stock;
-
-            $remaining_stock = $stock - ($herb_detail['unit'] * $quantity);
-
-            if ($remaining_stock >= 0) {
-
-                $inventory_id = $inventory['id'];
-
-                $updated_inventory = Inventory::find($inventory_id);
-                $updated_inventory->stock = $remaining_stock;
-                $updated_inventory->save();
-            } else {
-                return response()->json([
-                    'message' => $inventory->name . ' does not have enough stocks left!',
-
-                ], 422);
-            }
             array_push($herb_ids, $herb_detail['id']);
-            array_push($herb_units, $herb_detail['unit']);
+            array_push($herb_units, $herb_detail['units']);
         }
-
-
-        $service_id = $request->service_id;
-        $patient_id = $request->patient_id;
-        $quantity = $request->quantity;
-        $user_id = $request->user_id;
 
         $treatment = new Treatment;
-
-        $treatment->service_id = $service_id;
-        $treatment->patient_id = $patient_id;
-        $treatment->quantity = $quantity;
-        $treatment->treatment_details = json_encode($treatment_details);
-        $treatment->user_id = $user_id;
+        $treatment->service_id = $request->service_id;
+        $treatment->patient_id = $request->patient_id;
+        $treatment->user_id = $request->user_id;
+        $treatment->quantity = $request->quantity;
         if ($request->with_date) {
             $treatment->date = $request->date;
-        } else {
-            $treatment->date = Carbon::today();
         }
+
         $treatment->save();
-
-        $treatment_ids = Treatment::select('id')->where('patient_id', $patient_id)->latest()->first();
-
-
-        foreach ($request->herb_details as $herb_detail) {
-            $treatment_handler = new TreatmentDetails;
-            $treatment_handler->treatment_id = $treatment_ids['id'];
-            $treatment_handler->inventory_id = $herb_detail['id'];
-            $treatment_handler->units = $herb_detail['unit'];
-            $treatment_handler->patient_id = $patient_id;
-            $treatment_handler->user_id = $user_id;
-            $treatment_handler->quantity = $quantity;
-            if ($request->with_date) {
-                $treatment_handler->date = $request->date;
-            } else {
-                $treatment_handler->date = Carbon::today();
-            }
-            $treatment_handler->save();
+        foreach ($herb_ids as $key => $herb_id) {
+            $treatment->inventories()->attach($herb_ids[$key], ['units' => $herb_units[$key]]);
         }
-
-
 
         if ($request->with_finance) {
 
@@ -128,7 +79,7 @@ class TreatmentController extends Controller
 
             $income->amount = $request->final_price;
             $income->original_amount = $request->original_price;
-            $income->treatment_id = $treatment_ids['id'];
+            //$income->treatment_id = $treatment_ids['id'];
             $income->patient_id = $request->patient_id;
             $income->user_id = $request->user_id;
             $income->discount = $request->discount;
@@ -137,20 +88,21 @@ class TreatmentController extends Controller
             } else {
                 $income->date = Carbon::today();
             }
-            $income->service_id = $service_id;
+            $income->service_id = $request->service_id;
             $income->payment_type_id = $request->payment_type;
             $income->description = $request->description;
-            $income->save();
+            $treatment->incomes()->save($income);
         }
 
 
-
-
-
         return response()->json([
-            'message' => 'Treatment Has been added successfully!'
+            'message' => 'Patient Treatment Has been added!'
         ], 200);
     }
+
+    /**
+     * @param $request
+     */
 
     public function addServices(Request $request)
     {
@@ -158,45 +110,27 @@ class TreatmentController extends Controller
         $service->service_id = $request->service_id;
         $service->patient_id = $request->patient_id;
         $service->user_id = $request->user_id;
-        $service->discount = $request->discount;
-        //$service->unit = $request->unit;
         $service->quantity = $request->quantity;
         if ($request->with_date) {
             $service->date = $request->date;
         } else {
             $service->date = Carbon::today();
         }
+        $service->discount = $request->discount;
         $service->save();
 
-        $treatment_id = Treatment::select('id')->where('service_id', $request->service_id)->latest()->first();
-
-
-
-        $treatment_handler = new TreatmentDetails;
-        $treatment_handler->treatment_id = $treatment_id->id;
-        $treatment_handler->inventory_id = $request->id;
-        $treatment_handler->patient_id = $request->patient_id;
-        $treatment_handler->user_id = $request->user_id;
-        $treatment_handler->units = $request->unit;
-        $treatment_handler->quantity = $request->quantity;
-        if ($request->with_date) {
-            $treatment_handler->date = $request->date;
-        } else {
-            $treatment_handler->date = Carbon::today();
-        }
-
-        $treatment_handler->save();
-
+        $service->inventories()->attach($request->id, ['units' => $request->unit]);
 
         if ($request->with_finance) {
             $income = new Income;
+
             $income->amount = $request->final_price;
             $income->original_amount = $request->original_price;
             $income->payment_type_id = $request->payment_type_id;
             $income->patient_id = $request->patient_id;
             $income->user_id = $request->user_id;
-            $income->treatment_id = $treatment_id->id;
             $income->service_id = $request->service_id;
+            $income->discount = $request->discount;
             $income->description = $request->description;
 
             if ($request->with_date) {
@@ -205,15 +139,13 @@ class TreatmentController extends Controller
                 $income->date = Carbon::today();
             }
 
-            $income->save();
+            $service->incomes()->save($income);
         }
 
-
         return response()->json([
-            'message' => 'Service Has Been Added Successfully!'
+            'message' => 'Patient Treatment Has Been Added!'
         ], 200);
     }
-
     /**
      * @param $request
      * recives the retail treatment details from the front end and store them into the database.
@@ -222,62 +154,80 @@ class TreatmentController extends Controller
 
     public function addRetail(Request $request)
     {
+        //TODO: add check stocks before adding!
         $retail_ids = [];
-        $retail_details = $request->retail_details;
-        $quantity = 1;
-        if (isset($request->quantity)) {
-            $quantity = $request->quantity;
-        };
+        $retail_units = [];
 
-        foreach ($retail_details as $key => $retail_detail) {
-            $inventory = Inventory::where('id', $retail_detail['id'])->first();
-            $remaining_stock = $inventory->stock - ($retail_detail['units'] * $quantity);
-            if ($remaining_stock >= 0) {
-                $inventory_id = $inventory['id'];
 
-                $updated_inventory = Inventory::find($inventory_id);
-                $updated_inventory->stock = $remaining_stock;
-                $updated_inventory->save();
-            } else {
-                return response()->json([
-                    'message' => $inventory->name . ' does not have enough stocks left!',
-                ], 422);
-            }
+        foreach ($request->retail_details as $key => $retail_detail) {
+            array_push($retail_ids, $retail_detail['id']);
+            array_push($retail_units, $retail_detail['units']);
         }
 
-        $retail = new Treatment;
-        $retail->service_id = 3;
-        $retail->patient_id = $request->patient_id;
-        $retail->user_id = $request->user_id;
-        $retail->quantity = $quantity;
-        $retail->discount = $request->discount;
-        $retail->treatment_details = json_encode($request->retail_details);
+
+        $treatment = new Treatment;
+        $treatment->service_id = $request->service_id;
+        $treatment->patient_id = $request->patient_id;
+        $treatment->user_id = $request->user_id;
+        $treatment->quantity = 1;
         if ($request->with_date) {
-            $retail->date = $request->date;
-        } else {
-            $retail->date = Carbon::today();
+            $treatment->date = $request->date;
         }
-        $retail->save();
 
-        $treatment_id = Treatment::select('id')->where('service_id', 3)->latest()->first();
+        $treatment->save();
 
-        foreach ($request->retail_details as $retail_detail) {
-            $treatment_handler = new TreatmentDetails;
-            $treatment_handler->treatment_id = $treatment_id->id;
-            $treatment_handler->inventory_id = $retail_detail['id'];
-            $treatment_handler->patient_id = $request->patient_id;
-            $treatment_handler->user_id = $request->user_id; #
+        foreach ($retail_ids as $key => $retail_id) {
+            $treatment->inventories()->attach($retail_ids[$key], ['units' => $retail_units[$key]]);
+        }
+
+        if ($request->with_finance) {
+            $income = new Income;
+
+            $income->amount = $request->final_price;
+            $income->original_amount = $request->original_price;
+            $income->payment_type_id = $request->payment_type_id;
+            $income->patient_id = $request->patient_id;
+            $income->user_id = $request->user_id;
+            $income->service_id = $request->service_id;
+            $income->discount = $request->discount;
+            $income->description = $request->description;
+
             if ($request->with_date) {
-                $treatment_handler->date = $request->date;
+                $income->date = $request->date;
             } else {
-                $treatment_handler->date = Carbon::today();
+                $income->date = Carbon::today();
             }
-
-            $treatment_handler->units = $retail_detail['units'];
-            $treatment_handler->quantity = $quantity;
-            $treatment_handler->save();
+            $treatment->incomes()->save($income);
         }
 
+        return response()->json([
+            'message' => 'Treatment Has Been Added Successfully!'
+        ], 200);
+    }
+
+    public function addOther(Request $request)
+    {
+        $others_ids = [];
+        $others_units = [];
+
+        foreach ($request->others_details as $key => $others_detail) {
+            array_push($others_ids, $others_detail['id']);
+            array_push($others_units, $others_detail['units']);
+        }
+
+        $treatment = new Treatment;
+        $treatment->service_id = $request->service_id;
+        $treatment->patient_id = $request->patient_id;
+        $treatment->user_id = $request->user_id;
+        $treatment->quantity = 1;
+        if ($request->with_date) {
+            $treatment->date = $request->date;
+        }
+        $treatment->save();
+
+        foreach ($others_ids as $key => $others_id) {
+            $treatment->inventories()->attach($others_ids[$key], ['units' => $others_units[$key]]);
+        };
 
         if ($request->with_finance) {
             $income = new Income;
@@ -286,34 +236,27 @@ class TreatmentController extends Controller
             $income->payment_type_id = $request->payment_type;
             $income->patient_id = $request->patient_id;
             $income->user_id = $request->user_id;
-            $income->discount = $request->discount;
-            $income->treatment_id = $treatment_id->id;
             $income->service_id = $request->service_id;
+            $income->discount = $request->discount;
+            $income->description = $request->description;
+
             if ($request->with_date) {
                 $income->date = $request->date;
             } else {
                 $income->date = Carbon::today();
             }
-            $income->save();
+            $treatment->incomes()->save($income);
         }
 
-
-
-
-
         return response()->json([
-            'message' => 'Treatment Has Been Added Successfully!'
+            'message' => 'Treatment Has Been Added!'
         ], 200);
-
-
-
-        //$treatment_handler->
     }
 
 
 
 
-    public function addOther(Request $request)
+    /*     public function addOther(Request $request)
     {
         $others_details = $request->others_details;
         $quantity = 1;
@@ -400,7 +343,7 @@ class TreatmentController extends Controller
         return response()->json([
             'message' => 'Treatment Has Been Added Successfully!'
         ], 200);
-    }
+    } */
 
     public function updateHerb(Request $request)
     {

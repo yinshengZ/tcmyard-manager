@@ -1,45 +1,24 @@
 <template>
   <div>
 
-      <el-button style="width:100%" @click="add_row" type="success" icon="el-icon-plus">Ingredient</el-button>
-      <div class="add_herbs_form">
+    <el-button style="width:100%" @click="add_row" type="success" icon="el-icon-plus">Ingredient</el-button>
+    <div class="add_herbs_form">
       <el-form v-model="herb_details" label-width="80px" label-position="left">
-        <el-form-item
-          v-for="(herb_detail, index) in herb_details"
-          :label="'Herb ' + (index + 1)"
-        >
+        <el-form-item v-for="(herb_detail, index) in herb_details" :label="'Herb ' + (index + 1)">
           <!--<el-input v-model="herb_detail.name" placeholder="Name" size="medium"  style="width:300px "></el-input>-->
-          <el-select
-            v-model="herb_detail.id"
-            filterable
-            placeholder="select"
-            style="width:200px"
-           
-          >
-            <el-option
-              v-for="herb in herb_rtv"
-              :key="herb.id"
-              :label="herb.name+' / stock: '+herb.stock+' / price: '+herb.unit_price"
-              :value="herb.id"
-            >
+          <el-select v-model="herb_detail.id" filterable placeholder="select" style="width:200px">
+            <el-option v-for="herb in herb_rtv" :key="herb.id"
+              :label="herb.name + ' / stock: ' + herb.stock + ' / price: ' + herb.unit_price" :value="herb.id">
             </el-option>
           </el-select>
 
 
-          <el-input-number
-            v-model="herb_detail.unit"
-            placeholder="Units"
-            style="width: 130px; margin-left:10px"
-            :min="1"            
-          >
-            
+          <el-input-number v-model="herb_detail.units" placeholder="Units" style="width: 130px; margin-left:10px"
+            :min="1">
+
           </el-input-number>
 
-          <el-button
-            style="margin-left: 10px"
-            @click.prevent="remove_herb_row(index)"
-            >Delete</el-button
-          >
+          <el-button style="margin-left: 10px" @click.prevent="remove_herb_row(index)">Delete</el-button>
         </el-form-item>
 
         <div v-if="herb_details.length">
@@ -47,80 +26,68 @@
             <el-input-number v-model="quantity" :min="1"></el-input-number>
           </el-form-item>
 
-          <el-form-item
-          label="Extra Options">
-              <el-checkbox v-model="with_finance">With Income</el-checkbox>
-              <el-checkbox v-model="with_date">With Date</el-checkbox>
+          <el-form-item label="Extra Options">
+            <el-checkbox v-model="with_finance">With Income</el-checkbox>
+            <el-checkbox v-model="with_date">With Date</el-checkbox>
           </el-form-item>
 
 
           <div class="finance" v-if="with_finance">
             <el-form-item label="Discount">
               <el-input-number v-model="discount" :min="0" :max="100"></el-input-number>
-          </el-form-item>          
+            </el-form-item>
 
 
-          <el-form-item label="Price">
-            
-            <el-input-number v-model="final_price" :min="0" :max="999999999" :precision="2"></el-input-number>
-            <el-button type="primary" @click="calculate_herb_price">Calculate</el-button>
-          </el-form-item>
+            <el-form-item label="Price">
 
-          <el-form-item label="Original Price: £" label-width="150px">
-            <span>{{ original_price }}</span>
-          </el-form-item>
+              <el-input-number v-model="final_price" :min="0" :max="999999999" :precision="2"></el-input-number>
+              <el-button type="primary" @click="calculate_herb_price">Calculate</el-button>
+            </el-form-item>
 
-          <el-form-item label="Payment Type">
-            <el-select
-            v-model="payment_type"
-            >
-              <el-option
-              v-for="payment_method in payment_methods"
-              :key="payment_method.id"
-              :label="uppercaseFirst(payment_method.payment_type) "
-              :value="payment_method.id"
-              >
+            <el-form-item label="Original Price: £" label-width="150px">
+              <span>{{ original_price }}</span>
+            </el-form-item>
 
-              </el-option>
-            </el-select>
-          </el-form-item>
+            <el-form-item label="Payment Type">
+              <el-select v-model="payment_type">
+                <el-option v-for="payment_method in payment_methods" :key="payment_method.id"
+                  :label="uppercaseFirst(payment_method.payment_type)" :value="payment_method.id">
 
-          <el-form-item label="Description">
-            <el-input v-model="description"></el-input>
-          </el-form-item>
+                </el-option>
+              </el-select>
+            </el-form-item>
+
+            <el-form-item label="Description">
+              <el-input v-model="description"></el-input>
+            </el-form-item>
 
 
           </div>
 
           <div class="date" v-if="with_date">
-            <el-form-item
-            label="Date">
+            <el-form-item label="Date">
 
 
-              <el-date-picker
-              v-model="date"
-              type="date"
-              aria-placeholder="pick a date..."
-              :picker-options="date_picker_options"
-              value-format="yyyy-MM-dd">
+              <el-date-picker v-model="date" type="date" aria-placeholder="pick a date..."
+                :picker-options="date_picker_options" value-format="yyyy-MM-dd">
 
               </el-date-picker>
 
             </el-form-item>
           </div>
-          
-         
+
+
 
 
           <el-button type="primary" @click="add_herbal_packages">Submit</el-button>
         </div>
       </el-form>
 
-      
 
-      </div>
-      
-   
+
+    </div>
+
+
 
   </div>
 </template>
@@ -128,115 +95,137 @@
 <script>
 import { get_herbs } from "@/api/inventory";
 import { addHerbalPackages } from "@/api/treatment"
-import {getPaymentMethods} from "@/api/finance"
+import { getPaymentMethods } from "@/api/finance"
 import { uppercaseFirst } from "@/filters";
 export default {
-  props:['patient_id','user_id'],
+  props: ['patient_id', 'user_id'],
   data() {
     return {
-      date_picker_options:{
-                disabledDate(time) {
-                return time.getTime() > Date.now();
-            }
-            },
+      date_picker_options: {
+        disabledDate(time) {
+          return time.getTime() > Date.now();
+        }
+      },
       herb_details: [],
       herb_rtv: [],
-      quantity: "",    
-      treatment_details:[], 
+      quantity: "",
+      treatment_details: [],
       stock: "0",
       search: "",
       herb: "",
-      discount:"0",
-      original_price:0,    
-      final_price:0,
-      description:'',
-      payment_type:'',
-      payment_methods:[],
-      service_id:'',
-      with_finance:false,
-      with_date:false,
-      date:''
-      
+      discount: "0",
+      original_price: 0,
+      final_price: 0,
+      description: '',
+      payment_type: '',
+      payment_methods: [],
+      service_id: '',
+      with_finance: false,
+      with_date: false,
+      date: ''
+
 
     };
   },
-  created() {
+  mounted() {
     this.get_all_herbs();
+
+  },
+
+  created() {
     this.get_all_payment_methods();
   },
 
 
   methods: {
     uppercaseFirst,
-    calculate_herb_price(){
-      this.final_price= 0
+    calculate_herb_price() {
+      this.final_price = 0
       this.original_price = 0
-      if(this.herb_details.length>0){
-      for(let i = 0; i<this.herb_details.length; i++){
-        
-          let result = this.herb_rtv.find(item=>item.id === this.herb_details[i].id)
-          this.original_price +=(Number(result.unit_price) * Number(this.herb_details[i].unit))*this.quantity
-          this.final_price += (Number(result.unit_price) * Number(this.herb_details[i].unit))*(1-this.discount/100)*this.quantity 
-       }
-       this.original_price = this.original_price.toFixed(2)
-       this.final_price = this.final_price.toFixed(2)
-    }
-  
+
+
+
+      if (this.herb_details.length > 0) {
+
+        for (let i = 0; i < this.herb_details.length; i++) {
+
+          let result = this.herb_rtv.find(item => item.id === this.herb_details[i].id)
+
+          /* 
+          //check variable types. result.unit_price returned string, wtf?
+          console.log(typeof Number(result.unit_price))
+          console.log(typeof this.herb_details[i].units)
+          console.log(typeof this.quantity)
+          console.log('=========================') */
+          this.original_price += Number(result.unit_price) * this.herb_details[i].units * this.quantity
+          this.final_price += Number(result.unit_price * this.herb_details[i].units * (1 - this.discount / 100) * this.quantity)
+
+
+        }
+
+
+
+
+
+      }
+
+
 
     },
+
     add_row() {
       this.herb_details.push({
         id: "",
-        unit: "",
+        units: "",
       });
     },
     add_herbal_packages() {
 
-      if(this.with_finance && !this.with_date){
+      if (this.with_finance && !this.with_date) {
         this.treatment_details = {
-      
-        herb_details:this.herb_details, 
-      quantity:this.quantity,       
-      patient_id:this.patient_id, 
-      user_id:this.user_id, 
-      discount:this.discount,
-      description:this.description,
-      payment_type:this.payment_type,
-      original_price:this.original_price,
-      final_price:this.final_price,
-      service_id:this.service_id,
-      with_finance:this.with_finance,
 
+          herb_details: this.herb_details,
+          quantity: this.quantity,
+          patient_id: this.patient_id,
+          user_id: this.user_id,
+          discount: this.discount,
+          description: this.description,
+          payment_type: this.payment_type,
+          original_price: this.original_price,
+          final_price: this.final_price,
+          service_id: this.service_id,
+          with_finance: this.with_finance,
+
+        }
       }
-     }
-      else if(this.with_finance && this.with_date){
+      else if (this.with_finance && this.with_date) {
         this.treatment_details = {
-      
-      herb_details:this.herb_details, 
-    quantity:this.quantity,       
-    patient_id:this.patient_id, 
-    user_id:this.user_id, 
-    discount:this.discount,
-    description:this.description,
-    payment_type:this.payment_type,
-    original_price:this.original_price,
-    final_price:this.final_price,
-    service_id:this.service_id,
-    with_finance:this.with_finance,
-    with_date:this.with_date,
-    date:this.date,
-      }
-    } else if (!this.with_finance && !this.with_date){
+
+          herb_details: this.herb_details,
+          quantity: this.quantity,
+          patient_id: this.patient_id,
+          user_id: this.user_id,
+          discount: this.discount,
+          description: this.description,
+          payment_type: this.payment_type,
+          original_price: this.original_price,
+          final_price: this.final_price,
+          service_id: this.service_id,
+          with_finance: this.with_finance,
+          with_date: this.with_date,
+          date: this.date,
+        }
+      } else if (!this.with_finance && !this.with_date) {
         this.treatment_details = {
-      
-      herb_details:this.herb_details, 
-      quantity:this.quantity,       
-      patient_id:this.patient_id, 
-      user_id:this.user_id, 
-      service_id:this.service_id,
+
+          herb_details: this.herb_details,
+          quantity: this.quantity,
+          patient_id: this.patient_id,
+          user_id: this.user_id,
+          service_id: this.service_id,
+        }
       }
-    }
-    
+
       /* this.treatment_details = {
       
       herb_details:this.herb_details, 
@@ -250,20 +239,20 @@ export default {
       final_price:this.final_price,
       service_id:this.service_id
     } */
-      addHerbalPackages(this.treatment_details).then((response)=>{
+      addHerbalPackages(this.treatment_details).then((response) => {
         this.$notify({
-          title:'Notification',
-          message:response.message,
-          type:'success'
+          title: 'Notification',
+          message: response.message,
+          type: 'success'
         })
-      }).catch(error=>{
+      }).catch(error => {
         this.$notify.error({
-          title:'Error',
-          message:error.response.data.message,
+          title: 'Error',
+          message: error.response.data.message,
 
         })
       })
-       
+
     },
 
     remove_herb_row(index) {
@@ -272,18 +261,19 @@ export default {
 
     get_all_herbs() {
       get_herbs().then((response) => {
-        this.herb_rtv = response;       
+        console.log(response)
+        this.herb_rtv = response;
         this.service_id = response[0].categories_id
-   
+
       });
     },
 
-    get_all_payment_methods(){
-      getPaymentMethods().then((response)=>{
+    get_all_payment_methods() {
+      getPaymentMethods().then((response) => {
         this.payment_methods = response
       })
     }
-   
+
 
   },
 };
@@ -291,8 +281,8 @@ export default {
 
 
 <style lang="scss" scoped>
-.add_herbs_form{
-    margin-top:10px;
-    width:fit-content;
+.add_herbs_form {
+  margin-top: 10px;
+  width: fit-content;
 }
 </style>

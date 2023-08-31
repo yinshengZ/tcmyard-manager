@@ -35,7 +35,9 @@ class TreatmentController extends Controller
     //get single treatment data for displaying or updating
     public function show($id)
     {
-        $treatment_details = TreatmentService::processSingleTreatment($id);
+        // $treatment_details = TreatmentService::processSingleTreatment($id);
+
+        $treatment_details = Treatment::where('id', $id)->with('category')->with('inventories')->with('incomes')->first();
 
         return $treatment_details;
     }
@@ -77,8 +79,8 @@ class TreatmentController extends Controller
 
             $income = new Income;
 
-            $income->amount = $request->final_price;
-            $income->original_amount = $request->original_price;
+            $income->amount = $request->final_price * 100;
+            $income->original_amount = $request->original_price * 100;
             //$income->treatment_id = $treatment_ids['id'];
             $income->patient_id = $request->patient_id;
             $income->user_id = $request->user_id;
@@ -124,8 +126,8 @@ class TreatmentController extends Controller
         if ($request->with_finance) {
             $income = new Income;
 
-            $income->amount = $request->final_price;
-            $income->original_amount = $request->original_price;
+            $income->amount = $request->final_price * 100;
+            $income->original_amount = $request->original_price * 100;
             $income->payment_type_id = $request->payment_type_id;
             $income->patient_id = $request->patient_id;
             $income->user_id = $request->user_id;
@@ -183,8 +185,8 @@ class TreatmentController extends Controller
         if ($request->with_finance) {
             $income = new Income;
 
-            $income->amount = $request->final_price;
-            $income->original_amount = $request->original_price;
+            $income->amount = $request->final_price * 100;
+            $income->original_amount = $request->original_price * 100;
             $income->payment_type_id = $request->payment_type_id;
             $income->patient_id = $request->patient_id;
             $income->user_id = $request->user_id;
@@ -231,8 +233,8 @@ class TreatmentController extends Controller
 
         if ($request->with_finance) {
             $income = new Income;
-            $income->amount = $request->final_price;
-            $income->original_amount = $request->original_price;
+            $income->amount = $request->final_price * 100;
+            $income->original_amount = $request->original_price * 100;
             $income->payment_type_id = $request->payment_type;
             $income->patient_id = $request->patient_id;
             $income->user_id = $request->user_id;
@@ -347,7 +349,50 @@ class TreatmentController extends Controller
 
     public function updateHerb(Request $request)
     {
-        $treatment_detail = [];
+        $herb_ids = [];
+        $herb_units = [];
+        $income =  $request->incomes[0];
+
+        $income['amount'] = $income['amount'] * 100;
+        $income['original_amount'] = $income['original_amount'] * 100;
+
+
+
+        foreach ($request->inventories as $key => $herb_detail) {
+            array_push($herb_ids, $herb_detail['id']);
+            array_push($herb_units, $herb_detail['pivot']['units']);
+        }
+        //reconstructing inventory details for sync()
+        //sync() required format [1=>['units']=>10]
+        $units = array_map(function ($units) {
+            return ['units' => $units];
+        }, $herb_units);
+
+        $updated_inventories = array_combine($herb_ids, $units);
+
+
+        $treatment = Treatment::findOrFail($request->id);
+        $treatment->quantity = $request->quantity;
+        if ($request->with_date) {
+            $treatment->date = $request->date;
+        }
+
+        if ($request->with_finance) {
+            $treatment->incomes()->update($income);
+        }
+
+        $treatment->inventories()->sync($updated_inventories);
+
+        $treatment->save();
+
+
+        /*  foreach ($herb_ids as $key => $herb_id) {
+            $treatment->inventories()->update($herb_ids[$key], ['units' => $herb_units[$key]]);
+        }; */
+
+
+        return $treatment;
+        /*  $treatment_detail = [];
         $treatment_id = $request[0]['treatment_id'];
 
         $prepare_update = TreatmentService::processUpdateTreatment($treatment_id);
@@ -380,11 +425,10 @@ class TreatmentController extends Controller
 
             $treatment->treatment_details = json_encode($treatment_detail);
 
-            $treatment->save();
-            return response()->json([
-                'message' => "Treatment has been updated!"
-            ], 200);
-        }
+            $treatment->save(); */
+        return response()->json([
+            'message' => "Treatment has been updated!"
+        ], 200);
     }
 
     public function updateRetail(Request $request)

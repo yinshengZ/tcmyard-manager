@@ -87,17 +87,20 @@
                             {{ disease.disease }}
                           </el-tag>
                         </div>
-
-
-                        <div class="add-tag-button">
-                          <el-button @click="load_add_patient_disease_form" size="mini">
-                            <svg-icon icon-class="add"></svg-icon>
-                          </el-button>
-                        </div>
                       </div>
-
+                    </div>
+                    <div class="add-tag-button">
+                      <el-tooltip effect="dark" content="Add Patient Disease" placement="top">
+                        <el-button @click="load_add_patient_disease_form" size="mini">
+                          <svg-icon icon-class="add"></svg-icon>
+                        </el-button>
+                      </el-tooltip>
 
                     </div>
+
+
+
+
                   </el-collapse-item>
 
                   <el-collapse-item title="Symptoms">
@@ -113,9 +116,12 @@
 
                     </div>
                     <div class="add-tag-button">
-                      <el-button @click="load_add_patient_symptom_form" size="mini">
-                        <svg-icon icon-class="add"></svg-icon>
-                      </el-button>
+                      <el-tooltip effect="dark" content="Add Patient Symptom" placement="top">
+                        <el-button @click="load_add_patient_symptom_form" size="mini">
+                          <svg-icon icon-class="add"></svg-icon>
+                        </el-button>
+                      </el-tooltip>
+
                     </div>
 
 
@@ -132,10 +138,13 @@
                         </div>
 
                         <div class="add-tag-button">
-                          <el-button @click="load_add_patient_medication_form" size="mini">
-                            <svg-icon icon-class="add"></svg-icon>
+                          <el-tooltip effect="dark" content="Add Patient Medication" placement="top">
+                            <el-button @click="load_add_patient_medication_form" size="mini">
+                              <svg-icon icon-class="add"></svg-icon>
 
-                          </el-button>
+                            </el-button>
+                          </el-tooltip>
+
                         </div>
                       </div>
 
@@ -156,9 +165,12 @@
                       </div>
 
                       <div class="add-tag-button">
-                        <el-button @click="load_add_patient_allergy_form" size="mini">
-                          <svg-icon icon-class="add"></svg-icon>
-                        </el-button>
+                        <el-tooltip effect="dark" content="Add Patient Allergy" placement="top">
+                          <el-button @click="load_add_patient_allergy_form" size="mini">
+                            <svg-icon icon-class="add"></svg-icon>
+                          </el-button>
+                        </el-tooltip>
+
                       </div>
 
                     </div>

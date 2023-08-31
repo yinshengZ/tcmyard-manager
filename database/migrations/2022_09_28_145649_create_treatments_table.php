@@ -19,7 +19,6 @@ class CreateTreatmentsTable extends Migration
             $table->unsignedBigInteger('patient_id');
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('quantity');
-            $table->longtext('treatment_details');
             $table->date('date');
             $table->softDeletes('deleted_at');
             $table->timestamps();

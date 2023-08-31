@@ -11,7 +11,7 @@
             <el-table-column label="Final Amount (£)">
                 <template slot-scope="income">
                     <div>
-                        <span>£ {{ income.row.amount }}</span>
+                        <span>£ {{ income.row.amount / 100 }}</span>
                     </div>
                 </template>
 
@@ -21,7 +21,7 @@
             <el-table-column label="Original Amount (£)">
                 <template slot-scope="income">
                     <div>
-                        <span>£ {{ income.row.original_amount }}</span>
+                        <span>£ {{ income.row.original_amount / 100 }}</span>
                     </div>
                 </template>
 

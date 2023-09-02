@@ -343,8 +343,38 @@ class TreatmentController extends Controller
     }
 
 
+    //TODO: refactor update service function
+
 
     public function updateService(Request $request)
+    {
+        $inventory_id = $request->inventories[0]['pivot']['inventory_id'];
+
+
+        $treatment = Treatment::findOrFail($request->id);
+        $treatment->quantity = $request->quantity;
+        if ($request->with_date) {
+            $treatment->date = $request->date;
+        }
+
+        if ($request->with_finance) {
+            $income = $request->incomes[0];
+
+            $income['amount'] = $income['amount'] * 100;
+            $income['original_amount'] = $income['original_amount'] * 100;
+            $treatment->incomes()->update($income);
+        }
+
+        $treatment->inventories()->sync([$inventory_id], ['units' => 1]);
+        $treatment->save();
+
+        return response()->json([
+            'message' => "Treatment has been updated!"
+        ], 200);
+    }
+
+
+    /* public function updateService(Request $request)
     {
         $treatment_detail = [
             'id' => $request->inventory_id,
@@ -373,7 +403,7 @@ class TreatmentController extends Controller
         return response()->json([
             'message' => 'Treatment Has Been Updated Successfully!'
         ]);
-    }
+    } */
 
 
 

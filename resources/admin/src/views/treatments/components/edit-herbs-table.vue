@@ -180,7 +180,6 @@ export default {
     },
 
     update_herbs() {
-      console.log(this.treatment_detail)
       this.treatment_detail.with_finance = this.with_finance;
       this.treatment_detail.with_date = this.with_date;
 

@@ -36,6 +36,9 @@ import { addPatientAllergy } from '@/api/patient';
 export default {
 
     props: ['patient_id'],
+    components: {
+        AddAllergy,
+    },
 
     data() {
         return {

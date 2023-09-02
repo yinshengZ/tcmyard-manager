@@ -2,7 +2,7 @@
   <div>
     <div class="operation-buttons">
       <div class="add-button">
-        <el-button @click="add_item_row" type="info" icon="el-icon-plus">Herb</el-button>
+        <el-button @click="add_item_row" type="success" icon="el-icon-plus" class="add-herbs-button">Herb</el-button>
       </div>
 
     </div>
@@ -90,10 +90,12 @@
 
 
 
-
-      <el-button type="success" @click="update_herbs">Submit</el-button>
-
+      <el-form-item>
+        <el-button type="success" @click="update_herbs">Submit</el-button>
       </el-form-item>
+
+
+
     </el-form>
   </div>
 </template>
@@ -236,5 +238,10 @@ export default {
 .operation-buttons {
   display: grid;
   grid-template-columns: 1fr;
+}
+
+.add-herbs-button {
+  width: 100%;
+  margin-bottom: 2%;
 }
 </style>

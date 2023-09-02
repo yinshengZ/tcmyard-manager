@@ -1,65 +1,101 @@
 <template>
   <div>
-    <el-card shadow="always">
-      <el-button @click="add_item_row" type="info" icon="el-icon-plus"
-        >Retail</el-button
-      >
 
-      <el-form v-model="treatment_detail" label-widt="120px">
-        <div v-for="(treatment, index) in treatment_detail" :key="treatment.id">
-          <el-form-item :label="'Item ' + (index + 1)">
-            <el-select
-              v-model="treatment.inventory.id"
-              filterable
-              style="width: 200px"
-            >
-              <el-option
-                v-for="item in inventory"
-                :key="item.id"
-                :label="item.name + ' / stock: ' + item.stock"
-                :value="item.id"
-              >
-              </el-option>
-            </el-select>
+    <div>
+      <el-button @click="add_item_row" class="add-retail-button" type="success" icon="el-icon-plus">Retail</el-button>
+    </div>
 
-            <el-input-number
-              v-model="treatment.units"
-              style="width: 120px"
-              :min="1"
-              :max="99999999"
-              :step="1"
-            ></el-input-number>
+    <el-form v-model="retail_detail" label-width="120px">
+      <div v-for="(inventory, index) in retail_detail.inventories" :key="index">
+        <el-form-item :label="'Item' + (index + 1)">
+          <div class="grid-container">
+            <div class="retail-select">
+              <el-select v-model="retail_detail.inventories[index].id">
+                <el-option v-for="item in all_inventories" :key="item.id + Math.random()"
+                  :label="item.name + ' / stock:' + item.stock" :value="item.id"></el-option>
+              </el-select>
+            </div>
 
-            <el-button
-              style="padding: 10px; margin-left: 10px"
-              @click.prevent="remove_item_row(index)"
-              >Delete</el-button
-            >
-          </el-form-item>
-        </div>
+            <div class="retail-units">
+              <el-input-number size="mini" v-model="retail_detail.inventories[index].pivot.units" :min="1"
+                :step="1"></el-input-number>
+            </div>
 
+
+
+            <div class="retail-buttons">
+              <el-button @click="remove_item_row(index)"><svg-icon icon-class="delete"></svg-icon></el-button>
+
+            </div>
+          </div>
+        </el-form-item>
+
+      </div>
+      <el-form-item label="Quantity">
+        <el-input-number v-model="retail_detail.quantity" :min="1" :step="1"></el-input-number>
+      </el-form-item>
+
+      <el-form-item label="Extra Options">
+        <el-checkbox v-model="with_finance">
+          With Income</el-checkbox>
+
+        <el-checkbox v-model="with_date">
+          With Date</el-checkbox>
+      </el-form-item>
+
+      <div class="income_fields" v-if="with_finance">
         <el-form-item label="Discount">
-          <el-input-number
-            v-model="discount"
-            :min="0"
-            :max="100"
-            :precision="2"
-            :step="1"
-          >
-          </el-input-number>
+          <el-input-number v-model="retail_detail.incomes[0].discount" :min="0" :max="100"></el-input-number>
         </el-form-item>
 
-        <el-form-item>
-          <el-button type="primary" @click="update_retails()">Submit</el-button>
+        <el-form-item label="Price">
+          <el-input-number v-model="retail_detail.incomes[0].amount" :min="0" :max="99999999"
+            :precision="2"></el-input-number>
+          <el-button type="primary" @click="calculate_retail_price">Calculate</el-button>
+
         </el-form-item>
-      </el-form>
-    </el-card>
+
+        <el-form-item label="Original Price(£)">
+          <span>{{ retail_detail.incomes[0].original_amount }}</span>
+        </el-form-item>
+
+        <el-form-item label="Payment Type">
+          <el-select v-model="retail_detail.incomes[0].payment_type_id">
+            <el-option v-for="payment_method in payment_methods" :key="payment_method.id"
+              :label="uppercaseFirst(payment_method.payment_type)" :value="payment_method.id"></el-option>
+          </el-select>
+        </el-form-item>
+
+        <el-form-item label="Description">
+          <el-input v-model="retail_detail.incomes[0].description"></el-input>
+
+        </el-form-item>
+      </div>
+
+
+      <div class="date" v-if="with_date">
+        <el-form-item label="Date">
+          <el-date-picker v-model="retail_detail.date"></el-date-picker>
+        </el-form-item>
+      </div>
+
+
+      <el-form-item>
+        <el-button type="primary" @click="update_retails">Update</el-button>
+      </el-form-item>
+
+
+    </el-form>
+
   </div>
 </template>
 
 <script>
 import { getSingleTreatment, updateRetails } from "@/api/treatment";
 import { get_retails } from "@/api/inventory";
+import { uppercaseFirst } from "@/filters";
+
+import { getPaymentMethods } from "@/api/finance";
 
 export default {
   props: ["treatment_id", "treatment_category", "patient_id", "user_id"],
@@ -67,64 +103,45 @@ export default {
   data() {
     return {
       id: this.treatment_id,
-      inventory: [],
-      treatment_detail: [],
+      all_inventories: [],
+      retail_detail: [],
       discount: "",
       quantity: "",
       final_detail: [],
+      payment_methods: [],
+      with_finance: false,
+      with_date: false,
     };
   },
 
   created() {
     this.get_treatment_details();
     this.get_all_retails();
+    this.get_payment_methods();
   },
 
   methods: {
+    uppercaseFirst,
     add_item_row() {
-      this.treatment_detail.push({
-        categories_id: "",
-        discount: "",
-        inventory: {
-          categories_id: "",
-          created_at: "",
-          deleted_at: null,
-          description: "",
-          eng_name: "",
-          expiry_date: "",
-          id: "",
-          name: "",
-          stock: "",
-          unit_price: "",
-          updated_at: "",
-        },
-        quantity: "",
-        units: "",
-      });
+      this.retail_detail.inventories.push({
+        pivot: {
+          inventory_id: '',
+          treatment_id: '',
+          units: ''
+        }
+      })
     },
 
     remove_item_row(index) {
-      this.treatment_detail.splice(index, 1);
+      this.retail_detail.inventories.splice(index, 1);
     },
 
     update_retails() {
-      for (let i = 0; i < this.treatment_detail.length; i++) {
-        this.final_detail[i] = {
-          patient_id: this.patient_id,
-          user_id: this.user_id,
-          service_id: this.treatment_category,
-          treatment_id: this.treatment_id,
-          quantity: this.quantity,
-          discount: this.discount,
 
-          treatment_detail: {
-            id: this.treatment_detail[i].inventory.id,
-            units: this.treatment_detail[i].units,
-          },
-        };
-      }
+      this.retail_detail.with_finance = this.with_finance
+      this.retail_detail.with_date = this.with_date
 
-      updateRetails(this.final_detail)
+      updateRetails(this.retail_detail)
         .then((response) => {
           this.$notify({
             title: "Notification",
@@ -142,23 +159,56 @@ export default {
 
     get_treatment_details() {
       getSingleTreatment(this.id).then((response) => {
-        this.treatment_detail = response;
-        this.quantity = response[0].quantity;
-        this.discount = response[0].discount;
+        this.retail_detail = response;
+        this.retail_detail.incomes[0].amount = this.retail_detail.incomes[0].amount / 100
+        this.retail_detail.incomes[0].original_amount = this.retail_detail.incomes[0].original_amount / 100
 
-        console.log(response);
 
-        this.get_all_retails();
       });
     },
 
     get_all_retails() {
       get_retails().then((response) => {
-        this.inventory = response;
+        this.all_inventories = response;
+        console.log(this.all_inventories)
       });
     },
+
+    get_payment_methods() {
+      getPaymentMethods().then((response) => {
+        this.payment_methods = response
+      })
+    },
+
+    calculate_retail_price() {
+      this.retail_detail.incomes[0].amount = 0
+      this.retail_detail.incomes[0].original_amount = 0
+
+      if (this.retail_detail.inventories.length > 0) {
+        for (let i = 0; i < this.retail_detail.inventories.length; i++) {
+          let result = this.all_inventories.find(item => item.id === this.retail_detail.inventories[i].id)
+
+          this.retail_detail.incomes[0].original_amount += Number(result.unit_price) * this.retail_detail.inventories[i].pivot.units * this.retail_detail.quantity
+          this.retail_detail.incomes[0].amount += Number(result.unit_price * this.retail_detail.inventories[i].pivot.units * (1 - this.retail_detail.incomes[0].discount / 100) * this.retail_detail.quantity)
+
+
+        }
+      }
+
+    }
   },
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.grid-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  column-gap: 2%;
+}
+
+.add-retail-button {
+  width: 100%;
+  margin-bottom: 2%;
+}
+</style>

@@ -2,32 +2,26 @@
   <div class="app-container">
     <el-row :gutter="20">
       <el-col :span="6" :xs="24">
-        <patient-card
-          :personal_info="personal_info"
-          :contact_info="contact_info"
-          :patient_conditions="patient_conditions"
-          :patient_id="patient_id"
-        ></patient-card>
+        <patient-card :personal_info="personal_info" :contact_info="contact_info" :patient_conditions="patient_conditions"
+          :patient_id="patient_id"></patient-card>
       </el-col>
 
       <el-col :span="18" :xs="24">
         <el-card>
-          <el-tabs v-model="activeTab"  @tab-click="handleClick">
+          <el-tabs v-model="activeTab" @tab-click="handleClick">
             <el-tab-pane lazy label="Records" name="records">
-              <records-card
-                :patient_id="patient_id"
-                :user_id="user.id"
-                :user_name="user.name"
-                :key = "key"
-              ></records-card>
+              <records-card :patient_id="patient_id" :user_id="user.id" :user_name="user.name" :key="key"></records-card>
             </el-tab-pane>
 
             <el-tab-pane lazy label="Timeline" name="timelines">
               <p>hello timeline</p>
+
+              <el-button @click="sendEmail">Send Email</el-button>
             </el-tab-pane>
 
             <el-tab-pane lazy label="Treatments" name="treatments">
-              <treatments-card  :key="key" :patient_id="patient_id" :user_id="user.id" :user_name="user.name"></treatments-card>
+              <treatments-card :key="key" :patient_id="patient_id" :user_id="user.id"
+                :user_name="user.name"></treatments-card>
             </el-tab-pane>
 
             <el-tab-pane lazy label="Finance" name="finance">
@@ -35,13 +29,14 @@
             </el-tab-pane>
 
             <el-tab-pane lazy label="Files" name="files">
-              <files-card :key="key" :patient_id ="patient_id" :user_id = "user.id" :user_name="user.name" :token="user.token"></files-card>
+              <files-card :key="key" :patient_id="patient_id" :user_id="user.id" :user_name="user.name"
+                :token="user.token"></files-card>
             </el-tab-pane>
           </el-tabs>
         </el-card>
       </el-col>
     </el-row>
-    
+
   </div>
 </template>
 
@@ -53,6 +48,8 @@ import { mapGetters } from "vuex";
 import { getSingle } from "@/api/patient";
 
 import { getPatientIncome } from "@/api/finance";
+
+import { sendEmail } from "@/api/email";
 
 import ConditionsCard from "./components/conditions-card.vue";
 import PatientCard from "./components/patient-card.vue";
@@ -74,7 +71,7 @@ export default {
   },
   data() {
     return {
-      key:0,
+      key: 0,
       patient_id: "",
       activeTab: "records",
       patient_details: [],
@@ -86,7 +83,7 @@ export default {
         age: "",
         marital_status: "",
         occupation: "",
-      
+
       },
 
       patient_conditions: {
@@ -116,14 +113,15 @@ export default {
     this.get_patient_id();
     this.get_patient_details();
   },
-  mounted() {},
+  mounted() { },
 
   methods: {
 
-    handleClick(tab, event){
-      this.key+=1
+    handleClick(tab, event) {
+      this.key += 1
     },
 
+    sendEmail,
     get_user() {
       this.user = {
         name: this.name,
@@ -137,8 +135,8 @@ export default {
       console.log(this.user);
     },
 
-    get_patient_incomes(){
-      this.key+1
+    get_patient_incomes() {
+      this.key + 1
     },
 
     get_patient_id() {

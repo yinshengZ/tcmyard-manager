@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\admin;
+namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -27,19 +27,18 @@ class ServiceController extends Controller
      */
     public function store(Request $request)
     {
-       $this->validate($request,array(
-           'service_title'=>'required',
-           'unit_price'=>'required'
-       ));
+        $this->validate($request, array(
+            'service_title' => 'required',
+            'unit_price' => 'required'
+        ));
 
-       $service = new Service;
-       $service -> service_title = $request->service_title;
-       $service->description = $request->description;
-       $service->unit_price = $request->unit_price;
-       $service->save();
+        $service = new Service;
+        $service->service_title = $request->service_title;
+        $service->description = $request->description;
+        $service->unit_price = $request->unit_price;
+        $service->save();
 
-       return "Service Has Been Added!";
-       
+        return "Service Has Been Added!";
     }
 
     /**
@@ -50,8 +49,8 @@ class ServiceController extends Controller
      */
     public function show($id)
     {
-       $service = Service::find($id);
-       return $service;
+        $service = Service::find($id);
+        return $service;
     }
 
 
@@ -65,10 +64,10 @@ class ServiceController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $this->validate($request,array(
-            'service_title'=>'required',
-            'unit_price'=>'required|max:999999|numeric',
-            'description'=>'required|string'
+        $this->validate($request, array(
+            'service_title' => 'required',
+            'unit_price' => 'required|max:999999|numeric',
+            'description' => 'required|string'
         ));
 
         $service = Service::find($id);

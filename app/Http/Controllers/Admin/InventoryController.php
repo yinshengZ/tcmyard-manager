@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\admin;
+namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Inventory;
@@ -21,7 +21,7 @@ class InventoryController extends Controller
         return $inventory;
     }
 
- /*    public function get_all_retail_products(){
+    /*    public function get_all_retail_products(){
         $inventory = Inventory::where('categories_id','2')->with('category')->get();
         return $inventory;
     }
@@ -35,29 +35,28 @@ class InventoryController extends Controller
      */
     public function store(Request $request)
     {
-        
-        $this->validate($request,array(
-            'name'=>'required|unique:App\Models\Inventory|max:255',
-            'eng_name'=>'required|unique:App\Models\Inventory|max:255',
-            'stock'=>'required|max:999999999|numeric',
-            'unit_price'=>'required|max:999999|numeric',
-            'description'=>'string',
-            'categories_id'=>'integer',
-            'expiry_date'=>'nullable|date'
+
+        $this->validate($request, array(
+            'name' => 'required|unique:App\Models\Inventory|max:255',
+            'eng_name' => 'required|unique:App\Models\Inventory|max:255',
+            'stock' => 'required|max:999999999|numeric',
+            'unit_price' => 'required|max:999999|numeric',
+            'description' => 'string',
+            'categories_id' => 'integer',
+            'expiry_date' => 'nullable|date'
         ));
-        
-        $inventory = new Inventory;       
-        $inventory->name= $request->name;
-        $inventory->eng_name= $request->eng_name;
+
+        $inventory = new Inventory;
+        $inventory->name = $request->name;
+        $inventory->eng_name = $request->eng_name;
         $inventory->stock = $request->stock;
-        $inventory->unit_price=$request->unit_price;
+        $inventory->unit_price = $request->unit_price;
         $inventory->description = $request->description;
         $inventory->categories_id = $request->categories_id;
         $inventory->expiry_date = $request->expiry_date;
 
-        $inventory->save();        
+        $inventory->save();
         return "Inventory Has Been Added!";
-      
     }
 
     /**
@@ -82,56 +81,61 @@ class InventoryController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $this->validate($request,array(
-            'name'=>'required|max:255',
-            'eng_name'=>'required|max:255',
-            'stock'=>'required|max:9999999999999|numeric',
-            'unit_price'=>'required|max:99999999|numeric',
-            'description'=>'string',
-            'categories_id'=>'integer'
+        $this->validate($request, array(
+            'name' => 'required|max:255',
+            'eng_name' => 'required|max:255',
+            'stock' => 'required|max:9999999999999|numeric',
+            'unit_price' => 'required|max:99999999|numeric',
+            'description' => 'string',
+            'categories_id' => 'integer'
         ));
 
         $inventory = Inventory::find($id);
         $inventory->name = $request->name;
-        $inventory->eng_name=$request->eng_name;
+        $inventory->eng_name = $request->eng_name;
         $inventory->stock = $request->stock;
         $inventory->unit_price = $request->unit_price;
         $inventory->description = $request->description;
-        $inventory->categories_id=$request->categories_id;
+        $inventory->categories_id = $request->categories_id;
         $inventory->expiry_date = $request->expiry_date;
         $inventory->save();
 
         return "Inventory Has Been Updated!";
     }
 
-    public function get_inventory_by_category($categories){
-        $categories_id = Category::where('categories',$categories)->get()->pluck('id');
-        $inventory = Inventory::whereIn('categories_id',$categories_id)->get();
+    public function get_inventory_by_category($categories)
+    {
+        $categories_id = Category::where('categories', $categories)->get()->pluck('id');
+        $inventory = Inventory::whereIn('categories_id', $categories_id)->get();
         return $inventory;
     }
 
-    public function get_herbs(){
-        $herbs = Inventory::where('categories_id',1)->get();
+    public function get_herbs()
+    {
+        $herbs = Inventory::where('categories_id', 1)->get();
         return $herbs;
     }
 
-    public function get_services(){
-        $services = Inventory::where('categories_id',2)->get();
+    public function get_services()
+    {
+        $services = Inventory::where('categories_id', 2)->get();
         return $services;
     }
 
-    public function get_retails(){
-        $retails = Inventory::where('categories_id',3)->get();
+    public function get_retails()
+    {
+        $retails = Inventory::where('categories_id', 3)->get();
         return $retails;
     }
 
-    public function get_others(){
-        $others = Inventory::where('categories_id', '>=','4')->get();
+    public function get_others()
+    {
+        $others = Inventory::where('categories_id', '>=', '4')->get();
         return $others;
     }
 
-    public function get_expirying(){
-        
+    public function get_expirying()
+    {
     }
 
     /**
@@ -142,7 +146,6 @@ class InventoryController extends Controller
      */
     public function destroy($id)
     {
-        $inventory = Inventory::where('id',$id)->delete();
-        
+        $inventory = Inventory::where('id', $id)->delete();
     }
 }

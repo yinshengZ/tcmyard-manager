@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\admin;
+namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -35,8 +35,8 @@ class MedicationController extends Controller
         $medication->save();
 
         return response()->json([
-            'data'=>'Medication has been added successfully!',
-            'status_code'=>200
+            'data' => 'Medication has been added successfully!',
+            'status_code' => 200
         ]);
     }
 
@@ -48,9 +48,8 @@ class MedicationController extends Controller
      */
     public function show($id)
     {
-       $medication = Medication::find($id);
-       return $medication;
-       
+        $medication = Medication::find($id);
+        return $medication;
     }
 
 

@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\admin\FinanceController;
+use App\Http\Controllers\Admin\MailController;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,8 +19,9 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/php',function(){
+Route::get('/php', function () {
     return phpinfo();
 });
 
-Route::get('income/nill',[FinanceController::class,'report_nill']);
+Route::get('income/nill', [FinanceController::class, 'report_nill']);
+Route::get('/send_email', [MailController::class, 'test_email']);

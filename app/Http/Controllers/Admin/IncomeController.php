@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\admin;
+namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -32,39 +32,42 @@ class IncomeController extends Controller
         //
     }
 
-    public function addIncomeByService(Request $request){
-        $this->validate($request,array(
-            'service_id'=>'required|integer|min:0',
-            'amount'=>'required',
-            'discount'=>'required',
-            'quantity'=>'required',
-            'user_id'=>'required',
-            'income_type_id'=>'required',
+    public function addIncomeByService(Request $request)
+    {
+        $this->validate($request, array(
+            'service_id' => 'required|integer|min:0',
+            'amount' => 'required',
+            'discount' => 'required',
+            'quantity' => 'required',
+            'user_id' => 'required',
+            'income_type_id' => 'required',
         ));
 
         $income = new Income;
         $income->amount = $request->amount;
         $income->service_id = $request->service_id;
         $income->discount = $request->discount;
-        $income->quantity =$request->quantity;
-        $income->income_type_id =$request->income_type_id;
+        $income->quantity = $request->quantity;
+        $income->income_type_id = $request->income_type_id;
         $income->user_id = $request->user_id;
 
         $income->save();
 
-        return "Income Has Been Added!";        
-       
+        return "Income Has Been Added!";
     }
 
-    public function addIncomeByHerbs(Request $request){
+    public function addIncomeByHerbs(Request $request)
+    {
         return null;
     }
 
-    public function addIncomeByRetail(Request $request){
+    public function addIncomeByRetail(Request $request)
+    {
         return null;
     }
 
-    public function addIncomeByOther(Request $request){
+    public function addIncomeByOther(Request $request)
+    {
         return null;
     }
     /**

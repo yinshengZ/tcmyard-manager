@@ -22,6 +22,7 @@ use App\Http\Controllers\admin\MedicationController;
 use App\Http\Controllers\admin\DiseaseController;
 use App\Http\Controllers\Admin\PaymentMethodController;
 
+
 Route::post('login', [UserController::class, 'login'])->name('admin.api.login');
 
 Route::group([
@@ -125,6 +126,10 @@ Route::group([
     Route::post('income/service', [IncomeController::class, 'addIncomeByService']);
 
     Route::get('todo/{user_id}', [TodoController::class, 'user_todo_list']);
+
+
+
+
 
     Route::resource('patient', PatientController::class);
     Route::apiResource('gender', GenderController::class);

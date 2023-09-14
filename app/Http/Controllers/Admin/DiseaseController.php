@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\admin;
+namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -16,8 +16,8 @@ class DiseaseController extends Controller
      */
     public function index()
     {
-       $diseases = Disease::all();
-       return $diseases;
+        $diseases = Disease::all();
+        return $diseases;
     }
 
 
@@ -34,8 +34,8 @@ class DiseaseController extends Controller
         $disease->disease = $request->disease_name;
         $disease->save();
         return response()->json([
-            'data'=>'Disease has been added successfully!',
-            'status_code'=>200
+            'data' => 'Disease has been added successfully!',
+            'status_code' => 200
         ]);
     }
 
@@ -62,7 +62,6 @@ class DiseaseController extends Controller
      */
     public function update(Request $request, $id)
     {
-       
     }
 
     /**
@@ -73,6 +72,5 @@ class DiseaseController extends Controller
      */
     public function destroy($id)
     {
-        
     }
 }

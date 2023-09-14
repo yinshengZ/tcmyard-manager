@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\admin;
+namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -28,15 +28,15 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-      
-        $this->validate($request,array(
-            'categories'=>'required|max:255|unique:App\Models\Category',
+
+        $this->validate($request, array(
+            'categories' => 'required|max:255|unique:App\Models\Category',
         ));
- 
+
         $category = new Category;
         $category->categories = $request->categories;
         $category->save();
-       return "Category Has Been Added!";
+        return "Category Has Been Added!";
     }
 
     /**
@@ -47,8 +47,8 @@ class CategoryController extends Controller
      */
     public function show($id)
     {
-       $category = Category::find($id);
-       return $category;
+        $category = Category::find($id);
+        return $category;
     }
 
 

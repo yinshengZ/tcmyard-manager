@@ -171,7 +171,7 @@
 
 
 
-        <p>{{ patient_info }}</p>
+
 
 
         <el-dialog :visible.sync="add_medication_form_loaded" :beforeClose="get_medications" append-to-body>

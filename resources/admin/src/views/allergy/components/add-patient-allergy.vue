@@ -5,7 +5,7 @@
                 <el-input disabled v-model="id"></el-input>
             </el-form-item>
             <el-form-item label="Allergy">
-                <el-select v-model="allergy">
+                <el-select v-model="allergy" multiple filterable>
                     <el-option v-for="allergy in all_allergies" :key="allergy.id" :label="allergy.allergies"
                         :value="allergy.id"></el-option>
                 </el-select>

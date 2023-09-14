@@ -4,11 +4,7 @@
       <el-form-item>
         <el-input v-model="allergy.allergy" />
       </el-form-item>
-      <el-button
-        type="primary"
-        style="width: 100%"
-        @click="add_allergies"
-      >Add Allergy</el-button>
+      <el-button type="primary" style="width: 100%" @click="add_allergies">Add Allergy</el-button>
     </el-form>
   </div>
 </template>
@@ -31,7 +27,7 @@ export default {
       addAllergies(this.allergy).then((response) => {
         this.$message('Allergy added successfully')
       })
-        .catch(function(error) {
+        .catch(function (error) {
           console.log(error)
         })
       document.getElementById('add_allergy_form').reset()

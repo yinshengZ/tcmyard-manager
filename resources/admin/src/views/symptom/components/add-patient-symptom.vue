@@ -6,7 +6,7 @@
             </el-form-item>
 
             <el-form-item label="Symptoms:">
-                <el-select v-model="symptoms">
+                <el-select multiple filterable v-model="symptoms">
                     <el-option v-for="symptom in all_symptoms" :key="symptom.id" :label="symptom.symptom"
                         :value="symptom.id"></el-option>
                 </el-select>

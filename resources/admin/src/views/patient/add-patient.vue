@@ -1,68 +1,44 @@
 <template>
   <div class="app-container">
     <el-card class="box-card" shadow="hover">
-      <el-form
-        :model="patient_info"
-        id="add_patient"
-        ref="patient-info"
-        label-width="140px"
-        label-position="left"
-      >
-      <el-row :gutter="20">
-        <el-col :span="11">
-          <el-form-item label="First Name" prop="first_name">
-          <el-input
-            v-model="patient_info.first_name"
-            prefix-icon="el-icon-user-solid"
-          />
-        </el-form-item>
-        </el-col>
-
-        <el-col :span="11">
-          <el-form-item label="Last Name" prop="last_name">
-          <el-input
-            v-model="patient_info.last_name"
-            prefix-icon="el-icon-user-solid"
-          />
-        </el-form-item>
-        </el-col>
-      </el-row>
-        
-
-      
-
-        
-            <el-form-item label="Gender" prop="gender_id">
-              <el-row :gutter="1">
-          <el-col :span="7">
-              <el-select v-model="patient_info.gender_id">
-                <el-option
-                  v-for="genders in gender_rtv"
-                  :key="genders.id"
-                  :label="genders.gender"
-                  :value="genders.id"
-                />
-              </el-select>
-            
+      <el-form :model="patient_info" id="add_patient" ref="patient-info" label-width="140px" label-position="left">
+        <el-row :gutter="20">
+          <el-col :span="11">
+            <el-form-item label="First Name" prop="first_name">
+              <el-input v-model="patient_info.first_name" prefix-icon="el-icon-user-solid" />
+            </el-form-item>
           </el-col>
-          <el-col :span="1">
-            <el-tooltip content="Add New Genders" placement="top">
-              <el-button @click="load_gender" >
-                <svg-icon icon-class="add"></svg-icon>
-            </el-button>
-            </el-tooltip>
-           
+
+          <el-col :span="11">
+            <el-form-item label="Last Name" prop="last_name">
+              <el-input v-model="patient_info.last_name" prefix-icon="el-icon-user-solid" />
+            </el-form-item>
           </el-col>
         </el-row>
-      </el-form-item>
+
+
+
+
+
+        <el-form-item label="Gender" prop="gender_id">
+
+          <el-select v-model="patient_info.gender_id">
+            <el-option v-for="genders in gender_rtv" :key="genders.id" :label="genders.gender" :value="genders.id" />
+          </el-select>
+
+
+          <el-tooltip content="Add New Genders" placement="top">
+            <el-button class="add-button" @click="load_gender">
+              <svg-icon icon-class="add"></svg-icon>
+            </el-button>
+          </el-tooltip>
+
+
+        </el-form-item>
 
         <el-form-item label="Date of Birth" prop="date_of_birth">
-          <el-date-picker
-            v-model="patient_info.date_of_birth"
-            type="date"
-            format="yyyy/MM/dd"
-            value-format="yyyy/MM/dd"
-          />
+          <el-date-picker v-model="patient_info.date_of_birth" type="date" format="yyyy/MM/dd"
+            value-format="yyyy/MM/dd" />
         </el-form-item>
 
         <el-form-item label="Postcode" prop="postcode">
@@ -77,30 +53,22 @@
           <el-input v-model="patient_info.email" />
         </el-form-item>
 
-        
-            <el-form-item label="Marital Status" prop="marital_status_id">
-              <el-row :gutter="1">
-          <el-col :span="7">
-              <el-select v-model="patient_info.marital_status_id">
-                <el-option
-                  v-for="marital in marital_rtv"
-                  :key="marital.id"
-                  :label="marital.marital_status"
-                  :value="marital.id"
-                />
-              </el-select>
-            
-          </el-col>
-          <el-col :span="1">
-            <el-tooltip content="Add New Marital Status" placement="top">
-              <el-button  @click="load_marital" >
-             <svg-icon icon-class="add"></svg-icon>
+
+        <el-form-item label="Marital Status" prop="marital_status_id">
+
+          <el-select v-model="patient_info.marital_status_id">
+            <el-option v-for="marital in marital_rtv" :key="marital.id" :label="marital.marital_status"
+              :value="marital.id" />
+          </el-select>
+
+
+          <el-tooltip content="Add New Marital Status" placement="top">
+            <el-button class="add-button" @click="load_marital">
+              <svg-icon icon-class="add"></svg-icon>
             </el-button>
-            </el-tooltip>
-            
-          </el-col>
-        </el-row>
-      </el-form-item>
+          </el-tooltip>
+
+        </el-form-item>
 
         <el-form-item label="Occupation" prop="occupation">
           <el-input v-model="patient_info.occupation" />
@@ -111,188 +79,118 @@
         </el-form-item>
 
         <el-form-item label="Past History" prop="past_history">
-          <el-input
-            v-model="patient_info.past_history"
-            type="textarea"
-            :rows="3"
-          />
+          <el-input v-model="patient_info.past_history" type="textarea" :rows="3" />
         </el-form-item>
 
         <el-form-item label="Current Issue" prop="current_issue">
-          <el-input
-            v-model="patient_info.current_issue"
-            type="textarea"
-            :rows="3"
-          />
+          <el-input v-model="patient_info.current_issue" type="textarea" :rows="3" />
         </el-form-item>
 
-        
-         
-            <el-form-item label="Allergies" prop="allergies">
-              <el-row :gutter="1">
-                <el-col :span="7">
-              <el-select v-model="patient_info.allergies" multiple filterable>
-                <el-option
-                  v-for="allergy in allergies_rtv"
-                  :key="allergy.id"
-                  :label="allergy.allergies"
-                  :value="allergy.id"
-                />
-              </el-select>
-            
-          </el-col>
 
-          <el-col :span="1">
-            <el-tooltip content="Add New Allergies" placement="top">
-              <el-button @click="load_allergy">
+
+        <el-form-item label="Allergies" prop="allergies">
+
+          <el-select v-model="patient_info.allergies" multiple filterable>
+            <el-option v-for="allergy in allergies_rtv" :key="allergy.id" :label="allergy.allergies"
+              :value="allergy.id" />
+          </el-select>
+
+          <el-tooltip content="Add New Allergies" placement="top">
+            <el-button class="add-button" @click="load_allergy">
               <svg-icon icon-class="add"></svg-icon>
             </el-button>
-            </el-tooltip>
-            
-          </el-col>
-        
-        </el-row>
-      </el-form-item>
+          </el-tooltip>
 
-        
-            <el-form-item label="Symptoms" prop="symptoms">
-              <el-row :gutter="1">
-          <el-col :span="7">
-              <el-select v-model="patient_info.symptoms" multiple filterable>
-                <el-option
-                  v-for="symptom in symptoms_rtv"
-                  :key="symptom.id"
-                  :label="symptom.symptom"
-                  :value="symptom.id"
-                />
-              </el-select>
-           
-          </el-col>
 
-          <el-col :span="1">
-            <el-tooltip content="Add New Symptoms" placement="top">
-              <el-button @click="load_symptom">
+        </el-form-item>
+
+
+        <el-form-item label="Symptoms" prop="symptoms">
+
+          <el-select v-model="patient_info.symptoms" multiple filterable>
+            <el-option v-for="symptom in symptoms_rtv" :key="symptom.id" :label="symptom.symptom" :value="symptom.id" />
+          </el-select>
+
+          <el-tooltip content="Add New Symptoms" placement="top">
+            <el-button class="add-button" @click="load_symptom">
               <svg-icon icon-class="add"></svg-icon>
             </el-button>
-            </el-tooltip>
-           
-          </el-col>
-        </el-row>
-      </el-form-item>
+          </el-tooltip>
 
-        <el-row :gutter="1">
-          <el-form-item label="Medications" prop="current_medication">
-            <el-col :span="7">
-              <el-select v-model="patient_info.current_medication"
-          multiple filterable>
-            <el-option
-            v-for="medication in medications"
-            :key="medication.id"
-            :label="medication.medication"
-            :value="medication.id">
+        </el-form-item>
+
+
+        <el-form-item label="Medications" prop="current_medication">
+
+          <el-select v-model="patient_info.current_medication" multiple filterable>
+            <el-option v-for="medication in medications" :key="medication.id" :label="medication.medication"
+              :value="medication.id">
 
             </el-option>
           </el-select>
-            </el-col>
-          
 
-            <el-col :span="1">
-            <el-tooltip content="Add New Medications" placement="top">
-              <el-button @click="load_medication"><svg-icon icon-class="add"></svg-icon></el-button>
 
-            </el-tooltip>  
-          
-            </el-col>
-          
+
+
+          <el-tooltip content="Add New Medications" placement="top">
+            <el-button class="add-button" @click="load_medication"><svg-icon icon-class="add"></svg-icon></el-button>
+
+          </el-tooltip>
+
+
+
         </el-form-item>
 
 
         <el-form-item label="Diseases">
-          <el-row :gutter="1">
-            <el-col :span="7">
-              <el-select v-model="patient_info.diseases" multiple filterable>
-            <el-option
-            v-for="disease in diseases"
-            :key="disease.id"
-            :label="disease.disease"
-            :value="disease.id">
+
+          <el-select multiple filterable v-model="patient_info.diseases" multiple filterable>
+            <el-option v-for="disease in diseases" :key="disease.id" :label="disease.disease" :value="disease.id">
 
             </el-option>
           </el-select>
-            </el-col>
 
-            <el-col :span="1">
-              <el-tooltip
-              content="Add New Diseases"
-              placement="top">
-                <el-button @click="load_disease"><svg-icon icon-class="add"></svg-icon></el-button>
-              </el-tooltip>
-            </el-col>
+          <el-tooltip content="Add New Diseases" placement="top">
+            <el-button class="add-button" @click="load_disease"><svg-icon icon-class="add"></svg-icon></el-button>
+          </el-tooltip>
 
-          </el-row>
-          
 
         </el-form-item>
-        </el-row>
-       
+
+
 
         <el-row>
           <el-col>
             <el-form-item>
-              <el-button type="primary" @click="add_patient(first_name)"
-                >Submit</el-button
-              >
-              <el-button @click="reset_form('patient_info')"> Reset </el-button>
+              <el-button type="primary" @click="add_patient(first_name)">Submit</el-button>
+              <el-button @click="reset_form()"> Reset </el-button>
             </el-form-item>
           </el-col>
         </el-row>
       </el-form>
-      <el-dialog
-        title="Add New Allergy"
-        :visible.sync="add_allergy_loaded"
-        :before-close="get_allergies"
-      >
+      <el-dialog title="Add New Allergy" :visible.sync="add_allergy_loaded" :before-close="get_allergies">
         <add-allergy :key="key" />
       </el-dialog>
 
-      <el-dialog
-        title="Add New Gender"
-        width ="30%"
-        :visible.sync="add_genders_loaded"
-        :before-close="get_genders"
-      >
+      <el-dialog title="Add New Gender" :visible.sync="add_genders_loaded" :before-close="get_genders">
         <add-gender :key="key" />
       </el-dialog>
 
-      <el-dialog
-        title="Add New Marital Status"
-        :visible.sync="add_marital_loaded"
-        :before-close="get_maritals"
-      >
+      <el-dialog title="Add New Marital Status" :visible.sync="add_marital_loaded" :before-close="get_maritals">
         <add-marital :key="key" />
       </el-dialog>
 
-      <el-dialog
-        title="Add New Symptoms"
-        :visible.sync="add_symptom_loaded"
-        :before-close="get_symptoms"
-      >
-        <add-symptom  :key="key" />
+      <el-dialog title="Add New Symptoms" :visible.sync="add_symptom_loaded" :before-close="get_symptoms">
+        <add-symptom :key="key" />
       </el-dialog>
 
-      <el-dialog
-      title="Add New Medications"
-      :visible.sync="add_medications_loaded"
-      :before-close="get_medications">
+      <el-dialog title="Add New Medications" :visible.sync="add_medications_loaded" :before-close="get_medications">
 
-      <add-medication :key="key"></add-medication>
+        <add-medication :key="key"></add-medication>
 
       </el-dialog>
 
-      <el-dialog
-      title="Add New Diseases"
-      :visible.sync="add_diseases_loaded"
-      :before-close="get_diseases">
+      <el-dialog title="Add New Diseases" :visible.sync="add_diseases_loaded" :before-close="get_diseases">
         <add-diseases :key="key"></add-diseases>
       </el-dialog>
 
@@ -343,12 +241,12 @@ export default {
         current_medication: [],
         allergies: [],
         symptoms: [],
-        diseases:[]
+        diseases: []
       },
-        allergies: [],
-        symptoms: [],
-        medications:[],
-        diseases:[],
+      allergies: [],
+      symptoms: [],
+      medications: [],
+      diseases: [],
       gender_rtv: null,
       marital_rtv: null,
       allergies_rtv: null,
@@ -357,10 +255,10 @@ export default {
       add_genders_loaded: false,
       add_marital_loaded: false,
       add_symptom_loaded: false,
-      add_medications_loaded:false,
-      add_diseases_loaded:false,
+      add_medications_loaded: false,
+      add_diseases_loaded: false,
 
-      key:0,
+      key: 0,
     };
   },
   created() {
@@ -373,7 +271,7 @@ export default {
     this.get_diseases();
   },
   mounted() {
-    
+
   },
   methods: {
     add_patient(data) {
@@ -381,21 +279,21 @@ export default {
       AddPatient(this.data).then((response) => {
         console.log(response);
         this.$notify({
-          title:'Notification',
-          type:'success',
-          message:response.data
-        }).catch((error)=>{
+          title: 'Notification',
+          type: 'success',
+          message: response.data
+        }).catch((error) => {
           this.$notify.error({
-            title:'Error',
-            message:error.message
+            title: 'Error',
+            message: error.message
           })
         })
         this.$refs["patient-info"].resetFields();
       });
     },
 
-    reset_form(formName) {
-      this.$refs[formName].resetFields();
+    reset_form() {
+      this.patient_info = {}
     },
 
     get_genders() {
@@ -426,18 +324,18 @@ export default {
       });
       this.add_symptom_loaded = false;
     },
-    get_medications(){
-      getMedications().then((response)=>{
-        this.medications =response
+    get_medications() {
+      getMedications().then((response) => {
+        this.medications = response
       });
-      this.add_medications_loaded=false;
+      this.add_medications_loaded = false;
     },
-    
-    get_diseases(){
-      getDiseases().then((response)=>{
-        this.diseases=response
+
+    get_diseases() {
+      getDiseases().then((response) => {
+        this.diseases = response
       });
-      this.add_diseases_loaded=false;
+      this.add_diseases_loaded = false;
     },
     load_gender: function () {
       this.add_genders_loaded = true
@@ -451,12 +349,12 @@ export default {
     load_symptom: function () {
       this.add_symptom_loaded = true
     },
-    load_medication:function(){
-      this.add_medications_loaded=true;
+    load_medication: function () {
+      this.add_medications_loaded = true;
       this.key++
     },
-    load_disease:function(){
-      this.add_diseases_loaded=true;
+    load_disease: function () {
+      this.add_diseases_loaded = true;
       this.key++
     }
   },
@@ -469,11 +367,13 @@ export default {
   background-color: rgb(240, 242, 245);
   position: relative;
 }
+
 #add_patient {
   padding-top: 2%;
 }
-.add-buttons{
-  margin-left:1%;
+
+.add-button {
+  margin-left: 1%;
 }
 </style>
 

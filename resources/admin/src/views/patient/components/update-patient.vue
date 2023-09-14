@@ -1,47 +1,59 @@
 <template>
     <div>
-        <el-card></el-card>
+
         <div slot="header">
             <h3>Patient Info Update</h3>
         </div>
         <el-form :model="patient_info" label-width="120px" label-position="left">
-            <!-- <el-form-item label="ID">
-                    <el-input v-model="patient_info.id" :disabled="true"></el-input>
-                </el-form-item> -->
+
             <el-divider>Personal Info</el-divider>
-            <el-row :gutter="20">
-                <el-col :span="11">
+
+            <div class="grid-container name">
+
+                <div class="first-name">
                     <el-form-item label="First Name">
                         <el-input v-model="patient_info.first_name"></el-input>
                     </el-form-item>
-                </el-col>
+                </div>
 
-                <el-col :span="11">
+                <div class="last-name">
                     <el-form-item label="Last Name">
                         <el-input v-model="patient_info.last_name"></el-input>
                     </el-form-item>
-                </el-col>
+                </div>
 
-            </el-row>
-
-
+            </div>
 
 
-            <el-form-item label="Gender">
+            <div class="grid-container">
+                <div class="gender">
 
-                <el-select v-model="patient_info.gender_id" filterable>
-                    <el-option v-for="gender in genders" :key="gender.id" :label="gender.gender" :value="gender.id">
+                    <el-form-item label="Gender">
 
-                    </el-option>
+                        <el-select v-model="patient_info.gender_id" filterable>
+                            <el-option v-for="gender in genders" :key="gender.id" :label="gender.gender" :value="gender.id">
 
-                </el-select>
+                            </el-option>
 
-            </el-form-item>
+                        </el-select>
+
+                    </el-form-item>
+
+                </div>
+
+                <div class="postcode">
+                    <el-form-item label="Postcode">
+                        <el-input v-model="patient_info.postcode"></el-input>
+                    </el-form-item>
+
+                </div>
+
+            </div>
 
 
-            <el-form-item label="Postcode">
-                <el-input v-model="patient_info.postcode"></el-input>
-            </el-form-item>
+
+
+
             <el-divider>Contacts</el-divider>
             <el-form-item label="Telephone">
                 <el-input v-model="patient_info.telephone"></el-input>
@@ -64,77 +76,79 @@
                 <el-input v-model="patient_info.occupation"></el-input>
             </el-form-item>
             <el-form-item label="Past History">
-                <el-input v-model="patient_info.past_history"></el-input>
+                <el-input v-model="patient_info.past_history" type="textarea"></el-input>
             </el-form-item>
             <el-form-item label="Current Issue">
-                <el-input v-model="patient_info.current_issue"></el-input>
+                <el-input v-model="patient_info.current_issue" type="textarea"></el-input>
             </el-form-item>
 
             <el-form-item label="Disease">
-                <el-row :gutter="10">
-                    <el-col :span="14">
-
-
-                        <el-select multiple filterable v-model="patient_info.diseases">
-                            <el-option v-for="disease in diseases" :key="disease.id" :label="disease.disease"
-                                :value="disease.id">
-
-                            </el-option>
-                        </el-select>
-                    </el-col>
 
 
 
-                    <el-col :span="4">
-                        <el-button @click="load_add_disease_form" plain> <svg-icon icon-class="add"></svg-icon></el-button>
-                    </el-col>
+                <el-select multiple filterable v-model="patient_disease_ids">
+                    <el-option v-for="disease in diseases" :key="disease.id" :label="disease.disease" :value="disease.id">
 
-                </el-row>
+                    </el-option>
+                </el-select>
+
+
+
+
+                <el-button class="add-button" @click="load_add_disease_form" plain> <svg-icon
+                        icon-class="add"></svg-icon></el-button>
+
+
+
 
             </el-form-item>
 
             <el-form-item label="Medication">
-                <el-row :gutter="20">
-                    <el-col :span="14">
-                        <el-select multiple filterable v-model="patient_info.medications">
-                            <el-option v-for="medication in medications" :key="medication.id" :label="medication.medication"
-                                :value="medication.id"></el-option>
-                        </el-select>
 
-                    </el-col>
-                    <el-col :span="4">
-                        <el-button @click="load_add_medication_form" plain><svg-icon
-                                icon-class="add"></svg-icon></el-button>
+                <el-select multiple filterable v-model="patient_medication_ids">
+                    <el-option v-for="medication in medications" :key="medication.id" :label="medication.medication"
+                        :value="medication.id"></el-option>
+                </el-select>
 
-                    </el-col>
-                </el-row>
+
+
+                <el-button class="add-button" @click="load_add_medication_form" plain><svg-icon
+                        icon-class="add"></svg-icon></el-button>
+
+
             </el-form-item>
 
-            <el-row :gutter="20">
-                <el-form-item label="Allergies">
 
-                    <el-col :spam="14">
-                        <el-select multiple filterable v-model="patient_info.allergies">
-                            <el-option v-for="allergy in allergies" :key="allergy.id" :label="allergy.allergies"
-                                :vlaue="allergy.id"></el-option>
-                            <!-- FIXME: need to display data correctly! -->
-                        </el-select>
-                    </el-col>
+            <el-form-item label="Allergies">
 
-                </el-form-item>
-            </el-row>
+
+
+                <el-select multiple filterable v-model="patient_allergy_ids">
+                    <el-option v-for="allergy in allergies" :key="allergy.id" :label="allergy.allergies"
+                        :value="allergy.id"></el-option>
+
+
+                </el-select>
+
+
+
+
+                <el-button class="add-button" @click="load_add_allergy_form" plain><svg-icon
+                        icon-class="add"></svg-icon></el-button>
+
+            </el-form-item>
+
 
             <el-form-item label="Symptoms">
-                <el-row :gutter="3">
-                    <el-col :span="7">
-                        <el-select v-model="patient_info.symptoms.id">
-                            <el-option v-for="symptom in symptoms" :key="symptom.id" :label="symptom.symptom"
-                                :value="symptom.id">
 
-                            </el-option>
-                        </el-select>
-                    </el-col>
-                </el-row>
+                <el-select multiple filterable v-model="patient_symptom_ids">
+                    <el-option v-for="symptom in symptoms" :key="symptom.id" :label="symptom.symptom" :value="symptom.id">
+
+                    </el-option>
+                </el-select>
+                <el-button class="add-button" @click="load_add_symptom_form" plain><svg-icon
+                        icon-class="add"></svg-icon></el-button>
+
             </el-form-item>
 
             <el-form-item label="Date of Birth">
@@ -144,7 +158,7 @@
                 <el-switch v-model="patient_info.hiv_status">
 
                 </el-switch>
-                <el-input v-model="patient_info.hiv_status"></el-input>
+
             </el-form-item>
 
             <el-form-item>
@@ -158,7 +172,7 @@
 
 
         <p>{{ patient_info }}</p>
-        </el-card>
+
 
         <el-dialog :visible.sync="add_medication_form_loaded" :beforeClose="get_medications" append-to-body>
             <add-medication></add-medication>
@@ -166,6 +180,14 @@
 
         <el-dialog :visible.sync="add_disease_form_loaded" :beforeClose="get_diseases" append-to-body>
             <add-disease></add-disease>
+        </el-dialog>
+
+        <el-dialog :visible.sync="add_allergy_form_loaded" :beforeClose="get_allergies" append-to-body>
+            <add-allergy></add-allergy>
+        </el-dialog>
+
+        <el-dialog :visible.sync="add_symptom_form_loaded" :beforeClose="get_symptoms" append-to-body>
+            <add-symptom></add-symptom>
         </el-dialog>
 
     </div>
@@ -202,6 +224,11 @@ export default {
                 gender_id: 0,
 
             },
+            patient_allergy_ids: [],
+            patient_disease_ids: [],
+            patient_symptom_ids: [],
+            patient_medication_ids: [],
+
             id: '',
             genders: [],
             maritals: [],
@@ -212,6 +239,8 @@ export default {
             data_change: false,
             add_medication_form_loaded: false,
             add_disease_form_loaded: false,
+            add_allergy_form_loaded: false,
+            add_symptom_form_loaded: false,
 
 
         }
@@ -260,6 +289,25 @@ export default {
 
             getSingle(this.id).then((response) => {
                 this.patient_info = response
+
+
+                for (let i = 0; i < this.patient_info.allergies.length; i++) {
+                    this.patient_allergy_ids.push(this.patient_info.allergies[i].id)
+
+                }
+
+                for (let i = 0; i < this.patient_info.symptoms.length; i++) {
+                    this.patient_symptom_ids.push(this.patient_info.symptoms[i].id)
+                }
+
+                for (let i = 0; i < this.patient_info.diseases.length; i++) {
+                    this.patient_disease_ids.push(this.patient_info.diseases[i].id)
+                }
+
+                for (let i = 0; i < this.patient_info.medications.length; i++) {
+                    this.patient_medication_ids.push(this.patient_info.medications[i].id)
+                }
+
             })
         },
 
@@ -271,10 +319,26 @@ export default {
             this.add_disease_form_loaded = true
         },
 
+        load_add_allergy_form() {
+            this.add_allergy_form_loaded = true
+        },
+
+        load_add_symptom_form() {
+            this.add_symptom_form_loaded = true
+        },
+
         update_patient_info() {
-            //TODO:finish update function, and think about if changes been made but want to close the dialog window, add alert or popconfirm?
+            this.patient_info.allergy_ids = this.patient_allergy_ids
+            this.patient_info.disease_ids = this.patient_disease_ids
+            this.patient_info.symptom_ids = this.patient_symptom_ids
+            this.patient_info.medication_ids = this.patient_medication_ids
+
             updatePatient(this.patient_info, this.id).then((response) => {
-                console.log(response)
+                this.$notify({
+                    title: 'Notification',
+                    type: 'success',
+                    message: response.message
+                })
             })
         },
 
@@ -286,7 +350,6 @@ export default {
         },
 
         get_medications() {
-            //TODO: get all medications for select listing.
             getMedications().then((response) => {
 
                 this.medications = response
@@ -296,13 +359,14 @@ export default {
 
         get_allergies() {
             getAllergies().then((response) => {
-                console.log(response)
                 this.allergies = response
+                this.add_allergy_form_loaded = false
             })
         },
         get_symptoms() {
             getSymptoms().then((response) => {
                 this.symptoms = response
+                this.add_symptom_form_loaded = false
             })
         }
 
@@ -318,4 +382,14 @@ export default {
 
 
 
-<style scoped></style>
+<style scoped>
+.grid-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2%;
+}
+
+.add-button {
+    margin-left: 2%;
+}
+</style>

@@ -79,24 +79,28 @@
 
                 <el-collapse>
                   <el-collapse-item title="Diseases">
-                    <div v-if="patient_info.diseases.length">
-                      <div class="tags-container">
-                        <div class="tags">
-                          <el-tag :key="tag" type="danger" effect="dark" v-for="disease in patient_info.diseases" closable
-                            @close="delete_patient_tag(disease.id, patient_info.id, 'disease')">
-                            {{ disease.disease }}
-                          </el-tag>
+                    <div class="grid-container">
+                      <div v-if="patient_info.diseases.length">
+                        <div class="tags-container">
+                          <div class="tags" v-for="disease in patient_info.diseases">
+                            <el-tag :key="tag" type="danger" effect="dark" closable
+                              @close="delete_patient_tag(disease.id, patient_info.id, 'disease')">
+                              {{ disease.disease }}
+                            </el-tag>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                    <div class="add-tag-button">
-                      <el-tooltip effect="dark" content="Add Patient Disease" placement="top">
-                        <el-button @click="load_add_patient_disease_form" size="mini">
-                          <svg-icon icon-class="add"></svg-icon>
-                        </el-button>
-                      </el-tooltip>
 
+                      <div class="add-tag-button">
+                        <el-tooltip effect="dark" content="Add Patient Disease" placement="top">
+                          <el-button class="add-button" @click="load_add_patient_disease_form" size="mini">
+                            <svg-icon icon-class="add"></svg-icon>
+                          </el-button>
+                        </el-tooltip>
+
+                      </div>
                     </div>
+
 
 
 
@@ -115,14 +119,14 @@
                       </div>
 
                     </div>
-                    <div class="add-tag-button">
-                      <el-tooltip effect="dark" content="Add Patient Symptom" placement="top">
-                        <el-button @click="load_add_patient_symptom_form" size="mini">
-                          <svg-icon icon-class="add"></svg-icon>
-                        </el-button>
-                      </el-tooltip>
 
-                    </div>
+                    <el-tooltip effect="dark" content="Add Patient Symptom" placement="top">
+                      <el-button @click="load_add_patient_symptom_form" size="mini">
+                        <svg-icon icon-class="add"></svg-icon>
+                      </el-button>
+                    </el-tooltip>
+
+
 
 
                   </el-collapse-item>
@@ -229,7 +233,6 @@
     </el-dialog>
 
 
-    <!--TODO: Implement all add tags forms-->
     <el-dialog :visible.sync="add_patient_disease_form_loaded" :beforeClose="get_patient_info">
 
       <add-patient-disease :patient_id="patient_id"></add-patient-disease>
@@ -428,6 +431,10 @@ export default {
   margin-left: 10px;
 }
 
+.grid-container {
+  display: flex;
+}
+
 .box-center {
   margin: 0 auto;
   display: table;
@@ -490,6 +497,10 @@ export default {
     flex-wrap: wrap;
     gap: 10px;
 
+  }
+
+  .add-button {
+    margin-left: 10%;
   }
 
 }

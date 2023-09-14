@@ -132,7 +132,33 @@ class PatientController extends Controller
      */
     public function update(Request $request, $id)
     {
-        return $request;
+        $patient = Patient::findOrFail($request->id);
+
+        $patient->first_name = $request->first_name;
+        $patient->last_name = $request->last_name;
+        $patient->gender_id = $request->gender_id;
+        $patient->postcode = $request->postcode;
+        $patient->telephone = $request->telephone;
+        $patient->email = $request->email;
+        $patient->marital_status_id = $request->marital_status_id;
+        $patient->occupation = $request->occupation;
+        $patient->hiv_status = $request->hiv_satus;
+        $patient->date_of_birth = $request->date_of_birth;
+        $patient->current_issue = $request->current_issue;
+        $patient->past_history = $request->past_history;
+
+        $patient->diseases()->sync($request->disease_ids);
+        $patient->allergies()->sync($request->allergy_ids);
+        $patient->symptoms()->sync($request->symptom_ids);
+        $patient->medications()->sync($request->medication_ids);
+
+        $patient->save();
+
+
+
+        return response()->json([
+            'message' => 'Patient has been updated!'
+        ], 200);
     }
 
     /**

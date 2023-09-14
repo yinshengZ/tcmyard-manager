@@ -2,16 +2,13 @@
   <div>
     <el-form id="add_gender_form">
       <el-form-item>
-        <el-row :gutter="20">
-           <el-col :span="12">
-            <el-input v-model="gender.gender" />
-            </el-col>
-            <el-col :span="6">
-          <el-button type="primary" style="width:50%" @click="add_gender">Add Gender</el-button>
-        </el-col>        
-        </el-row>        
+        <el-input v-model="gender.gender" />
       </el-form-item>
-  
+
+      <el-form-item>
+        <el-button class="add-button" type="primary" @click="add_gender">Add Gender</el-button>
+
+      </el-form-item>
 
     </el-form>
   </div>
@@ -42,3 +39,9 @@ export default {
 }
 
 </script>
+
+<style scoped>
+.add-button {
+  width: 100%;
+}
+</style>

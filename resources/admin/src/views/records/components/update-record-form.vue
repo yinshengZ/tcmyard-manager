@@ -9,48 +9,46 @@
 </template>
 
 <script>
-import {getSingleRecord} from "@/api/record.js"
-import {updateRecord} from "@/api/record.js"
+import { getSingleRecord } from "@/api/record.js"
+import { updateRecord } from "@/api/record.js"
 import Tinymce from "@/components/Tinymce"
 export default {
-props:['record_id','patient_id','user_id'],
-components:{Tinymce},
-data(){
-    return{
-        record_details:{
-          
-        },
-        
-    }
-},
-created(){
-    this.get_record_details();
-},
+    props: ['record_id', 'patient_id', 'user_id'],
+    components: { Tinymce },
+    data() {
+        return {
+            record_details: {
 
-methods:{
-    get_record_details(){
-        getSingleRecord(this.record_id).then((response)=>{
-            this.record_details = response
-         
-    })
+            },
+
+        }
+    },
+    created() {
+        this.get_record_details();
     },
 
-    update_record(){
-        updateRecord(this.record_details,this.record_id).then((response)=>{
-            this.$notify({
-                title:'Notification',
-                message:response,
-                type:'success'
+    methods: {
+        get_record_details() {
+            getSingleRecord(this.record_id).then((response) => {
+                this.record_details = response
+
             })
-        })
+        },
+
+        update_record() {
+            updateRecord(this.record_details, this.record_id).then((response) => {
+                this.$notify({
+                    title: 'Notification',
+                    message: response.message,
+                    type: 'success'
+                })
+            })
+        }
     }
-}
 
 
 }
 </script>
 
 
-<style lang="scss" scoped>
-    
-</style>
+<style lang="scss" scoped></style>

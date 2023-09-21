@@ -277,7 +277,7 @@ export default {
       return value.charAt(0).toUpperCase() + value.slice(1);
     },
   },
-  props: ["contact_info", "patient_conditions", "patient_id"],
+  props: ["patient_id"],
 
   data() {
     return {

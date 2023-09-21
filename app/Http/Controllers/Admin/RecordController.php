@@ -21,8 +21,9 @@ class RecordController extends Controller
         return $records;
     }
 
-    public function patient_records($patient_id){
-        $records = Record::where('patient_id',$patient_id)->with('user')->orderBy('created_at','DESC')->get();
+    public function patient_records($patient_id)
+    {
+        $records = Record::where('patient_id', $patient_id)->with('user')->orderBy('created_at', 'DESC')->get();
         return $records;
     }
 
@@ -37,13 +38,13 @@ class RecordController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, array(
-            'record_body'=>'required',
-            'patient_id'=>'required',
-            'user_id'=>'required'
+            'record_body' => 'required',
+            'patient_id' => 'required',
+            'user_id' => 'required'
         ));
 
         $record = new Record;
-        $record -> record_body = $request->record_body;
+        $record->record_body = $request->record_body;
         $record->patient_id = $request->patient_id;
         $record->user_id = $request->user_id;
         $record->save();
@@ -59,7 +60,7 @@ class RecordController extends Controller
      */
     public function show($id)
     {
-        $records=Record::where('id',$id)->first();
+        $records = Record::where('id', $id)->first();
         return $records;
     }
 
@@ -72,20 +73,21 @@ class RecordController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $this->validate($request,array(
-            'record_body'=>'required',
+        $this->validate($request, array(
+            'record_body' => 'required',
             //'patient_id'=>'required',
-            'user_id'=>'required'
+            'user_id' => 'required'
 
         ));
 
         $record = Record::find($id);
-        $record -> record_body = $request->record_body;
-        $record-> user_id = $request->user_id;
+        $record->record_body = $request->record_body;
+        $record->user_id = $request->user_id;
         $record->save();
 
-        return response('Hello response',200)->header('Content-Type','text/plain');
-        
+        return response()->json([
+            'message' => "Record has been updated!",
+        ], 200);
     }
 
     /**

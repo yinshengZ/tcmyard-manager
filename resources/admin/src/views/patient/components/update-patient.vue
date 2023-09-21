@@ -163,7 +163,6 @@
 
             <el-form-item>
                 <el-button type="success" @click="update_patient_info">Submit</el-button>
-                <el-button type="info">Cancel</el-button>
             </el-form-item>
 
         </el-form>

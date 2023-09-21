@@ -1,52 +1,41 @@
 <template>
   <div class="upload_form">
 
-    <el-form 
-    >
-      <el-form-item
-        label="Description: "
-        label-width="120px"        
-      >
-        <el-input
-        type="textarea"
-        class="description_box"
-          v-model="description"
-          size="medium"
-          :rows="10"
-          autosize          
-          placeholder="description for this upload...."
-        ></el-input>
-      </el-form-item>
+    <el-form>
 
-      <el-form-item>
-        <el-upload
-        class="uploader"
-          drag
-          ref="file_upload"
-          action="api/file"
-          :headers="{ 'XSRF-TOKEN': this.token, 'X-XSRF-TOKEN': this.token }"
-          :auto-upload="false"
-          :data="{
-            patient_id: this.patient_id,
-            user_id: this.user_id,
-            description: description,
-          }"
-          multiple
-          :file-list="fileList"
-        >
-          <i class="el-icon-upload"></i>
-          <div class="el-upload__text">
-            Drop file here or <em>click to upload</em>
+      <div class="uploader">
+        <el-form-item>
+          <div class="upload-container">
+            <el-upload class="uploader" drag ref="file_upload" action="api/file"
+              :headers="{ 'XSRF-TOKEN': this.token, 'X-XSRF-TOKEN': this.token }" :auto-upload="false" :data="{
+                patient_id: this.patient_id,
+                user_id: this.user_id,
+                description: description,
+              }" multiple :file-list="fileList">
+              <i class="el-icon-upload"></i>
+              <div class="el-upload__text">
+                Drop file here or <em>click to upload</em>
+              </div>
+            </el-upload>
           </div>
-        </el-upload>
-      </el-form-item>     
 
-      <el-form-item>
-        <el-button type="primary" @click="upload">Upload</el-button>
-      </el-form-item>
+        </el-form-item>
+      </div>
+
+      <div class="description-box">
+        <el-form-item label="Description: " label-width="120px">
+          <el-input type="textarea" class="description_box" v-model="description" size="medium" :rows="10" autosize
+            placeholder="description for this upload...."></el-input>
+        </el-form-item>
+      </div>
+
+
+      <div class="upload-button">
+        <el-form-item>
+          <el-button type="primary" @click="upload">Upload</el-button>
+        </el-form-item>
+      </div>
     </el-form>
-
-
 
   </div>
 </template> 
@@ -57,14 +46,14 @@ import { getToken } from "@/utils/auth";
 import VueUploadComponent from 'vue-upload-component'
 export default {
   props: ["patient_id", "user_id"],
-  components:{
-    FileUpload:VueUploadComponent,
+  components: {
+    FileUpload: VueUploadComponent,
   },
   data() {
     return {
       file: [],
       fileList: [],
-      uploadUrl:"#",
+      uploadUrl: "#",
       token: "",
       description: "",
     };
@@ -77,11 +66,11 @@ export default {
   methods: {
     upload() {
       this.$refs.file_upload.submit();
-      
+
     },
 
     get_token() {
-      
+
       this.token = getToken();
     },
   },
@@ -89,14 +78,27 @@ export default {
 </script>
 
 <style scoped>
-.uploader{
-    margin-left:20%;
+.upload_form {
+  border: solid;
+  width: 80%;
+
+}
+
+.uploader {
+  width: 80%;
+}
+
+.description-box {
+  border: solid;
+}
+
+.upload-button {
+  border: solid;
 }
 
 
-.upload_form{
-    width:50%;
-    margin:auto;
-}
-
+/* .upload_form {
+  width: 50%;
+  margin: auto;
+} */
 </style>

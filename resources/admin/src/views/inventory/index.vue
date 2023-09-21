@@ -1,9 +1,9 @@
 <template>
     <div class="app-container">
-        
-                <inventory-list></inventory-list>   
-            
-       
+
+        <inventory-list></inventory-list>
+
+
     </div>
 </template>
 
@@ -11,12 +11,8 @@
 
 import InventoryList from './components/inventory-list'
 export default {
-    components:{InventoryList},
+    components: { InventoryList },
 }
 </script>
 
-<style scoped>
-.inventory-table{
-    margin-top:10px;
-}
-</style>
+<style scoped></style>

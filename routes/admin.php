@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\UserController;
 
 use App\Http\Controllers\Admin\PatientController;
+use App\Http\Controllers\Admin\PatientStatController;
 use App\Http\Controllers\Admin\GenderController;
 use App\Http\Controllers\Admin\MaritalController;
 use App\Http\Controllers\Admin\AllergyController;
@@ -47,7 +48,8 @@ Route::group([
     Route::post('patient/search', [PatientController::class, 'search_patient'])->name('patient.search_patient');
     Route::get('record/search/{patient_id}', [RecordController::class, 'patient_records'])->name('record.patient_records');
 
-
+    Route::get('patient/new/month', [PatientController::class, 'get_current_month_new_patients']);
+    Route::get('patient/stat/gender', [PatientStatController::class, 'get_most_patients_gender']);
 
 
 

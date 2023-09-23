@@ -28,6 +28,20 @@ export function getPatientInfo(id) {
   });
 }
 
+export function getCurrentMonthNewPatients() {
+  return request({
+    url: "/patient/new/month",
+    method: "get",
+  });
+}
+
+export function getMostPatientsGender() {
+  return request({
+    url: "/patient/stat/gender",
+    method: "get",
+  });
+}
+
 export function AddPatient(data) {
   return request({
     url: "/patient",

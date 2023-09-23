@@ -38,6 +38,14 @@ class PatientController extends Controller
         return $patients;
     }
 
+    public function get_current_month_new_patients()
+    {
+        $patients = Patient::whereMonth('created_at', Carbon::now()->month)->get()->count();
+        return $patients;
+    }
+
+
+
 
 
 

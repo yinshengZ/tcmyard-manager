@@ -1,28 +1,62 @@
 <template>
-    <el-card class="card-outer">
-        <div class="card">
-            <div class="card-box">
+    <div>
+        <el-card class="card-outer">
+            <div class="card">
+                <div class="card-box">
 
-                <div class="card-icon">
-                    <svg-icon icon-class="locale" class="card-panel-icon" />
+                    <div class="card-icon" v-on:click="load_detailed_table">
+                        <svg-icon icon-class="locale" class="card-panel-icon" />
 
-                </div>
+                    </div>
 
-                <div class="card-content">
-                    <div class="content-title">
-                        <h4>Most Patients From: </h4>
-                        <span class="most-locale">{{ }}</span>
+                    <div class="card-content">
+                        <div class="content-title">
+                            <h4>Most Patients From: </h4>
+                            <span class="most-locale">{{ patients_locale[0].locale }}: {{ patients_locale[0].total }}
+                                Patients</span>
+                        </div>
+
                     </div>
 
                 </div>
-
             </div>
-        </div>
-    </el-card>
+        </el-card>
+        <el-dialog :visible.sync="locale_dialog_loaded">
+            <el-table :data="patients_locale" border>
+                <el-table-column prop="locale" label="Locale" width="400"></el-table-column>
+                <el-table-column prop="total" label="Patients" width="400"></el-table-column>
+            </el-table>
+        </el-dialog>
+    </div>
 </template>
 
 <script>
+import { getMostPatientsLocale } from "@/api/patient"
 
+export default {
+    data() {
+        return {
+            patients_locale: '',
+            locale_dialog_loaded: false,
+        }
+    },
+    mounted() {
+        this.get_most_patients_locale()
+    },
+    methods: {
+        get_most_patients_locale() {
+            getMostPatientsLocale().then((response) => {
+                this.patients_locale = response
+            })
+        },
+
+        load_detailed_table() {
+            this.locale_dialog_loaded = true
+        }
+
+
+    }
+}
 
 </script>
 
@@ -48,10 +82,7 @@
 
 .card-box {
     width: 350px;
-    /*     border-top: 3px solid hsl(0, 78%, 62%);
- */
-    /*     background-color: var(--veryLightGray);
- */
+
     height: 100px;
     border-radius: 5px;
     display: grid;

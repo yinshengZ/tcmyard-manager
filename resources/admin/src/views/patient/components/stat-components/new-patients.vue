@@ -1,41 +1,71 @@
 <template>
-    <el-card class="card-outer">
-        <div class="card">
-            <div class="card-box">
+    <div>
+        <el-card class="card-outer">
+            <div class="card">
+                <div class="card-box">
 
-                <div class="card-icon">
-                    <svg-icon icon-class="peoples" class="card-panel-icon" />
+                    <div class="card-icon" v-on:click="load_new_patients_dialog">
+                        <svg-icon icon-class="peoples" class="card-panel-icon" />
 
-                </div>
-
-                <div class="card-content">
-                    <div class="content-title">
-                        <h4>New Patients</h4>
                     </div>
 
-                    <div class="content-stat">
+                    <div class="card-content">
+                        <div class="content-title">
+                            <h4>New Patients</h4>
+                        </div>
 
-                        <span>This Month: </span>
-                        <count-to :start-val="0" :end-val="new_patients" :duration="2600" class="count-text"></count-to>
+                        <div class="content-stat">
+
+                            <span>This Month: {{ new_patients_count }}</span>
+
+                        </div>
                     </div>
-                </div>
 
+                </div>
             </div>
-        </div>
-    </el-card>
+        </el-card>
+
+        <el-dialog :visible.sync="new_patients_dialog_loaded">
+            <el-table :data="new_patients">
+                <el-table-column prop="first_name" label="First Name"></el-table-column>
+
+                <el-table-column prop="last_name" label="Last Name">
+
+                </el-table-column>
+
+                <el-table-column prop="gender.gender" label="Gender"></el-table-column>
+
+                <el-table-column prop="email" label="Email">
+
+                </el-table-column>
+
+                <el-table-column prop="postcode" label="Postcode"></el-table-column>
+                <el-table-column label="Date Joined">
+                    <template slot-scope="{row}">
+                        <div>
+                            <span>{{ date_converter(row.created_at) }}</span>
+                        </div>
+                    </template>
+                </el-table-column>
+            </el-table>
+        </el-dialog>
+    </div>
 </template>
 
 <script>
-import CountTo from 'vue-count-to'
+
 import { getCurrentMonthNewPatients } from '@/api/patient'
 
+import { date_converter } from "@/utils/converters"
+
+
 export default {
-    components: {
-        CountTo,
-    },
+
     data() {
         return {
-            new_patients: 0,
+            new_patients_dialog_loaded: false,
+            new_patients: [],
+            new_patients_count: 0,
         }
     },
     mounted() {
@@ -45,8 +75,13 @@ export default {
         current_month_new_patients() {
             getCurrentMonthNewPatients().then((response) => {
                 this.new_patients = response
+                this.new_patients_count = response.length
             })
-        }
+        },
+        load_new_patients_dialog() {
+            this.new_patients_dialog_loaded = true
+        },
+        date_converter,
     }
 };
 </script>
@@ -72,7 +107,7 @@ export default {
 }
 
 .card-box {
-    width: 350px;
+
     /*     border-top: 3px solid hsl(0, 78%, 62%);
  */
     /*     background-color: var(--veryLightGray);

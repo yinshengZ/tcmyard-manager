@@ -40,13 +40,13 @@
                 <p>
                   Gender:
                   <span class="text-muted">{{
-                    patient_info.gender.gender | capitalize
+                    gender.gender | capitalize
                   }}</span>
                 </p>
                 <p>
                   Marital Status:
                   <span class="text-muted">{{
-                    patient_info.marital_status.marital_status | capitalize
+                    marital_status.marital_status | capitalize
                   }}</span>
                 </p>
                 <p>
@@ -71,7 +71,6 @@
               <div>
                 <p>Main Issue: <span class="text-mute">{{ patient_info.current_issue }}</span></p>
                 <p>Past History: <span class="text-mute">{{ patient_info.past_history }}</span></p>
-                <p>Current Medication: <span class="text-mute">{{ patient_info.current_medication }}</span></p>
                 <p>HIV Status: <span class="text-mute" v-if="patient_info.hiv_status">Postive</span><span
                     v-else>Negative</span>
                 </p>
@@ -80,16 +79,16 @@
                 <el-collapse>
                   <el-collapse-item title="Diseases">
                     <div class="grid-container">
-                      <div v-if="patient_info.diseases.length">
-                        <div class="tags-container">
-                          <div class="tags" v-for="disease in patient_info.diseases">
-                            <el-tag :key="tag" type="danger" effect="dark" closable
-                              @close="delete_patient_tag(disease.id, patient_info.id, 'disease')">
-                              {{ disease.disease }}
-                            </el-tag>
-                          </div>
+
+                      <div class="tags-container">
+                        <div class="tags" v-for="disease in patient_info.diseases">
+                          <el-tag :key="disease.id" type="danger" effect="dark" closable
+                            @close="delete_patient_tag(disease.id, patient_info.id, 'disease')">
+                            {{ disease.disease }}
+                          </el-tag>
                         </div>
                       </div>
+
 
                       <div class="add-tag-button">
                         <el-tooltip effect="dark" content="Add Patient Disease" placement="top">
@@ -108,17 +107,16 @@
                   </el-collapse-item>
 
                   <el-collapse-item title="Symptoms">
-                    <div v-if="patient_info.symptoms.length">
-                      <div class="tags-container">
-                        <div class="tags">
-                          <el-tag :key="tag" type="" effect="dark" v-for="symptom in patient_info.symptoms" closable
-                            @close="delete_patient_tag(symptom.id, patient_info.id, 'symptom')">
-                            {{ symptom.symptom }}
-                          </el-tag>
-                        </div>
-                      </div>
 
+                    <div class="tags-container">
+                      <div class="tags">
+                        <el-tag :key="symptom.id" type="" effect="dark" v-for="symptom in patient_info.symptoms" closable
+                          @close="delete_patient_tag(symptom.id, patient_info.id, 'symptom')">
+                          {{ symptom.symptom }}
+                        </el-tag>
+                      </div>
                     </div>
+
 
                     <el-tooltip effect="dark" content="Add Patient Symptom" placement="top">
                       <el-button @click="load_add_patient_symptom_form" size="mini">
@@ -135,8 +133,9 @@
                     <div v-if="patient_info.medications">
                       <div class="tags-container">
                         <div class="tags">
-                          <el-tag :key="tag" type="success" effect="dark" v-for="medication in patient_info.medications"
-                            closable @close="delete_patient_tag(medication.id, patient_info.id, 'medication')">
+                          <el-tag :key="medication.id" type="success" effect="dark"
+                            v-for="medication in patient_info.medications" closable
+                            @close="delete_patient_tag(medication.id, patient_info.id, 'medication')">
                             {{ medication.medication }}
                           </el-tag>
                         </div>
@@ -160,8 +159,8 @@
 
                       <div class="tags-container">
                         <div class="tags">
-                          <el-tag :key="tag" type="info" effect="dark" v-for="allergy in patient_info.allergies" closable
-                            @close="delete_patient_tag(allergy.id, patient_info.id, 'allergy')">
+                          <el-tag :key="allergy.id" type="info" effect="dark" v-for="allergy in patient_info.allergies"
+                            closable @close="delete_patient_tag(allergy.id, patient_info.id, 'allergy')">
                             {{ allergy.allergies }}
 
                           </el-tag>
@@ -215,8 +214,10 @@
                   </span>
                 </p>
               </div>
+              <span> {{ patient_info.gender }}</span>
             </div>
           </div>
+
 
 
 
@@ -290,7 +291,9 @@ export default {
       id: '',
       patient_info: {
         age: 0,
-      }
+      },
+      gender: '',
+      marital_status: '',
 
     };
   },
@@ -308,7 +311,8 @@ export default {
     get_patient_info(category) {
       getSingle(this.id).then((response) => {
         this.patient_info = response
-
+        this.gender = response.gender
+        this.marital_status = response.marital_status
         this.reset_dialogs(category)
 
       })

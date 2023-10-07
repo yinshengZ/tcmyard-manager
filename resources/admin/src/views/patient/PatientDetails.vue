@@ -71,7 +71,7 @@ export default {
   created() {
     this.get_user();
     this.get_patient_id();
-    this.get_patient_details();
+
   },
   mounted() { },
 

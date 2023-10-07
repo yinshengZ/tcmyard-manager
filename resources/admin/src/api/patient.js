@@ -42,6 +42,20 @@ export function getMostPatientsGender() {
   });
 }
 
+export function getMostPatientsLocale() {
+  return request({
+    url: "/patient/stat/locale",
+    method: "get",
+  });
+}
+
+export function getPatientAverageSpending() {
+  return request({
+    url: "/patient/stat/average_spending",
+    method: "get",
+  });
+}
+
 export function AddPatient(data) {
   return request({
     url: "/patient",

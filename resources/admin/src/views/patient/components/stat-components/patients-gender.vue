@@ -1,37 +1,52 @@
 <template>
-    <el-card class="card-outer">
-        <div class="card">
-            <div class="card-box">
+    <div>
+        <el-card class="card-outer">
+            <div class="card">
+                <div class="card-box">
 
-                <div class="card-icon">
-                    <svg-icon icon-class="gender" class="card-panel-icon" />
+                    <div class="card-icon" v-on:click="load_detailed_table">
+                        <svg-icon icon-class="gender" class="card-panel-icon" />
 
-                </div>
+                    </div>
 
-                <div class="card-content">
-                    <div class="content-title">
-                        <h4>Most Patients Are: </h4>
-                        <span class="most-gender">{{ genders[0].gender.gender }}</span>
+                    <div class="card-content">
+                        <div class="content-title">
+                            <h4>Most Patients Are: </h4>
+                            <span class="most-gender">{{ most_genders.gender }}</span>
+                        </div>
+
                     </div>
 
                 </div>
-
             </div>
-        </div>
-    </el-card>
+        </el-card>
+
+        <el-dialog :visible.sync="gender_dialog_loaded">
+            <el-table :data="genders" border>
+                <el-table-column prop="gender.gender" label="Gender">
+
+                </el-table-column>
+
+                <el-table-column prop="total" label="Patients">
+
+                </el-table-column>
+            </el-table>
+        </el-dialog>
+
+    </div>
 </template>
 
 <script>
-import CountTo from 'vue-count-to'
+
 import { getMostPatientsGender } from '@/api/patient'
 
 export default {
-    components: {
-        CountTo,
-    },
+
     data() {
         return {
-            genders: []
+            most_genders: [],
+            genders: [],
+            gender_dialog_loaded: false
         }
     },
     mounted() {
@@ -41,8 +56,12 @@ export default {
         get_most_patients_gender() {
             getMostPatientsGender().then((response) => {
                 this.genders = response
+                this.most_genders = response[0].gender
             })
 
+        },
+        load_detailed_table() {
+            this.gender_dialog_loaded = true
         }
     }
 };

@@ -12,7 +12,7 @@
                     <div class="card-content">
                         <div class="content-title">
                             <h4>Most Patients From: </h4>
-                            <span class="most-locale">{{ patients_locale[0].locale }}: {{ patients_locale[0].total }}
+                            <span class="most-locale">{{ most_locale }}: {{ most_locale_total }}
                                 Patients</span>
                         </div>
 
@@ -38,6 +38,8 @@ export default {
         return {
             patients_locale: '',
             locale_dialog_loaded: false,
+            most_locale: '',
+            most_locale_total: '',
         }
     },
     mounted() {
@@ -47,6 +49,8 @@ export default {
         get_most_patients_locale() {
             getMostPatientsLocale().then((response) => {
                 this.patients_locale = response
+                this.most_locale = response[0].locale
+                this.most_locale_total = response[0].total
             })
         },
 

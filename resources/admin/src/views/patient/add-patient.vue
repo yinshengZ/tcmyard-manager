@@ -41,6 +41,7 @@
             value-format="yyyy/MM/dd" />
         </el-form-item>
 
+
         <el-form-item label="Postcode" prop="postcode">
           <el-input v-model="patient_info.postcode" />
         </el-form-item>
@@ -156,6 +157,11 @@
 
 
         </el-form-item>
+        <el-form-item label="Date Joined" prop="date_joined">
+          <el-date-picker v-model="patient_info.date_joined" type="date" format="yyyy/MM/dd"
+            value-format="yyyy/MM/dd"></el-date-picker>
+        </el-form-item>
+
 
 
 

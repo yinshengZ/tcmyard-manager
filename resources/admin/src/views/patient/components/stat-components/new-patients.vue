@@ -26,7 +26,7 @@
         </el-card>
 
         <el-dialog :visible.sync="new_patients_dialog_loaded">
-            <el-table :data="new_patients">
+            <!-- <el-table :data="new_patients">
                 <el-table-column prop="first_name" label="First Name"></el-table-column>
 
                 <el-table-column prop="last_name" label="Last Name">
@@ -47,12 +47,18 @@
                         </div>
                     </template>
                 </el-table-column>
-            </el-table>
+            </el-table> -->
+            <div class="new-patients-table">
+                <new-patients-table></new-patients-table>
+            </div>
+
         </el-dialog>
     </div>
 </template>
 
 <script>
+
+import NewPatientsTable from "@/views/patient/components/data-tables/new-patients.vue"
 
 import { getCurrentMonthNewPatients } from '@/api/patient'
 
@@ -60,6 +66,10 @@ import { date_converter } from "@/utils/converters"
 
 
 export default {
+
+    components: {
+        NewPatientsTable,
+    },
 
     data() {
         return {
@@ -112,6 +122,9 @@ export default {
  */
     /*     background-color: var(--veryLightGray);
  */
+    width: 350px;
+
+    height: 100px;
     border-radius: 5px;
     display: grid;
     grid-template-columns: 0.5fr 1fr;
@@ -172,5 +185,13 @@ export default {
 
 .count-text {
     font-size: 20px;
+}
+
+.new-patients-table {
+    padding: 10px;
+    height: 60vh;
+    width: 100%;
+
+    overflow: auto;
 }
 </style>

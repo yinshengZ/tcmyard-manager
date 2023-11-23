@@ -26,7 +26,7 @@
                 <el-table-column label="Patient Name">
                     <template slot-scope="{row}">
                         <div>
-
+                            <!-- TODO: Add top spending, least spending and such-->
                         </div>
                     </template>
                 </el-table-column>
@@ -44,6 +44,7 @@ export default {
         return {
             average_spending: 0,
             spendings: [],
+            patient_spendings_dialog_loaded: false,
         }
     },
 

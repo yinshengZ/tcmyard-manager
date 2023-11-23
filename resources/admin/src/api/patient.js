@@ -35,6 +35,20 @@ export function getCurrentMonthNewPatients() {
   });
 }
 
+export function getNewestPatients(number) {
+  return request({
+    url: "/patient/new/custom/" + number,
+    method: "get",
+  });
+}
+
+export function getCurrentYearMonthlyNewPatients() {
+  return request({
+    url: "/patient/stat/patient/current_year",
+    method: "get",
+  });
+}
+
 export function getMostPatientsGender() {
   return request({
     url: "/patient/stat/gender",

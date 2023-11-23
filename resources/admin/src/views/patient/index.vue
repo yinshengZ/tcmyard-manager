@@ -25,9 +25,20 @@
 
     </div>
 
+    <div class="chart-area">
+      <el-tabs type="card">
+        <el-tab-pane label="Patients">
+          <div id="new-patients-line-chart">
+            <new-patients-line-chart></new-patients-line-chart>
+          </div>
+        </el-tab-pane>
 
+        <el-tab-pane label="Genders">
+          <p>hello chart 2</p>
+        </el-tab-pane>
+      </el-tabs>
 
-
+    </div>
 
 
 
@@ -35,20 +46,24 @@
 </template>
 
 <script>
-import PanelGroup from './components/panel-group'
 import NewPatients from './components/stat-components/new-patients.vue'
 import patientsGender from './components/stat-components/patients-gender.vue';
 import PatientsLocale from './components/stat-components/patients-locale.vue'
 import TestApi from './components/stat-components/test-api.vue';
 import AverageSpending from './components/stat-components/average-spending.vue'
+import NewPatientsTable from './components/data-tables/new-patients.vue'
+import NewPatientsLineChart from './components/charts/new-patients-line-chart.vue'
 export default {
   components: {
-    PanelGroup,
+
     NewPatients,
     patientsGender,
     PatientsLocale,
     AverageSpending,
-    TestApi
+    NewPatientsTable,
+    TestApi,
+    NewPatientsLineChart
+
   },
 
   data() {
@@ -58,9 +73,7 @@ export default {
   },
 
   methods: {
-    click_me() {
-      alert('oh my, you clicked me!')
-    }
+
   }
 }
 </script>
@@ -73,11 +86,26 @@ export default {
   row-gap: 4%;
 }
 
-@media only screen and (max-width:1200px) {
+.chart-area {
+  margin-top: 2%;
+}
+
+@media only screen and (max-width:900px) {
   .stat-group {
     display: grid;
     grid-template-columns: 1fr 1fr;
     column-gap: 2%;
+  }
+
+  .data-tables {
+    margin-top: 3%;
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+
+  #new-patients-line-chart {
+    width: 400px;
+    height: 400px;
   }
 }
 </style>

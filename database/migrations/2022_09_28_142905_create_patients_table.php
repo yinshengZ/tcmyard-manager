@@ -25,9 +25,10 @@ class CreatePatientsTable extends Migration
             $table->string('occupation')->nullable();
             $table->boolean('hiv_status')->default(0);
             $table->text('past_history')->nullable();
-            $table->text('current_issue');            
+            $table->text('current_issue');
             $table->date('date_of_birth')->nullable();
-            $table->softDeletes($columns='deleted_at');
+            $table->date('date_joined')->nullable();
+            $table->softDeletes($columns = 'deleted_at');
             $table->timestamps();
         });
     }

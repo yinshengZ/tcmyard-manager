@@ -161,6 +161,10 @@
 
             </el-form-item>
 
+            <el-form-item label="Date Joined">
+                <el-date-picker v-model="patient_info.date_joined" type="date"></el-date-picker>
+            </el-form-item>
+
             <el-form-item>
                 <el-button type="success" @click="update_patient_info">Submit</el-button>
             </el-form-item>

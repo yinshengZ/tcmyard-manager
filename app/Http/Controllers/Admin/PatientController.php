@@ -6,10 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\Patient;
-use App\Models\Record;
 use App\Models\Allergy;
 use App\Models\Symptom;
-use App\Models\Disease;
 use App\Models\Gender;
 use Carbon\Carbon;
 use Exception;
@@ -23,15 +21,6 @@ class PatientController extends Controller
      */
     public function index()
     {
-        /* 
-        $patients = \App\Patient::first();
-        $allergies = \App\Allergy::all();
-        
-        $patients->allergy()->sync($allergies); */
-
-        /* $patients = Patient::find(1);
-        $patient = $patients->Allergy()->get();
-        dd($patient); */
         $patients = Patient::with('gender')->with('marital_status')->with('allergy')
             ->symptoms()->allergies()->diseases()->get();
 
@@ -44,6 +33,7 @@ class PatientController extends Controller
 
         return $patients;
     }
+
 
 
 
@@ -86,6 +76,7 @@ class PatientController extends Controller
         $patient->last_name = $request->last_name;
         $patient->gender_id = $request->gender_id;
         $patient->date_of_birth = $request->date_of_birth;
+        $patient->date_joined = $request->date_joined;
         $patient->postcode = $request->postcode;
         $patient->telephone = $request->telephone;
         $patient->email = $request->email;
@@ -155,6 +146,7 @@ class PatientController extends Controller
         $patient->date_of_birth = $request->date_of_birth;
         $patient->current_issue = $request->current_issue;
         $patient->past_history = $request->past_history;
+        $patient->date_joined = $request->date_joined;
 
         $patient->diseases()->sync($request->disease_ids);
         $patient->allergies()->sync($request->allergy_ids);
